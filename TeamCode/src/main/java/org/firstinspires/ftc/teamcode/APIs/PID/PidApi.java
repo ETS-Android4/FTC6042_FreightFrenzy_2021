@@ -22,7 +22,7 @@ public class PidApi {
 
     double iMax = 1; // The maximum I value
 
-    double targetErrorDeadzone = 0;
+    double targetErrorDeadZone = 0;
 
     /**
      * Instantiate a new PID object
@@ -201,6 +201,22 @@ public class PidApi {
      */
     public boolean hasReachedTarget() {
         return previousError >= -targetErrorDeadzone && previousError <= targetErrorDeadzone;
+    }
+
+    /**
+     * Update the target error dead zone
+     * @param newTargetErrorDeadZone The new target error dead zone
+     */
+    public void updateTargetErrorDeadZone(double newTargetErrorDeadZone) {
+        this.targetErrorDeadZone = newTargetErrorDeadZone;
+    }
+
+    /**
+     * Get the current target error dead zone
+     * @return The current target error dead zone
+     */
+    public double getTargetErrorDeadZone() {
+        return targetErrorDeadZone;
     }
 
 }
