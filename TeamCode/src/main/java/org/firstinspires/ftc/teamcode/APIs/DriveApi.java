@@ -195,6 +195,34 @@ public class DriveApi {
     }
 
     /**
+     * Drive forward the given number of inches using the default PID values specified in the drivetrain constants class
+     * @param inches The number of inches to drive forward
+     */
+    public void driveForwardInches(double inches) {
+        resetEncoders();
+        double distanceToTravelInTicks = inchesToTicks(inches);
+
+        double p = DrivetrainConstants.driveTrainPGain;
+        double i = DrivetrainConstants.driveTrainIGain;
+        double d = DrivetrainConstants.driveTrainDGain;
+        double deadZoneInTicks = DrivetrainConstants.driveTrainPidDeadZoneInTicks;
+
+        // Instantiate our PID objects
+        PidApi frontLeftPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi frontRightPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi rearLeftPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi rearRightPid = new PidApi(p, i, d, deadZoneInTicks);
+
+        while(opMode.opModeIsActive() && !(frontLeftPid.hasReachedTarget() && frontRightPid.hasReachedTarget() && rearLeftPid.hasReachedTarget() && rearRightPid.hasReachedTarget())) {
+            frontLeft.setPower(frontLeftPid.getLimitedControlLoopOutput(frontLeft.getCurrentPosition(), distanceToTravelInTicks, 1));
+            frontRight.setPower(frontRightPid.getLimitedControlLoopOutput(frontRight.getCurrentPosition(), distanceToTravelInTicks, 1));
+            rearLeft.setPower(rearLeftPid.getLimitedControlLoopOutput(rearLeft.getCurrentPosition(), distanceToTravelInTicks, 1));
+            rearRight.setPower(rearRightPid.getLimitedControlLoopOutput(rearRight.getCurrentPosition(), distanceToTravelInTicks, 1));
+        }
+        stopMotors();
+    }
+
+    /**
      * Stop the drive motors
      */
     public void stopMotors() {

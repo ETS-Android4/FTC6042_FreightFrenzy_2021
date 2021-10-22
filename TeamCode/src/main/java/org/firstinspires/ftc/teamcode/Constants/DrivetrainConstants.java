@@ -14,7 +14,7 @@ public class DrivetrainConstants {
     public static final double encoderTicksPerWheelRotation = 560;
 
     // PID related values
-    public static final double driveTrainPGain = 0;
+    public static final double driveTrainPGain = 0; // TODO add actual weights
     public static final double driveTrainIGain = 0;
     public static final double driveTrainDGain = 0;
     public static final double driveTrainPidDeadZoneInTicks = 2;
