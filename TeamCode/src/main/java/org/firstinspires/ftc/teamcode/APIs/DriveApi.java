@@ -148,7 +148,7 @@ public class DriveApi {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
         while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
-            driveAtPower(0.2);
+            driveAtPower(DrivetrainConstants.defaultPower);
         }
     }
 

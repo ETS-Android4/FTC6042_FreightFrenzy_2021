@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Constants;
 
 public class DrivetrainConstants {
 
+    public static final double defaultPower = 0.2;
+
     public static final double driveWheelDiameterInInches = 4.75;
 
     public static final double driveWheelCircumferenceInInches = 3.14*driveWheelDiameterInInches;
