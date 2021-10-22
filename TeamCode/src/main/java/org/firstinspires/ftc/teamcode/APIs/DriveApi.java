@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.Constants.DrivetrainConstants;
 
 public class DriveApi {
@@ -141,7 +142,7 @@ public class DriveApi {
     }
 
     /**
-     * Drive forward the given number of inches using encoders
+     * Drive forward the given number of inches using encoders, with the default power value
      * @param inches The number of inches to drive
      */
     public void driveForwardInches(double inches) {
@@ -150,6 +151,40 @@ public class DriveApi {
         while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
             driveAtPower(DrivetrainConstants.defaultPower);
         }
+        stopMotors();
+    }
+
+    /**
+     * Drive forward the given number of inches using encoders, at a specified power
+     * @param inches The number of inches to drive
+     * @param power The power at which to drive
+     */
+    public void driveForwardInches(double inches, double power) {
+        resetEncoders();
+        double distanceToTravelInTicks = inchesToTicks(inches);
+        while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
+            driveAtPower(power);
+        }
+        stopMotors();
+    }
+
+    public void driveForwardInches(double inches, double p, double i, double d) {
+        resetEncoders();
+        double distanceToTravelInTicks = inchesToTicks(inches);
+
+        // Instantiate our PID objects
+        PidApi frontLeftPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
+        PidApi frontRightPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
+        PidApi rearLeftPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
+        PidApi rearRightPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
+
+        while(opMode.opModeIsActive() && !(frontLeftPid.hasReachedTarget() && frontRightPid.hasReachedTarget() && rearLeftPid.hasReachedTarget() && rearRightPid.hasReachedTarget())) {
+            frontLeft.setPower(frontLeftPid.getLimitedControlLoopOutput(frontLeft.getCurrentPosition(), distanceToTravelInTicks, 1));
+            frontRight.setPower(frontRightPid.getLimitedControlLoopOutput(frontRight.getCurrentPosition(), distanceToTravelInTicks, 1));
+            rearLeft.setPower(rearLeftPid.getLimitedControlLoopOutput(rearLeft.getCurrentPosition(), distanceToTravelInTicks, 1));
+            rearRight.setPower(rearRightPid.getLimitedControlLoopOutput(rearRight.getCurrentPosition(), distanceToTravelInTicks, 1));
+        }
+        stopMotors();
     }
 
     /**

@@ -22,6 +22,8 @@ public class PidApi {
 
     double iMax = 1; // The maximum I value
 
+    double targetErrorDeadzone = 0;
+
     /**
      * Instantiate a new PID object
      * @param pGain The P gain for this new PID object
@@ -32,6 +34,20 @@ public class PidApi {
         this.pGain = pGain;
         this.iGain = iGain;
         this.dGain = dGain;
+    }
+
+    /**
+     * Instantiate a new PID object
+     * @param pGain The P gain for this new PID object
+     * @param iGain The I gain for this new PID object
+     * @param dGain The D gain for this new PID object
+     * @param targetErrorDeadzone The value that when added or subtracted from the target value creates the "dead zone" of values which are considered to be at their target position
+     */
+    public PidApi(double pGain, double iGain, double dGain, double targetErrorDeadzone) {
+        this.pGain = pGain;
+        this.iGain = iGain;
+        this.dGain = dGain;
+        this.targetErrorDeadzone = targetErrorDeadzone;
     }
 
     /**
@@ -177,6 +193,14 @@ public class PidApi {
      */
     public double getDGain() {
         return dGain;
+    }
+
+    /**
+     * Determine whether or not we have reached our target based on the dead zone specified or, in some cases, not specified.
+     * @return Whether or not this PID loop has reached its target
+     */
+    public boolean hasReachedTarget() {
+        return previousError >= -targetErrorDeadzone && previousError <= targetErrorDeadzone;
     }
 
 }
