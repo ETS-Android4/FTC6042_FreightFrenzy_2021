@@ -47,7 +47,7 @@ public class PidApi {
         this.pGain = pGain;
         this.iGain = iGain;
         this.dGain = dGain;
-        this.targetErrorDeadzone = targetErrorDeadzone;
+        this.targetErrorDeadZone = targetErrorDeadzone;
     }
 
     /**
@@ -200,7 +200,7 @@ public class PidApi {
      * @return Whether or not this PID loop has reached its target
      */
     public boolean hasReachedTarget() {
-        return previousError >= -targetErrorDeadzone && previousError <= targetErrorDeadzone;
+        return previousError >= -targetErrorDeadZone && previousError <= targetErrorDeadZone;
     }
 
     /**
