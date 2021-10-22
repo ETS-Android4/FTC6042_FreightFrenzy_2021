@@ -145,7 +145,7 @@ public class DriveApi {
      * Drive forward the given number of inches using encoders, with the default power value
      * @param inches The number of inches to drive
      */
-    public void driveForwardInches(double inches) {
+    public void driveForwardInchesNoPid(double inches) {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
         while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
@@ -159,7 +159,7 @@ public class DriveApi {
      * @param inches The number of inches to drive
      * @param power The power at which to drive
      */
-    public void driveForwardInches(double inches, double power) {
+    public void driveForwardInchesNoPid(double inches, double power) {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
         while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
@@ -168,6 +168,13 @@ public class DriveApi {
         stopMotors();
     }
 
+    /**
+     * Drive forward the given number of inches using the given PID values
+     * @param inches The inches to drive forward
+     * @param p The P gain
+     * @param i The I gain
+     * @param d The D gain
+     */
     public void driveForwardInches(double inches, double p, double i, double d) {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
