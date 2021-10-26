@@ -200,6 +200,9 @@ public class PidApi {
      * @return Whether or not this PID loop has reached its target
      */
     public boolean hasReachedTarget() {
+        if(previousTimeInMillis == 0) {
+            return false;
+        }
         return previousError >= -targetErrorDeadZone && previousError <= targetErrorDeadZone;
     }
 
