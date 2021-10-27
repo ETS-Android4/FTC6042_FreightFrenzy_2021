@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.Constants.DrivetrainConstants;
@@ -29,6 +30,21 @@ public class Drivetrain {
         this.rearLeft = rearLeft;
         this.rearRight = rearRight;
         this.opMode = opMode;
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        resetEncoders();
+    }
+
+    /**
+     * Instantiate a new Drive API object using the passed opMode to fetch the drive motors
+     * @param opMode This opMode
+     */
+    public Drivetrain(LinearOpMode opMode) {
+        this.opMode = opMode;
+        frontLeft = opMode.hardwareMap.get(DcMotor.class, "frontLeft");
+        frontRight = opMode.hardwareMap.get(DcMotor.class, "frontRight");
+        rearLeft = opMode.hardwareMap.get(DcMotor.class, "rearLeft");
+        rearRight = opMode.hardwareMap.get(DcMotor.class, "rearRight");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
