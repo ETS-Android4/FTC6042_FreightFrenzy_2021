@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.APIs.DriveApi;
 
-@TeleOp(name="Opmode passing testing")
+@TeleOp(name="TestOpmode")
 public class TestOpMode extends LinearOpMode {
 
     @Override
