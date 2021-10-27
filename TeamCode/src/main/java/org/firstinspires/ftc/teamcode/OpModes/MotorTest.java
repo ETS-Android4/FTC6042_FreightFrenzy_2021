@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 
 import org.firstinspires.ftc.teamcode.APIs.DriveApi;
 
-@TeleOp(name="TestOpmode")
-public class TestOpMode extends LinearOpMode {
+@Autonomous(name="MotorTest")
+public class MotorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,12 +20,22 @@ public class TestOpMode extends LinearOpMode {
         DcMotor rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         DcMotor rearRight = hardwareMap.get(DcMotor.class, "rearRight");
 
-        DriveApi drive = new DriveApi(frontLeft, frontRight, rearLeft, rearRight, this);
+        DriveApi drivetrain = new DriveApi(frontLeft, frontRight, rearLeft, rearRight, this);
 
         waitForStart();
 
-        drive.driveForwardInches(15);
-        drive.stopMotors();
+        drivetrain.driveFrontLeft(0.1);
+        sleep(3000);
+        drivetrain.stopMotors();
+        drivetrain.driveFrontRight(0.1);
+        sleep(3000);
+        drivetrain.stopMotors();
+        drivetrain.driveRearLeft(0.1);
+        sleep(3000);
+        drivetrain.stopMotors();
+        drivetrain.driveRearRight(0.1);
+        sleep(3000);
+        drivetrain.stopMotors();
 
     }
 

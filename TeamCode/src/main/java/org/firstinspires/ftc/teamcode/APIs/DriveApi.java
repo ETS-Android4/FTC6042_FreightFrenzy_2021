@@ -29,9 +29,8 @@ public class DriveApi {
         this.rearLeft = rearLeft;
         this.rearRight = rearRight;
         this.opMode = opMode;
-        //TODO make sure we're reversing the correct motors
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
     }
 
