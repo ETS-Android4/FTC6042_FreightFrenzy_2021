@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.APIs; // Include this with our team "APIs" package
+package org.firstinspires.ftc.teamcode.mechanisms;
 
 // FIRST APIs
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; // Need this so we can check if "opModeIsActive"
@@ -6,20 +6,21 @@ import com.qualcomm.robotcore.hardware.ColorSensor; // Need this so we can defin
 import com.qualcomm.robotcore.hardware.DcMotor; // Need this so we can define our motors
 import com.qualcomm.robotcore.hardware.DcMotor; // Need this so we can define our servos
 import com.qualcomm.robotcore.hardware.HardwareMap; // Need this so we can connect to the hardware used by this mechanism
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
     // The lift is a linear slide mechanism (controlled by one motor) that has four preset heights (bottom, low, mid, & high)
     // The lift's box also has a servo that dumps/pushes/releases the Freight.
     // There is a color sensor on the lift that looks at a white bar with colored areas that indicate the height (black=load, red, orange=low, yellow, green=middle, blue, purple=high)
 
-    // Constants that neeed to be calibrated
-    const double UP_POWER = 100; // Power that we should use when moving up.
-    const double DOWN_POWER = -50; // Safe power for moving down.
-    const DcMotor.Direction UP_DIRECTION = DcMotor.Direction.FORWARD; // Set which way the motor should rotate to slide the lift up.
-    const double BUCKET_OPEN = 1.0; // Servo position to remove Freight from the bucket.
-    const double BUCKET_CLOSED = 0.0; // Servo position to keep Freight in the bucket.
-    const int BLACK_THRESHOLD = 10; // If all color readings are less than this, we are at the BOTTOM (loading position)
-    const int COLOR_THRESHOLD = 200; // If a color is greater than this, we are seeing that color.
+    // Constants that need to be calibrated
+    final double UP_POWER = 100; // Power that we should use when moving up.
+    final double DOWN_POWER = -50; // Safe power for moving down.
+    final DcMotor.Direction UP_DIRECTION = DcMotor.Direction.FORWARD; // Set which way the motor should rotate to slide the lift up.
+    final double BUCKET_OPEN = 1.0; // Servo position to remove Freight from the bucket.
+    final double BUCKET_CLOSED = 0.0; // Servo position to keep Freight in the bucket.
+    final int BLACK_THRESHOLD = 10; // If all color readings are less than this, we are at the BOTTOM (loading position)
+    final int COLOR_THRESHOLD = 200; // If a color is greater than this, we are seeing that color.
 
     DcMotor liftMotor = null; // Motor connected to a string that raises and lowers our lift
     Servo bucketServo = null; // Servo that releases the Freight
@@ -34,7 +35,7 @@ public class Lift {
     public void init(HardwareMap theHardwareMap, LinearOpMode currentOpMode) {
         liftMotor = theHardwareMap.get(DcMotor.class, "lift_motor");
         liftMotor.setDirection(UP_DIRECTION);
-        liftMotor.ZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the lift from falling when zero power is applied.
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the lift from falling when zero power is applied.
         liftMotor.setPower(0);
         bucketServo = theHardwareMap.get(Servo.class, "bucket_servo");
         bucketServo.setPosition(BUCKET_CLOSED);
@@ -62,9 +63,10 @@ public class Lift {
         // ToDo: Implement this
     }
 
-    // Set the servo so that Frieght will stay in the bucket
-    public void open() {
+    // Set the servo so that freight will stay in the bucket
+    public void open(double temporaryVarForBuilding) {
         // ToDo: Implement this
+        //TODO remove the temporary variable, as it exists only to allow our code to build
     }
     
     // Start (or continue) sending the bucket down to the loading position
@@ -73,6 +75,7 @@ public class Lift {
     public boolean autoGoToLoadPosition() {
         // ToDo: Implement this
         // If we don't see black, we need to go down
+        return true; //TODO remove this, as it exists only to allow our code to build
     }
  
     // Start (or continue) sending the bucket to the low scoring position
@@ -83,6 +86,7 @@ public class Lift {
         // If we see red, stop.
         // If we see black, we need to go up.
         // Otherwise, go down.
+        return true; //TODO remove this, as it exists only to allow our code to build
     }
 
     // Start (or continue) sending the bucket to the low scoring position
@@ -90,6 +94,7 @@ public class Lift {
     // Returns true if at the correct position
     public boolean autoGoToMediumPosition() {
         // ToDo: Implement this
+        return true; //TODO remove this, as it exists only to allow our code to build
     }
 
     // Start (or continue) sending the bucket to the low scoring position
@@ -97,5 +102,6 @@ public class Lift {
     // Returns true if at the correct position
     public boolean autoGoToHighPosition() {
         // ToDo: Implement this
+        return true; //TODO remove this, as it exists only to allow our code to build
     }
 }

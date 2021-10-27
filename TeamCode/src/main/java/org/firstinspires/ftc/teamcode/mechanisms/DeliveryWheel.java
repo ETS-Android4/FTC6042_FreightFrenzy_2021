@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.APIs; // Include this with our team "APIs" package
+package org.firstinspires.ftc.teamcode.mechanisms;
 
 // FIRST APIs
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; // Need this so we can check if "opModeIsActive"
@@ -9,11 +9,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap; // Need this so we can conne
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi; // Need this so we can use PID to control speed
 
 public class DeliveryWheel {
-    // Constants that neeed to be calibrated
-    const double TICKS_PER_WHEEL_ROTATION = 100; // Number of encoder ticks for one complete revolution of our delivery wheel
-    const double ROTATIONS_FOR_COMPLETED_DELIVERY = 10; // Enough rotations of our wheel to completely deliver the duck (plus some safety)
-    const double MAXIMUM_SAFE_RPM = 100; // Speed that will not knock the duck off.
-    const DcMotor.Direction DIRECTION_TO_ROTATE = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
+    // Constants that need to be calibrated
+    final double TICKS_PER_WHEEL_ROTATION = 100; // Number of encoder ticks for one complete revolution of our delivery wheel
+    final double ROTATIONS_FOR_COMPLETED_DELIVERY = 10; // Enough rotations of our wheel to completely deliver the duck (plus some safety)
+    final double MAXIMUM_SAFE_RPM = 100; // Speed that will not knock the duck off.
+    final DcMotor.Direction DIRECTION_TO_ROTATE = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
 
     DcMotor deliveryWheel = null; // Motor connected to our delivery wheel
     LinearOpMode opMode = null; // Store a soft copy of the opMode information (so we can check if we need to exit)
@@ -25,7 +25,7 @@ public class DeliveryWheel {
     public void init(HardwareMap theHardwareMap, LinearOpMode currentOpMode) {
         deliveryWheel = theHardwareMap.get(DcMotor.class, "delivery_motor");
         deliveryWheel.setDirection(DIRECTION_TO_ROTATE);
-        deliveryWheel.ZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the wheel from turning when zero power is applied.
+        deliveryWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the wheel from turning when zero power is applied.
         deliveryWheel.setPower(0);
         opMode = currentOpMode;
     }
