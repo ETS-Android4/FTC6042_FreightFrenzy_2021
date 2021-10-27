@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.APIs;
+package org.firstinspires.ftc.teamcode.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.Constants.DrivetrainConstants;
 
-public class DriveApi {
+public class Drivetrain {
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -23,7 +23,7 @@ public class DriveApi {
      * @param rearRight The rear right drive motor
      * @param opMode This opmode object
      */
-    public DriveApi(DcMotor frontLeft, DcMotor frontRight, DcMotor rearLeft, DcMotor rearRight, LinearOpMode opMode) {
+    public Drivetrain(DcMotor frontLeft, DcMotor frontRight, DcMotor rearLeft, DcMotor rearRight, LinearOpMode opMode) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.rearLeft = rearLeft;

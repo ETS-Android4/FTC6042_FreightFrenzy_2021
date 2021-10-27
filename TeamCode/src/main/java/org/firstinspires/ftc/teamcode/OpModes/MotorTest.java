@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-import org.firstinspires.ftc.teamcode.APIs.DriveApi;
+import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
 @Autonomous(name="MotorTest")
 public class MotorTest extends LinearOpMode {
@@ -20,7 +20,7 @@ public class MotorTest extends LinearOpMode {
         DcMotor rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         DcMotor rearRight = hardwareMap.get(DcMotor.class, "rearRight");
 
-        DriveApi drivetrain = new DriveApi(frontLeft, frontRight, rearLeft, rearRight, this);
+        Drivetrain drivetrain = new Drivetrain(frontLeft, frontRight, rearLeft, rearRight, this);
 
         waitForStart();
 

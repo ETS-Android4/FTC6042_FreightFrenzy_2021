@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.APIs.DriveApi;
+import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
 @TeleOp(name="TestOpmode")
 public class TestOpMode extends LinearOpMode {
@@ -19,7 +19,7 @@ public class TestOpMode extends LinearOpMode {
         DcMotor rearLeft = hardwareMap.get(DcMotor.class, "rearLeft");
         DcMotor rearRight = hardwareMap.get(DcMotor.class, "rearRight");
 
-        DriveApi drive = new DriveApi(frontLeft, frontRight, rearLeft, rearRight, this);
+        Drivetrain drive = new Drivetrain(frontLeft, frontRight, rearLeft, rearRight, this);
 
         waitForStart();
 
