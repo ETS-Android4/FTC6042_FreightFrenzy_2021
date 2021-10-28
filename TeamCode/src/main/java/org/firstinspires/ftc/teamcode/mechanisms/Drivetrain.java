@@ -3,12 +3,24 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
-import org.firstinspires.ftc.teamcode.Constants.DrivetrainConstants;
 
 public class Drivetrain {
+
+    // Constants
+    final double DEFAULT_POWER = 0.5;
+    final double DRIVE_WHEEL_DIAMETER_IN_INCHES = 4.75;
+    final double DRIVE_WHEEL_CIRCUMFERENCE_IN_INCHES = 3.14*DRIVE_WHEEL_DIAMETER_IN_INCHES;
+    final double MOTOR_TO_WHEEL_RATIO = 0.5; // The number of rotations on the output shaft of the motor necessary for one rotation of the wheel
+    final double ENCODER_TICKS_PER_WHEEL_ROTATION = 560;
+
+    // PID related constants
+    //TODO tune these values
+    final double DRIVETRAIN_P_GAIN = 0.015;
+    final double DRIVETRAIN_I_GAIN = 0;
+    final double DRIVETRAIN_D_GAIN = 0.2;
+    final double DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS = 2;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -127,8 +139,8 @@ public class Drivetrain {
      * @return The number of ticks to drive
      */
     private double inchesToTicks(double inches) {
-        double rotations = inches/DrivetrainConstants.driveWheelCircumferenceInInches;
-        return rotations*DrivetrainConstants.encoderTicksPerWheelRotation;
+        double rotations = inches/DRIVE_WHEEL_CIRCUMFERENCE_IN_INCHES;
+        return rotations*ENCODER_TICKS_PER_WHEEL_ROTATION;
     }
 
     /**
@@ -166,7 +178,7 @@ public class Drivetrain {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
         while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
-            driveAtPower(DrivetrainConstants.defaultPower);
+            driveAtPower(DEFAULT_POWER);
         }
         stopMotors();
     }
@@ -197,10 +209,10 @@ public class Drivetrain {
         double distanceToTravelInTicks = inchesToTicks(inches);
 
         // Instantiate our PID objects
-        PidApi frontLeftPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
-        PidApi frontRightPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
-        PidApi rearLeftPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
-        PidApi rearRightPid = new PidApi(p, i, d, DrivetrainConstants.driveTrainPidDeadZoneInTicks);
+        PidApi frontLeftPid = new PidApi(p, i, d, DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS);
+        PidApi frontRightPid = new PidApi(p, i, d, DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS);
+        PidApi rearLeftPid = new PidApi(p, i, d,DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS);
+        PidApi rearRightPid = new PidApi(p, i, d, DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS);
 
         while(opMode.opModeIsActive() && !(frontLeftPid.hasReachedTarget() && frontRightPid.hasReachedTarget() && rearLeftPid.hasReachedTarget() && rearRightPid.hasReachedTarget())) {
             frontLeft.setPower(frontLeftPid.getLimitedControlLoopOutput(frontLeft.getCurrentPosition(), distanceToTravelInTicks, 1));
@@ -219,10 +231,10 @@ public class Drivetrain {
         resetEncoders();
         double distanceToTravelInTicks = inchesToTicks(inches);
 
-        double p = DrivetrainConstants.driveTrainPGain;
-        double i = DrivetrainConstants.driveTrainIGain;
-        double d = DrivetrainConstants.driveTrainDGain;
-        double deadZoneInTicks = DrivetrainConstants.driveTrainPidDeadZoneInTicks;
+        double p = DRIVETRAIN_P_GAIN;
+        double i = DRIVETRAIN_I_GAIN;
+        double d = DRIVETRAIN_D_GAIN;
+        double deadZoneInTicks = DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS;
 
         // Instantiate our PID objects
         PidApi frontLeftPid = new PidApi(p, i, d, deadZoneInTicks);
