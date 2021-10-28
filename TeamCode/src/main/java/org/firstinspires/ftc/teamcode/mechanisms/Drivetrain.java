@@ -15,7 +15,7 @@ public class Drivetrain {
     DcMotor rearLeft;
     DcMotor rearRight;
     LinearOpMode opMode;
-    
+
     public Drivetrain() {}
 
     /**
@@ -32,8 +32,8 @@ public class Drivetrain {
         this.rearLeft = rearLeft;
         this.rearRight = rearRight;
         this.opMode = opMode;
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
     }
 
@@ -47,8 +47,8 @@ public class Drivetrain {
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontRight");
         rearLeft = opMode.hardwareMap.get(DcMotor.class, "rearLeft");
         rearRight = opMode.hardwareMap.get(DcMotor.class, "rearRight");
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
     }
 
