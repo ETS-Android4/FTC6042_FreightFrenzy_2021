@@ -15,16 +15,18 @@ public class Drivetrain {
     DcMotor rearLeft;
     DcMotor rearRight;
     LinearOpMode opMode;
+    
+    public Drivetrain() {}
 
     /**
-     * Instantiate a new Drive API object
-     * @param frontLeft The front left drive motor
-     * @param frontRight The front right drive motor
-     * @param rearLeft The rear left drive motor
-     * @param rearRight The rear right drive motor
-     * @param opMode This opmode object
+     * Initialize this drivetrain object, feeding it the four drive motors and the opmode
+     * @param frontLeft Front left drive motor
+     * @param frontRight Front right drive motor
+     * @param rearLeft Rear left drive motor
+     * @param rearRight Rear right drive motor
+     * @param opMode The opmode this object is being instantiating in
      */
-    public Drivetrain(DcMotor frontLeft, DcMotor frontRight, DcMotor rearLeft, DcMotor rearRight, LinearOpMode opMode) {
+    public void init(DcMotor frontLeft, DcMotor frontRight, DcMotor rearLeft, DcMotor rearRight, LinearOpMode opMode) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.rearLeft = rearLeft;
@@ -36,10 +38,10 @@ public class Drivetrain {
     }
 
     /**
-     * Instantiate a new Drive API object using the passed opMode to fetch the drive motors
-     * @param opMode This opMode
+     * Initialize this drivetrain object, feeding it the opmode which will be for fetching the drive motor objects
+     * @param opMode The opmode this object is being instantiated in
      */
-    public Drivetrain(LinearOpMode opMode) {
+    public void init(LinearOpMode opMode) {
         this.opMode = opMode;
         frontLeft = opMode.hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontRight");
