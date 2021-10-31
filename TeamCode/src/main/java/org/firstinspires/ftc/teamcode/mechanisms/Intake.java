@@ -19,6 +19,7 @@ public class Intake {
 
     DcMotor roller; // Motor connected to our intake wheel/star/tubing
     Servo wrist; // Servo connected to the hinge point of our intake box
+    boolean isWristUp;
 
     // Default constructor for a new Intake object
     public Intake() { }
@@ -31,40 +32,55 @@ public class Intake {
         roller.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the motor immediately so we don't take in extra objects.
         wrist = opMode.hardwareMap.get(Servo.class, "wristServo");
         wrist.setPosition(WRIST_UP_POSITION);
+        isWristUp = true;
         this.opMode = opMode;
     }
 
+    /**
+     * Spin the intake wheel at its default power, if the intake is down. If it's up, don't spin at all.
+     */
     public void intake() {
-        // ToDo: Implement this
-        // Spin the intake motor at the normal power.
+        if(!isWristUp) {
+            roller.setPower(INTAKE_POWER);
+        } else {
+            roller.setPower(0);
+        }
     }
 
+    /**
+     * Stop the intake motor
+     */
     public void stop() {
-        // ToDo: Implement this
-        // Set the delivery wheel motor power to zero
+        roller.setPower(0);
     }
 
+    /**
+     * Run the intake backwards to "eject" an element
+     */
     public void eject() {
-        // ToDo: Implement this
-        // Set the intake motor in reverse to spit Freight out
+        if(!isWristUp) {
+            roller.setPower(EJECT_POWER);
+        } else {
+            roller.setPower(0);
+        }
     }
 
+    /**
+     * Move the wrist to its "up" position
+     */
     public void up() {
-        // ToDo: Implement this
-        // Rotate the wrist up, so we can deliver Freight to the indexer, or score.
+        wrist.setPosition(WRIST_UP_POSITION);
     }
 
+    /**
+     * Move the wrist to its "down" position
+     */
     public void down() {
-        // ToDo: Implement this
-        // Rotate the wrist down, so we can deliver Freight to the indexer, or score.
+        wrist.setPosition(WRIST_DOWN_POSITION);
     }
 
     public void autoIntake() {
         // ToDo: Implement this
-        // Make sure the wrist is down
-        // Spin the intake motor
-        // Stop the intake motor when an object is collected
-        // Rotate the intake up and eject the object into the indexer
     }
 
     //
