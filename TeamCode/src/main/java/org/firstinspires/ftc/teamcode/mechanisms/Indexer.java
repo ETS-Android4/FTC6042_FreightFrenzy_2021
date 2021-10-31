@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 public class Indexer {
     // ToDo: implement this.
     // We don't know what the Indexer will need yet.
@@ -9,7 +11,7 @@ public class Indexer {
     }
 
      // Call this once to set up the mechanism
-     public void init() {
+     public void init(LinearOpMode opMode) {
         // ToDo: implement this.
     }
 
