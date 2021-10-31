@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap; // Need this so we can conne
 import com.qualcomm.robotcore.hardware.Servo; // Need this so we can control the wrist servo
 
 public class Intake {
+
+    LinearOpMode opMode;
+
     // Constants that need to be calibrated
     final double INTAKE_POWER = 50; // Power to drive the intake motor when retrieving Freight
     final double EJECT_POWER = -1; // Power to drive the intake motor when pushing Freight back out (just in case)
@@ -21,13 +24,14 @@ public class Intake {
     public Intake() { }
 
     // Call this once to set up the mechanism
-    public void init(HardwareMap theHardwareMap, LinearOpMode currentOpMode) {
-        roller = theHardwareMap.get(DcMotor.class, "intake_motor");
+    public void init(LinearOpMode opMode) {
+        roller = opMode.hardwareMap.get(DcMotor.class, "intake_motor");
         roller.setPower(0);
         roller.setDirection(INTAKE_DIRECTION);
         roller.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the motor immediately so we don't take in extra objects.
-        wrist = theHardwareMap.get(Servo.class, "wristServo");
+        wrist = opMode.hardwareMap.get(Servo.class, "wristServo");
         wrist.setPosition(WRIST_UP_POSITION);
+        this.opMode = opMode;
     }
 
     public void intake() {
