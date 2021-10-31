@@ -32,15 +32,15 @@ public class Lift {
     public Lift() { }
 
     // Call this once to set up the mechanism
-    public void init(HardwareMap theHardwareMap, LinearOpMode currentOpMode) {
-        liftMotor = theHardwareMap.get(DcMotor.class, "lift_motor");
+    public void init(LinearOpMode opMode) {
+        liftMotor = opMode.hardwareMap.get(DcMotor.class, "lift_motor");
         liftMotor.setDirection(UP_DIRECTION);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the lift from falling when zero power is applied.
         liftMotor.setPower(0);
-        bucketServo = theHardwareMap.get(Servo.class, "bucket_servo");
+        bucketServo = opMode.hardwareMap.get(Servo.class, "bucket_servo");
         bucketServo.setPosition(BUCKET_CLOSED);
-        colorSensor = theHardwareMap.get(ColorSensor.class, "lift_color_sensor");;
-        opMode = currentOpMode;
+        colorSensor = opMode.hardwareMap.get(ColorSensor.class, "lift_color_sensor");;
+        this.opMode = opMode;
     }
 
     // Continuous raising (not using sensor positions)
