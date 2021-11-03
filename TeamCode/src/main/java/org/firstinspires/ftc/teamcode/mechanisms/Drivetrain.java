@@ -276,7 +276,7 @@ public class Drivetrain {
         // Get our current orientation and record it as our starting position
         gyro.update();
         //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawX();
+        float startingRotation = gyro.getRawY();
 
         // Instantiate our PID object for rotation
         PidApi rotationPid = new PidApi(ROTATION_P_GAIN, ROTATION_I_GAIN, ROTATION_D_GAIN, ROTATION_PID_DEAD_ZONE);
@@ -284,13 +284,13 @@ public class Drivetrain {
         if(degreesToRotate > 0) {
             while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
                 gyro.update();
-                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawX(), startingRotation+degreesToRotate, 1);
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawY(), startingRotation+degreesToRotate, 1);
                 driveAtPower(pidOutput, -pidOutput);
             }
         } else if(degreesToRotate < 0) {
             while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
                 gyro.update();
-                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawX(), startingRotation-degreesToRotate, 1);
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawY(), startingRotation-degreesToRotate, 1);
                 driveAtPower(pidOutput, -pidOutput);
             }
         }
@@ -305,15 +305,15 @@ public class Drivetrain {
         // Get our current orientation and record it as our starting position
         gyro.update();
         //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawX();
+        float startingRotation = gyro.getRawY();
 
         if(degreesToRotate > 0) {
-            while(opMode.opModeIsActive() && gyro.getRawX() < startingRotation+degreesToRotate) {
+            while(opMode.opModeIsActive() && gyro.getRawY() < startingRotation+degreesToRotate) {
                 driveAtPower(DEFAULT_ROTATE_SPEED, -DEFAULT_ROTATE_SPEED);
                 gyro.update();
             }
         } else if(degreesToRotate < 0) {
-            while(opMode.opModeIsActive() && gyro.getRawX() > startingRotation-degreesToRotate) {
+            while(opMode.opModeIsActive() && gyro.getRawY() > startingRotation-degreesToRotate) {
                 driveAtPower(-DEFAULT_ROTATE_SPEED, DEFAULT_ROTATE_SPEED);
                 gyro.update();
             }
@@ -330,15 +330,15 @@ public class Drivetrain {
         // Get our current orientation and record it as our starting position
         gyro.update();
         //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawX();
+        float startingRotation = gyro.getRawY();
 
         if(degreesToRotate > 0) {
-            while(opMode.opModeIsActive() && gyro.getRawX() < startingRotation+degreesToRotate) {
+            while(opMode.opModeIsActive() && gyro.getRawY() < startingRotation+degreesToRotate) {
                 driveAtPower(speedToRotate, -speedToRotate);
                 gyro.update();
             }
         } else if(degreesToRotate < 0) {
-            while(opMode.opModeIsActive() && gyro.getRawX() > startingRotation-degreesToRotate) {
+            while(opMode.opModeIsActive() && gyro.getRawY() > startingRotation-degreesToRotate) {
                 driveAtPower(-speedToRotate, speedToRotate);
                 gyro.update();
             }
