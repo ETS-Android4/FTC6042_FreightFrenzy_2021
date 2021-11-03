@@ -23,7 +23,7 @@ public class DeliveryWheel {
 
     // Call this once to set up the mechanism
     public void init(LinearOpMode opMode) {
-        deliveryWheel = opMode.hardwareMap.get(DcMotor.class, "delivery_motor");
+        deliveryWheel = opMode.hardwareMap.get(DcMotor.class, "deliveryWheel");
         deliveryWheel.setDirection(DIRECTION_TO_ROTATE);
         deliveryWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the wheel from turning when zero power is applied.
         deliveryWheel.setPower(0);
@@ -32,14 +32,12 @@ public class DeliveryWheel {
 
     // Spin our wheel at a set power
     public void rotateAtPower(double power) {
-        // ToDo: Implement this
-        // Set the delivery wheel mnotor power to the level requested
+        deliveryWheel.setPower(power);
     }
 
     // Bring our wheel to a complete stop
     public void stop() {
-        // ToDo: Implement this
-        // Set the delivery wheel motor power to zero
+        deliveryWheel.setPower(0);
     }
 
     // Spin our wheel a set number of degrees at the fastest safe speed, then stop the motor.
@@ -70,5 +68,6 @@ public class DeliveryWheel {
         deliveryWheel.setMode(DcMotor.RunMode.RESET_ENCODERS);
         deliveryWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
 
 }
