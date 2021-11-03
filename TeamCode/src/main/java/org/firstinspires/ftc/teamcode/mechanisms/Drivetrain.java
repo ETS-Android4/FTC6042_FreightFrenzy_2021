@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.APIs.Gyroscope.GyroscopeApi;
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 
 public class Drivetrain {
@@ -14,6 +15,7 @@ public class Drivetrain {
     final double DRIVE_WHEEL_CIRCUMFERENCE_IN_INCHES = 3.14*DRIVE_WHEEL_DIAMETER_IN_INCHES;
     final double MOTOR_TO_WHEEL_RATIO = 0.5; // The number of rotations on the output shaft of the motor necessary for one rotation of the wheel
     final double ENCODER_TICKS_PER_WHEEL_ROTATION = 560;
+    final double DEFAULT_ROTATE_SPEED = 0.5;
 
     // PID related constants
     //TODO tune these values
@@ -21,12 +23,17 @@ public class Drivetrain {
     final double DRIVETRAIN_I_GAIN = 0;
     final double DRIVETRAIN_D_GAIN = 0.2;
     final double DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS = 2;
+    final double ROTATION_P_GAIN = 0;
+    final double ROTATION_I_GAIN = 0;
+    final double ROTATION_D_GAIN = 0;
+    final double ROTATION_PID_DEAD_ZONE = 0;
 
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor rearLeft;
     DcMotor rearRight;
     LinearOpMode opMode;
+    GyroscopeApi gyro;
 
     public Drivetrain() {}
 
@@ -44,6 +51,7 @@ public class Drivetrain {
         this.rearLeft = rearLeft;
         this.rearRight = rearRight;
         this.opMode = opMode;
+        gyro = new GyroscopeApi(opMode.hardwareMap);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
@@ -61,6 +69,7 @@ public class Drivetrain {
         rearRight = opMode.hardwareMap.get(DcMotor.class, "rearRight");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        gyro = new GyroscopeApi(opMode.hardwareMap);
         resetEncoders();
     }
 
@@ -171,6 +180,13 @@ public class Drivetrain {
     }
 
     /**
+     * Stop the drive motors
+     */
+    public void stopMotors() {
+        driveAtPower(0);
+    }
+
+    /**
      * Drive forward the given number of inches using encoders, with the default power value
      * @param inches The number of inches to drive
      */
@@ -252,10 +268,82 @@ public class Drivetrain {
     }
 
     /**
-     * Stop the drive motors
+     * Rotate a certain number of degrees using PID. Negative degrees rotate counterclockwise and positive numbers rotate clockwise
+     * @param degreesToRotate The number of degrees to rotate
      */
-    public void stopMotors() {
-        driveAtPower(0);
+    public void rotateDegrees(double degreesToRotate) {
+
+        // Get our current orientation and record it as our starting position
+        gyro.update();
+        //TODO change all axis instances to the proper axis
+        float startingRotation = gyro.getRawX();
+
+        // Instantiate our PID object for rotation
+        PidApi rotationPid = new PidApi(ROTATION_P_GAIN, ROTATION_I_GAIN, ROTATION_D_GAIN, ROTATION_PID_DEAD_ZONE);
+
+        if(degreesToRotate > 0) {
+            while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
+                gyro.update();
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawX(), startingRotation+degreesToRotate, 1);
+                driveAtPower(pidOutput, -pidOutput);
+            }
+        } else if(degreesToRotate < 0) {
+            while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
+                gyro.update();
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawX(), startingRotation-degreesToRotate, 1);
+                driveAtPower(pidOutput, -pidOutput);
+            }
+        }
+        stopMotors();
+    }
+
+    /**
+     * Rotate a certain number of degrees at the default power without PID. Negative degrees rotate counter clockwise, while positive degrees rotate clockwise.
+     * @param degreesToRotate The number of degrees to rotate
+     */
+    public void rotateDegreesNoPid(double degreesToRotate) {
+        // Get our current orientation and record it as our starting position
+        gyro.update();
+        //TODO change all axis instances to the proper axis
+        float startingRotation = gyro.getRawX();
+
+        if(degreesToRotate > 0) {
+            while(opMode.opModeIsActive() && gyro.getRawX() < startingRotation+degreesToRotate) {
+                driveAtPower(DEFAULT_ROTATE_SPEED, -DEFAULT_ROTATE_SPEED);
+                gyro.update();
+            }
+        } else if(degreesToRotate < 0) {
+            while(opMode.opModeIsActive() && gyro.getRawX() > startingRotation-degreesToRotate) {
+                driveAtPower(-DEFAULT_ROTATE_SPEED, DEFAULT_ROTATE_SPEED);
+                gyro.update();
+            }
+        }
+        stopMotors();
+    }
+
+    /**
+     * Rotate a certain number of degrees at a certain power and without PID. Negative degrees rotate counter clockwise, while positive degrees rotate clockwise.
+     * @param degreesToRotate The number of degrees to rotate
+     * @param speedToRotate The speed at which to rotate
+     */
+    public void rotateDegreesNoPid(double degreesToRotate, double speedToRotate) {
+        // Get our current orientation and record it as our starting position
+        gyro.update();
+        //TODO change all axis instances to the proper axis
+        float startingRotation = gyro.getRawX();
+
+        if(degreesToRotate > 0) {
+            while(opMode.opModeIsActive() && gyro.getRawX() < startingRotation+degreesToRotate) {
+                driveAtPower(speedToRotate, -speedToRotate);
+                gyro.update();
+            }
+        } else if(degreesToRotate < 0) {
+            while(opMode.opModeIsActive() && gyro.getRawX() > startingRotation-degreesToRotate) {
+                driveAtPower(-speedToRotate, speedToRotate);
+                gyro.update();
+            }
+        }
+        stopMotors();
     }
 
 }

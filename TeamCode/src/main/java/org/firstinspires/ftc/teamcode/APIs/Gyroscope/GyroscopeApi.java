@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.APIs;
+package org.firstinspires.ftc.teamcode.APIs.Gyroscope;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
