@@ -31,9 +31,13 @@ public class GyroscopeApi {
 
         float startX = this.xAngle, startY = this.yAngle, startZ = this.zAngle;
 
-        this.xAngle = getRelativeClosestAngle(this.xAngle, orientation.firstAngle);
-        this.yAngle = getRelativeClosestAngle(this.yAngle, orientation.secondAngle);
-        this.zAngle = getRelativeClosestAngle(this.zAngle, orientation.thirdAngle);
+        this.xAngle = orientation.firstAngle;
+        this.yAngle = orientation.secondAngle;
+        this.zAngle = orientation.thirdAngle;
+
+//        this.xAngle = getRelativeClosestAngle(this.xAngle, orientation.firstAngle);
+//        this.yAngle = getRelativeClosestAngle(this.yAngle, orientation.secondAngle);
+//        this.zAngle = getRelativeClosestAngle(this.zAngle, orientation.thirdAngle);
     }
 
     private float getRelativeClosestAngle(float currentAngle, float targetAngle) {
