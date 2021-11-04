@@ -13,7 +13,8 @@ public class DeliveryWheel {
     final double TICKS_PER_WHEEL_ROTATION = 100; // Number of encoder ticks for one complete revolution of our delivery wheel
     final double ROTATIONS_FOR_COMPLETED_DELIVERY = 10; // Enough rotations of our wheel to completely deliver the duck (plus some safety)
     final double MAXIMUM_SAFE_RPM = 100; // Speed that will not knock the duck off.
-    final DcMotor.Direction DIRECTION_TO_ROTATE = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
+    final DcMotor.Direction DIRECTION_TO_ROTATE = DcMotor.Direction.REVERSE; // Set which way we should normally rotate.
+    final int TICKS_PER_CAROUSEL_REVOLUTION = 3360;
 
     DcMotor deliveryWheel = null; // Motor connected to our delivery wheel
     LinearOpMode opMode = null; // Store a soft copy of the opMode information (so we can check if we need to exit)
@@ -67,6 +68,47 @@ public class DeliveryWheel {
     public void resetEncoder() {
         deliveryWheel.setMode(DcMotor.RunMode.RESET_ENCODERS);
         deliveryWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /**
+     * Rotate a specified number of ticks at a specified power
+     * @param numberOfTicks The number of ticks to rotate
+     * @param power The power at which to rotate
+     */
+    public void rotateNumberOfTicks(int numberOfTicks, double power) {
+        // Make sure the power is positive
+        if(power < 0) {
+            power *= -1;
+        }
+        resetEncoder();
+        if(numberOfTicks > 0) {
+            while(opMode.opModeIsActive() && deliveryWheel.getCurrentPosition() < numberOfTicks) {
+                rotateAtPower(power);
+            }
+        } else if(numberOfTicks < 0) {
+            while(opMode.opModeIsActive() && deliveryWheel.getCurrentPosition() > numberOfTicks) {
+                rotateAtPower(-power);
+            }
+        }
+        stop();
+    }
+
+    /**
+     * Get the number of ticks for a certain number of carousel revolutions
+     * @param numberOfCarouselRotations The number of carousel revolutions
+     * @return The number of ticks
+     */
+    public int carouselRotationsToTicks(double numberOfCarouselRotations) {
+        return (int) (numberOfCarouselRotations*TICKS_PER_CAROUSEL_REVOLUTION);
+    }
+
+    /**
+     * Rotate the carousel a number of rotations
+     * @param numberOfCarouselRotations The number of carousel rotations to rotate
+     * @param power The power at which to rotate
+     */
+    public void rotateNumberOfCarouselRotations(double numberOfCarouselRotations, double power) {
+        rotateNumberOfTicks(carouselRotationsToTicks(numberOfCarouselRotations), power);
     }
 
 
