@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.APIs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 import org.firstinspires.ftc.teamcode.mechanisms.Indexer;
@@ -70,49 +71,97 @@ public class AutonomousActions {
      * Rotate left off of the wall
      */
     public void rotateLeftFromWall() {
-        //TODO Implement this
+        drivetrain.driveForwardInches(2, 0.4);
+        drivetrain.rotateDegreesNoPid(-90);
     }
 
     /**
      * Rotate right off of the wall
      */
     public void rotateRightFromWall() {
-        //TODO Implement this
+        drivetrain.driveForwardInches(2, 0.4);
+        drivetrain.rotateDegreesNoPid(90);
     }
 
     /**
-     * Drive straight to the delivery wheel from wherever we are
+     * Drive straight to the delivery wheel from near the far barcode
      */
-    public void driveToDeliveryWheel() {
-        //TODO Implement this
+    public void driveToDeliveryWheelFromFarBarcode() {
+        // Get us close to the delivery wheel
+        drivetrain.driveForwardInchesNoPid(54, 0.5);
+
+        // Slow down but keep moving forward until we hit the wheel
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
+            drivetrain.driveAtPower(0.2);
+        }
+    }
+
+    /**
+     * Drive straight to the delivery wheel from near the far barcode
+     */
+    public void driveToDeliveryWheelFromFarBarcodeBackwards() {
+        // Get us close to the delivery wheel
+        drivetrain.driveForwardInchesNoPid(-54, 0.5);
+
+        // Slow down but keep moving forward until we hit the wheel
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
+            drivetrain.driveAtPower(-0.2);
+        }
+    }
+
+    // TODO create a backwards version of the method below
+
+    /**
+     * Drive straight to the delivery wheel from near the near barcode
+     */
+    public void driveToDeliveryWheelFromNearBarcode() {
+
+        // Get us close to the delivery wheel
+        drivetrain.driveForwardInches(12, 0.5);
+
+        // Slow down but keep moving forward until we hit the week
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
+            drivetrain.driveAtPower(0.2);
+        }
+    }
+
+    /**
+     * Drive straight to the delivery wheel from near the near barcode
+     */
+    public void driveToDeliveryWheelFromNearBarcodeBackwards() {
+
+        // Get us close to the delivery wheel
+        drivetrain.driveForwardInches(-12, 0.5);
+
+        // Slow down but keep moving forward until we hit the week
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
+            drivetrain.driveAtPower(-0.2);
+        }
     }
 
     /**
      * Deliver the duck by spinning the wheel clockwise
      */
-    public void deliverDuckClockwise() {
-        //TODO Implement this
+    public void deliverDuck() {
+        deliveryWheel.rotateNumberOfCarouselRotations(1.5, 0.5);
     }
 
     /**
-     * Deliver the duck by spinning the wheel counter clockwise
+     * Park in the warehouse from the Carousel
      */
-    public void deliverDuckCounterClockwise() {
-        //TODO Implement this
-    }
-
-    /**
-     * Park in the warehouse by driving straight forwards
-     */
-    public void parkInWarehouse() {
-        //TODO Implement this
+    public void parkInWarehouseFromCarousel() {
+        driveInches(102);
     }
 
     /**
      * Park in the warehouse by driving backwards
      */
-    public void parkInWarehouseBackwards() {
-        //TODO Implement this
+    public void parkInWarehouseFromCarouselBackwards() {
+        driveInches(-102);
     }
 
     /**
@@ -124,9 +173,10 @@ public class AutonomousActions {
 
     /**
      * Rotate a specified number of degrees
+     * @param degreesToRotate The number of degrees to rotate. Negative degrees are counterclockwise, and positive degrees are clockwise
      */
-    public void rotateDegrees() {
-        //TODO Implement this
+    public void rotateDegrees(double degreesToRotate) {
+        drivetrain.rotateDegrees(degreesToRotate);
     }
 
 }
