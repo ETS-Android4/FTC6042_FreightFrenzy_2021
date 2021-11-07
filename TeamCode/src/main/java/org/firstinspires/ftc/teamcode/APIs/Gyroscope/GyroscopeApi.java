@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.APIs.Gyroscope;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -12,6 +13,7 @@ public class GyroscopeApi {
 
     private BNO055IMU imu;
     private float xAngle, yAngle, zAngle;
+    double xAcceleration, yAcceleration, zAcceleration;
 
     public GyroscopeApi(HardwareMap hardwareMap) {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -24,51 +26,24 @@ public class GyroscopeApi {
         this.imu.initialize(parameters);
 
         this.xAngle = this.yAngle = this.zAngle = 0;
+        this.xAcceleration = this.yAcceleration = this.zAcceleration = 0;
     }
 
     public void update() {
+        // Record angles
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-        float startX = this.xAngle, startY = this.yAngle, startZ = this.zAngle;
-
         this.xAngle = orientation.firstAngle;
         this.yAngle = orientation.secondAngle;
         this.zAngle = orientation.thirdAngle;
 
-//        this.xAngle = getRelativeClosestAngle(this.xAngle, orientation.firstAngle);
-//        this.yAngle = getRelativeClosestAngle(this.yAngle, orientation.secondAngle);
-//        this.zAngle = getRelativeClosestAngle(this.zAngle, orientation.thirdAngle);
+        // Record accelerations
+        Acceleration acceleration = imu.getAcceleration();
+        this.xAcceleration = acceleration.xAccel;
+        this.yAcceleration = acceleration.yAccel;
+        this.zAcceleration = acceleration.zAccel;
     }
 
-    private float getRelativeClosestAngle(float currentAngle, float targetAngle) {
-        while(targetAngle - currentAngle >= 360) {
-            targetAngle -= 360;
-        }
 
-        while(targetAngle - currentAngle <= -360) {
-            targetAngle += 360;
-        }
-
-        if(targetAngle != currentAngle) {
-            float negativeDirectionTargetAngle = 0;
-            float positiveDirectionTargetAngle = 0;
-
-            if(targetAngle < currentAngle) {
-                negativeDirectionTargetAngle = targetAngle;
-                positiveDirectionTargetAngle = targetAngle + 360;
-            } else {
-                negativeDirectionTargetAngle = targetAngle - 360;
-                positiveDirectionTargetAngle = targetAngle;
-            }
-            float negativeDirectionDistance = negativeDirectionTargetAngle - currentAngle;
-            float positiveDirectionDistance = positiveDirectionTargetAngle - currentAngle;
-
-            if(Math.abs(positiveDirectionDistance) < Math.abs(negativeDirectionDistance)) return positiveDirectionTargetAngle;
-            else return negativeDirectionTargetAngle;
-        }
-
-        return targetAngle;
-    }
 
     public float getRawX() {
         return xAngle;
@@ -92,5 +67,17 @@ public class GyroscopeApi {
 
     public float getStandardizedZ() {
         return xAngle%360;
+    }
+
+    public double getXAcceleration() {
+        return xAcceleration;
+    }
+
+    public double getYAcceleration() {
+        return yAcceleration;
+    }
+
+    public double getZAcceleration() {
+        return zAcceleration;
     }
 }
