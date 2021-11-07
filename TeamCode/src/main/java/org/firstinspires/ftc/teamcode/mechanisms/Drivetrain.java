@@ -268,6 +268,35 @@ public class Drivetrain {
     }
 
     /**
+     * Drive forward the given number of inches with a specified top speed using the default PID values specified in the drivetrain constants class
+     * @param inches The number of inches to drive forward
+     * @param topSpeed The top speed our robot can drive
+     */
+    public void driveForwardInches(double inches, double topSpeed) {
+        resetEncoders();
+        double distanceToTravelInTicks = inchesToTicks(inches);
+
+        double p = DRIVETRAIN_P_GAIN;
+        double i = DRIVETRAIN_I_GAIN;
+        double d = DRIVETRAIN_D_GAIN;
+        double deadZoneInTicks = DRIVETRAIN_PID_DEAD_ZONE_IN_TICKS;
+
+        // Instantiate our PID objects
+        PidApi frontLeftPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi frontRightPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi rearLeftPid = new PidApi(p, i, d, deadZoneInTicks);
+        PidApi rearRightPid = new PidApi(p, i, d, deadZoneInTicks);
+
+        while(opMode.opModeIsActive() && !(frontLeftPid.hasReachedTarget() && frontRightPid.hasReachedTarget() && rearLeftPid.hasReachedTarget() && rearRightPid.hasReachedTarget())) {
+            frontLeft.setPower(frontLeftPid.getLimitedControlLoopOutput(frontLeft.getCurrentPosition(), distanceToTravelInTicks, topSpeed));
+            frontRight.setPower(frontRightPid.getLimitedControlLoopOutput(frontRight.getCurrentPosition(), distanceToTravelInTicks, topSpeed));
+            rearLeft.setPower(rearLeftPid.getLimitedControlLoopOutput(rearLeft.getCurrentPosition(), distanceToTravelInTicks, topSpeed));
+            rearRight.setPower(rearRightPid.getLimitedControlLoopOutput(rearRight.getCurrentPosition(), distanceToTravelInTicks, topSpeed));
+        }
+        stopMotors();
+    }
+
+    /**
      * Rotate a certain number of degrees using PID. Negative degrees rotate counterclockwise and positive numbers rotate clockwise
      * @param degreesToRotate The number of degrees to rotate
      */
