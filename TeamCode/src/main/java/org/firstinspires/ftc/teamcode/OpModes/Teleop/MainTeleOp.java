@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
 @TeleOp(name="Main Teleop")
@@ -13,6 +14,8 @@ public class MainTeleOp extends LinearOpMode {
         // Instantiate and initialize our drivetrain
         Drivetrain drivetrain = new Drivetrain();
         drivetrain.init(this);
+        DeliveryWheel deliveryWheel = new DeliveryWheel();
+        deliveryWheel.init(this);
 
         // Let the driver know the robot is done initializing
         telemetry.addLine("Robot initialized");
@@ -34,6 +37,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Drive at the target powers
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
+            deliveryWheel.rotateAtPower(gamepad1.right_trigger);
         }
     }
 }
