@@ -14,9 +14,9 @@ public class AutonomousActions {
     LinearOpMode opMode;
     Drivetrain drivetrain;
     DeliveryWheel deliveryWheel;
-    Indexer indexer;
-    Intake intake;
-    Lift lift;
+    //Indexer indexer;
+    //Intake intake;
+    //Lift lift;
 
     public AutonomousActions() {}
 
@@ -30,16 +30,16 @@ public class AutonomousActions {
         // Instantiate our mechanisms
         drivetrain = new Drivetrain();
         deliveryWheel = new DeliveryWheel();
-        indexer = new Indexer();
-        intake = new Intake();
-        lift = new Lift();
+        //indexer = new Indexer();
+        //intake = new Intake();
+        //lift = new Lift();
 
         // Initialize our mechanisms
         drivetrain.init(opMode);
         deliveryWheel.init(opMode);
-        indexer.init(opMode);
-        intake.init(opMode);
-        lift.init(opMode);
+        //indexer.init(opMode);
+        //intake.init(opMode);
+        //lift.init(opMode);
     }
 
     /**
