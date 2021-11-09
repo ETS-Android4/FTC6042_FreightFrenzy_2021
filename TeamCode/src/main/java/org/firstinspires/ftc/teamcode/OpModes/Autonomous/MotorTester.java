@@ -21,7 +21,7 @@ public class MotorTester extends LinearOpMode {
         // Wait for the driver to press play
         waitForStart();
 
-        /*drivetrain.driveFrontLeft(0.1);
+        drivetrain.driveFrontLeft(0.1);
         sleep(3000);
         drivetrain.stopMotors();
         drivetrain.driveFrontRight(0.1);
@@ -32,8 +32,7 @@ public class MotorTester extends LinearOpMode {
         drivetrain.stopMotors();
         drivetrain.driveRearRight(0.1);
         sleep(3000);
-        drivetrain.stopMotors(); */
-
+        drivetrain.stopMotors();
 
         delivery.rotateAtPower(-1);
         sleep(5000);
