@@ -433,6 +433,46 @@ public class Drivetrain {
         stopMotors();
     }
 
+    /**
+     * Drive at a certain power for a certain number of milliseconds
+     * @param power The power at which to drive
+     * @param millis The number of milliseconds for which to drive
+     */
+    public void driveTime(double power, long millis) {
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTimeInMillis+millis) {
+            driveAtPower(power);
+        }
+        stopMotors();
+    }
+
+    /**
+     * Drive the left and right sides at specified powers for a certain number of milliseconds
+     * @param leftPower The speed at which to drive the left side of the robot
+     * @param rightPower The speed at which to drive the right side of the robot
+     * @param millis The number of milliseconds for which to drive
+     */
+    public void driveTime(double leftPower, double rightPower, long millis) {
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTimeInMillis+millis) {
+            driveAtPower(leftPower, rightPower);
+        }
+        stopMotors();
+    }
+
+    /**
+     * Rotate in place like a tank at a certain power for a certain number of milliseconds
+     * @param power The power at which to rotate
+     * @param millis The number of milliseconds for which to rotate
+     */
+    public void rotateInPlaceTime(double power, long millis) {
+        long startTimeInMillis = System.currentTimeMillis();
+        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTimeInMillis+millis) {
+            driveAtPower(power, -power);
+        }
+        stopMotors();
+    }
+
     public int getFrontLeftEncoderValue() {
         return frontLeft.getCurrentPosition();
     }
