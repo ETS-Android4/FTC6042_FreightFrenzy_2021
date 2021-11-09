@@ -15,7 +15,7 @@ public class Drivetrain {
     final double DRIVE_WHEEL_CIRCUMFERENCE_IN_INCHES = 3.1459*DRIVE_WHEEL_DIAMETER_IN_INCHES;
     final double MOTOR_TO_WHEEL_RATIO = 0.5; // The number of rotations on the output shaft of the motor necessary for one rotation of the wheel
     final double ENCODER_TICKS_PER_WHEEL_ROTATION = 560;
-    final double DEFAULT_ROTATE_SPEED = 0.5;
+    final double DEFAULT_ROTATE_SPEED = 0.3;
 
     // PID related constants
     //TODO tune these values
@@ -27,6 +27,8 @@ public class Drivetrain {
     final double ROTATION_I_GAIN = 0;
     final double ROTATION_D_GAIN = 0;
     final double ROTATION_PID_DEAD_ZONE = 0;
+
+    final double ROTATION_NO_PID_DEAD_ZONE = 2;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -52,8 +54,8 @@ public class Drivetrain {
         this.rearRight = rearRight;
         this.opMode = opMode;
         gyro = new GyroscopeApi(opMode.hardwareMap);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
         resetEncoders();
     }
 
@@ -67,8 +69,8 @@ public class Drivetrain {
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontRight");
         rearLeft = opMode.hardwareMap.get(DcMotor.class, "rearLeft");
         rearRight = opMode.hardwareMap.get(DcMotor.class, "rearRight");
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
         gyro = new GyroscopeApi(opMode.hardwareMap);
         resetEncoders();
     }
@@ -180,6 +182,18 @@ public class Drivetrain {
     }
 
     /**
+     * Get the average of all of the drivetrain encoders
+     * @return The average of all of the drivetrain encoders
+     */
+    public double getEncoderAbsoluteAverage() {
+        double frontLeftEncoder = Math.abs(frontLeft.getCurrentPosition());
+        double frontRightEncoder = Math.abs(frontRight.getCurrentPosition());
+        double rearLeftEncoder = Math.abs(rearLeft.getCurrentPosition());
+        double rearRightEncoder = Math.abs(rearRight.getCurrentPosition());
+        return (frontLeftEncoder+frontRightEncoder+rearLeftEncoder+rearRightEncoder)/4;
+    }
+
+    /**
      * Stop the drive motors
      */
     public void stopMotors() {
@@ -192,10 +206,21 @@ public class Drivetrain {
      */
     public void driveForwardInchesNoPid(double inches) {
         resetEncoders();
-        double distanceToTravelInTicks = inchesToTicks(inches);
-        while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
-            driveAtPower(DEFAULT_POWER);
+
+        boolean desiredDirectionIsForward;
+        desiredDirectionIsForward = (inches > 0 && DEFAULT_POWER > 0) || (inches < 0 && DEFAULT_POWER < 0);
+        double targetTicks = inchesToTicks(inches);
+
+        if(desiredDirectionIsForward) {
+            while(opMode.opModeIsActive() && getEncoderAbsoluteAverage() < Math.abs(targetTicks)) {
+                driveAtPower(Math.abs(DEFAULT_POWER));
+            }
+        } else {
+            while(opMode.opModeIsActive() && getEncoderAbsoluteAverage() < Math.abs(targetTicks)) {
+                driveAtPower(-Math.abs(DEFAULT_POWER));
+            }
         }
+
         stopMotors();
     }
 
@@ -205,11 +230,23 @@ public class Drivetrain {
      * @param power The power at which to drive
      */
     public void driveForwardInchesNoPid(double inches, double power) {
+
         resetEncoders();
-        double distanceToTravelInTicks = inchesToTicks(inches);
-        while(opMode.opModeIsActive() && getEncoderAverage() < distanceToTravelInTicks) {
-            driveAtPower(power);
+
+        boolean desiredDirectionIsForward;
+        desiredDirectionIsForward = (inches > 0 && power > 0) || (inches < 0 && power < 0);
+        double targetTicks = inchesToTicks(inches);
+
+        if(desiredDirectionIsForward) {
+            while(opMode.opModeIsActive() && getEncoderAbsoluteAverage() < Math.abs(targetTicks)) {
+                driveAtPower(Math.abs(power));
+            }
+        } else {
+            while(opMode.opModeIsActive() && getEncoderAbsoluteAverage() < Math.abs(targetTicks)) {
+                driveAtPower(-Math.abs(power));
+            }
         }
+
         stopMotors();
     }
 
@@ -305,7 +342,7 @@ public class Drivetrain {
         // Get our current orientation and record it as our starting position
         gyro.update();
         //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawY();
+        float startingRotation = gyro.getY();
 
         // Instantiate our PID object for rotation
         PidApi rotationPid = new PidApi(ROTATION_P_GAIN, ROTATION_I_GAIN, ROTATION_D_GAIN, ROTATION_PID_DEAD_ZONE);
@@ -313,13 +350,13 @@ public class Drivetrain {
         if(degreesToRotate > 0) {
             while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
                 gyro.update();
-                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawY(), startingRotation+degreesToRotate, 1);
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getY(), startingRotation+degreesToRotate, 1);
                 driveAtPower(pidOutput, -pidOutput);
             }
         } else if(degreesToRotate < 0) {
             while(opMode.opModeIsActive() && !rotationPid.hasReachedTarget()) {
                 gyro.update();
-                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getRawY(), startingRotation-degreesToRotate, 1);
+                double pidOutput = rotationPid.getLimitedControlLoopOutput(gyro.getY(), startingRotation-degreesToRotate, 1);
                 driveAtPower(pidOutput, -pidOutput);
             }
         }
@@ -333,18 +370,28 @@ public class Drivetrain {
     public void rotateDegreesNoPid(double degreesToRotate) {
         // Get our current orientation and record it as our starting position
         gyro.update();
-        //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawY();
+        float startingRotation = gyro.getY();
 
-        if(degreesToRotate > 0) {
-            while(opMode.opModeIsActive() && gyro.getRawY() < startingRotation+degreesToRotate) {
-                driveAtPower(DEFAULT_ROTATE_SPEED, -DEFAULT_ROTATE_SPEED);
-                gyro.update();
+        boolean rotatingClockwise;
+
+        rotatingClockwise = (degreesToRotate > 0 && DEFAULT_ROTATE_SPEED > 0) || (degreesToRotate < 0 && DEFAULT_ROTATE_SPEED < 0);
+        int numberOfTimesToRotate = (int) String.valueOf(degreesToRotate / 360).charAt(0);
+
+        if(rotatingClockwise) {
+            double valueToStopRotatingAt = Math.abs((startingRotation-Math.abs(degreesToRotate))%360);
+            for (int i = 0; i < numberOfTimesToRotate; i++) {
+                while(!(gyro.getY() >= valueToStopRotatingAt && gyro.getY() <= valueToStopRotatingAt+ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
+                    driveAtPower(Math.abs(DEFAULT_ROTATE_SPEED), -Math.abs(DEFAULT_ROTATE_SPEED));
+                    gyro.update();
+                }
             }
-        } else if(degreesToRotate < 0) {
-            while(opMode.opModeIsActive() && gyro.getRawY() > startingRotation-degreesToRotate) {
-                driveAtPower(-DEFAULT_ROTATE_SPEED, DEFAULT_ROTATE_SPEED);
-                gyro.update();
+        } else {
+            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            for (int i = 0; i < numberOfTimesToRotate; i++) {
+                while(!(gyro.getY() <= valueToStopRotatingAt && gyro.getY() >= valueToStopRotatingAt-ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
+                    driveAtPower(-Math.abs(DEFAULT_ROTATE_SPEED), Math.abs(DEFAULT_ROTATE_SPEED));
+                    gyro.update();
+                }
             }
         }
         stopMotors();
@@ -358,21 +405,49 @@ public class Drivetrain {
     public void rotateDegreesNoPid(double degreesToRotate, double speedToRotate) {
         // Get our current orientation and record it as our starting position
         gyro.update();
-        //TODO change all axis instances to the proper axis
-        float startingRotation = gyro.getRawY();
+        float startingRotation = gyro.getY();
 
-        if(degreesToRotate > 0) {
-            while(opMode.opModeIsActive() && gyro.getRawY() < startingRotation+degreesToRotate) {
-                driveAtPower(speedToRotate, -speedToRotate);
-                gyro.update();
+        boolean rotatingClockwise;
+
+        rotatingClockwise = (degreesToRotate > 0 && speedToRotate > 0) || (degreesToRotate < 0 && speedToRotate  < 0);
+        int numberOfTimesToRotate = (int) String.valueOf(degreesToRotate / 360).charAt(0);
+
+        if(rotatingClockwise) {
+            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            for (int i = 0; i < numberOfTimesToRotate; i++) {
+                while(!(gyro.getY() >= valueToStopRotatingAt && gyro.getY() <= valueToStopRotatingAt+ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
+                    driveAtPower(Math.abs(speedToRotate), -Math.abs(speedToRotate));
+                    gyro.update();
+                }
             }
-        } else if(degreesToRotate < 0) {
-            while(opMode.opModeIsActive() && gyro.getRawY() > startingRotation-degreesToRotate) {
-                driveAtPower(-speedToRotate, speedToRotate);
-                gyro.update();
+        } else {
+            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            for (int i = 0; i < numberOfTimesToRotate; i++) {
+                while(!(gyro.getY() <= valueToStopRotatingAt && gyro.getY() >= valueToStopRotatingAt-ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
+                    driveAtPower(-Math.abs(speedToRotate), Math.abs(speedToRotate));
+                    gyro.update();
+                }
             }
         }
+
         stopMotors();
     }
+
+    public int getFrontLeftEncoderValue() {
+        return frontLeft.getCurrentPosition();
+    }
+
+    public int getFrontRightEncoderValue() {
+        return frontRight.getCurrentPosition();
+    }
+
+    public int getRearLeftEncoderValue() {
+        return rearLeft.getCurrentPosition();
+    }
+
+    public int getRearRightEncoderValue() {
+        return rearRight.getCurrentPosition();
+    }
+
 
 }

@@ -33,8 +33,18 @@ public class GyroscopeApi {
         // Record angles
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
         this.xAngle = orientation.firstAngle;
-        this.yAngle = orientation.secondAngle;
         this.zAngle = orientation.thirdAngle;
+
+        float rawYValue = orientation.secondAngle;
+        float actualYValue = 0;
+        if(rawYValue < 0 && rawYValue >= -180) {
+            actualYValue = Math.abs(rawYValue);
+        } else if(rawYValue <= 180 && rawYValue > 0) {
+            actualYValue = 360-rawYValue;
+        }
+
+        this.yAngle = Math.round(actualYValue);
+
 
         // Record accelerations
         Acceleration acceleration = imu.getAcceleration();
@@ -45,15 +55,15 @@ public class GyroscopeApi {
 
 
 
-    public float getRawX() {
+    public float getX() {
         return xAngle;
     }
 
-    public float getRawY() {
+    public float getY() {
         return yAngle;
     }
 
-    public float getRawZ() {
+    public float getZ() {
         return zAngle;
     }
 
