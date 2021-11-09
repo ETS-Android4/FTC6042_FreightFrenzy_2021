@@ -55,15 +55,15 @@ public class GyroscopeApi {
 
 
 
-    public float getRawX() {
+    public float getX() {
         return xAngle;
     }
 
-    public float getRawY() {
+    public float getY() {
         return yAngle;
     }
 
-    public float getRawZ() {
+    public float getZ() {
         return zAngle;
     }
 
