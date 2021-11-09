@@ -28,7 +28,7 @@ public class Drivetrain {
     final double ROTATION_D_GAIN = 0;
     final double ROTATION_PID_DEAD_ZONE = 0;
 
-    final double ROTATION_NO_PID_DEAD_ZONE = 2;
+    final double ROTATION_NO_PID_DEAD_ZONE = 5;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -378,7 +378,7 @@ public class Drivetrain {
         int numberOfTimesToRotate = (int) String.valueOf(degreesToRotate / 360).charAt(0);
 
         if(rotatingClockwise) {
-            double valueToStopRotatingAt = Math.abs((startingRotation-Math.abs(degreesToRotate))%360);
+            double valueToStopRotatingAt = Math.abs((startingRotation+Math.abs(degreesToRotate))%360);
             for (int i = 0; i < numberOfTimesToRotate; i++) {
                 while(!(gyro.getY() >= valueToStopRotatingAt && gyro.getY() <= valueToStopRotatingAt+ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
                     driveAtPower(Math.abs(DEFAULT_ROTATE_SPEED), -Math.abs(DEFAULT_ROTATE_SPEED));
@@ -386,7 +386,7 @@ public class Drivetrain {
                 }
             }
         } else {
-            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            double valueToStopRotatingAt = (startingRotation+360-Math.abs(degreesToRotate))%360;
             for (int i = 0; i < numberOfTimesToRotate; i++) {
                 while(!(gyro.getY() <= valueToStopRotatingAt && gyro.getY() >= valueToStopRotatingAt-ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
                     driveAtPower(-Math.abs(DEFAULT_ROTATE_SPEED), Math.abs(DEFAULT_ROTATE_SPEED));
@@ -413,23 +413,35 @@ public class Drivetrain {
         int numberOfTimesToRotate = (int) String.valueOf(degreesToRotate / 360).charAt(0);
 
         if(rotatingClockwise) {
-            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            double valueToStopRotatingAt = Math.abs((startingRotation+Math.abs(degreesToRotate))%360);
             for (int i = 0; i < numberOfTimesToRotate; i++) {
                 while(!(gyro.getY() >= valueToStopRotatingAt && gyro.getY() <= valueToStopRotatingAt+ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
                     driveAtPower(Math.abs(speedToRotate), -Math.abs(speedToRotate));
+                    opMode.telemetry.addLine("Value to stop at" + valueToStopRotatingAt);
+                    opMode.telemetry.addLine("Current " + gyro.getY());
+                    opMode.telemetry.addLine("Raw " + gyro.getRawY());
+                    opMode.telemetry.update();
                     gyro.update();
+
+
                 }
             }
         } else {
-            double valueToStopRotatingAt = (startingRotation-Math.abs(degreesToRotate))%360;
+            double valueToStopRotatingAt = (startingRotation+360-Math.abs(degreesToRotate))%360;
             for (int i = 0; i < numberOfTimesToRotate; i++) {
                 while(!(gyro.getY() <= valueToStopRotatingAt && gyro.getY() >= valueToStopRotatingAt-ROTATION_NO_PID_DEAD_ZONE) && opMode.opModeIsActive()) {
                     driveAtPower(-Math.abs(speedToRotate), Math.abs(speedToRotate));
+                    opMode.telemetry.addLine("Value to stop at" + valueToStopRotatingAt);
+                    opMode.telemetry.addLine("Current " + gyro.getY());
+                    opMode.telemetry.addLine("Raw " + gyro.getRawY());
+                    opMode.telemetry.addLine("counter ");
+
+
+                    opMode.telemetry.update();
                     gyro.update();
                 }
             }
         }
-
         stopMotors();
     }
 

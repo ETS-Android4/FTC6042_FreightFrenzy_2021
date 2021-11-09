@@ -13,6 +13,7 @@ public class GyroscopeApi {
 
     private BNO055IMU imu;
     private float xAngle, yAngle, zAngle;
+    private float yAngleRaw;
     double xAcceleration, yAcceleration, zAcceleration;
 
     public GyroscopeApi(HardwareMap hardwareMap) {
@@ -36,6 +37,7 @@ public class GyroscopeApi {
         this.zAngle = orientation.thirdAngle;
 
         float rawYValue = orientation.secondAngle;
+        yAngleRaw = orientation.secondAngle;
         float actualYValue = 0;
         if(rawYValue < 0 && rawYValue >= -180) {
             actualYValue = Math.abs(rawYValue);
@@ -89,5 +91,9 @@ public class GyroscopeApi {
 
     public double getZAcceleration() {
         return zAcceleration;
+    }
+
+    public float getRawY() {
+        return yAngleRaw;
     }
 }
