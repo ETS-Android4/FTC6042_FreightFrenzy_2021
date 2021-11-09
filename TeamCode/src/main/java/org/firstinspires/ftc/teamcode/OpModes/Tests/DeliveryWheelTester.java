@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
+package org.firstinspires.ftc.teamcode.OpModes.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 
+@Disabled
 @Autonomous(name="Delivery Wheel Tester")
 public class DeliveryWheelTester extends LinearOpMode {
 
