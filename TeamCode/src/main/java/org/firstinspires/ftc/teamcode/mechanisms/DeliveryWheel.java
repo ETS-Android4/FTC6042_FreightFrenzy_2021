@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 // FIRST APIs
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; // Need this so we can check if "opModeIsActive"
 import com.qualcomm.robotcore.hardware.DcMotor; // Need this so we can define our motors
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 // Team APIs
 
@@ -12,8 +13,8 @@ public class DeliveryWheel {
     final double TICKS_PER_WHEEL_ROTATION = 100; // Number of encoder ticks for one complete revolution of our delivery wheel
     final double ROTATIONS_FOR_COMPLETED_DELIVERY = 10; // Enough rotations of our wheel to completely deliver the duck (plus some safety)
     final double MAXIMUM_SAFE_RPM = 100; // Speed that will not knock the duck off.
-    final DcMotor.Direction DIRECTION_FOR_LEFT = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
-    final DcMotor.Direction DIRECTION_FOR_RIGHT = DcMotor.Direction.REVERSE; // Set which way we should normally rotate.
+    final DcMotor.Direction DIRECTION_FOR_LEFT = DcMotor.Direction.REVERSE; // Set which way we should normally rotate.
+    final DcMotor.Direction DIRECTION_FOR_RIGHT = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
     final int TICKS_PER_CAROUSEL_REVOLUTION = 3360;
 
     DcMotor deliveryLeft = null; // Motor connected to our delivery wheel
@@ -87,22 +88,18 @@ public class DeliveryWheel {
      */
     public void rotateNumberOfTicks(int numberOfTicks, double power) {
         //TODO add second delivery motor to this
+        numberOfTicks = Math.abs(numberOfTicks);
+        power = Math.abs(power);
 
-        // Make sure the power is positive
-        if(power < 0) {
-            power *= -1;
-        }
         resetEncoder();
-        if(numberOfTicks > 0) {
-            while(opMode.opModeIsActive() && deliveryLeft.getCurrentPosition() < numberOfTicks) {
-                rotateAtPower(power);
-            }
-        } else if(numberOfTicks < 0) {
-            while(opMode.opModeIsActive() && deliveryLeft.getCurrentPosition() > numberOfTicks) {
-                rotateAtPower(-power);
-            }
+        while(opMode.opModeIsActive() && getAverageTicks() < numberOfTicks) {
+            rotateAtPower(power);
         }
         stop();
+    }
+
+    public int getAverageTicks() {
+        return (Math.abs(deliveryLeft.getCurrentPosition()) + Math.abs(deliveryRight.getCurrentPosition()))/2;
     }
 
     /**
