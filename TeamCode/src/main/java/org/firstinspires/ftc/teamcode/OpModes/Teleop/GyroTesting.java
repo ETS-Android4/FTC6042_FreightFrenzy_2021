@@ -19,9 +19,9 @@ public class GyroTesting extends LinearOpMode {
 
         while(opModeIsActive()) {
             gyro.update();
-            telemetry.addLine("X: " + gyro.getRawX());
-            telemetry.addLine("Y: " + gyro.getRawY());
-            telemetry.addLine("Z: " + gyro.getRawZ());
+            telemetry.addLine("X: " + gyro.getX());
+            telemetry.addLine("Y: " + gyro.getY());
+            telemetry.addLine("Z: " + gyro.getZ());
             telemetry.update();
         }
     }

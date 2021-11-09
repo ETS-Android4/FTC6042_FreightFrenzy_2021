@@ -172,11 +172,20 @@ public class AutonomousActions {
     }
 
     /**
+     * Drive forward a specific number of inches at a specified power with no PDI
+     * @param inchesToDrive The number of inches to drive forward
+     * @param power The power at which to drive forward
+     */
+    public void driveInchesNoPid(double inchesToDrive, double power) {
+        drivetrain.driveForwardInchesNoPid(inchesToDrive, power);
+    }
+
+    /**
      * Rotate a specified number of degrees
      * @param degreesToRotate The number of degrees to rotate. Negative degrees are counterclockwise, and positive degrees are clockwise
      */
     public void rotateDegrees(double degreesToRotate) {
-        drivetrain.rotateDegrees(degreesToRotate);
+        drivetrain.rotateDegreesNoPid(degreesToRotate);
     }
 
 }
