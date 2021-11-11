@@ -71,16 +71,16 @@ public class AutonomousActions {
      * Rotate left off of the wall
      */
     public void rotateLeftFromWall() {
-        drivetrain.driveForwardInchesNoPid(3, 0.4);
-        drivetrain.rotateDegreesNoPid(-85, 0.2);
+        drivetrain.driveForwardInches(2, 0.4);
+        drivetrain.rotateDegreesNoPid(-90);
     }
 
     /**
      * Rotate right off of the wall
      */
     public void rotateRightFromWall() {
-        drivetrain.driveForwardInchesNoPid(3, 0.4);
-        drivetrain.rotateDegreesNoPid(85, 0.2);
+        drivetrain.driveForwardInches(2, 0.4);
+        drivetrain.rotateDegreesNoPid(90);
     }
 
     /**
@@ -147,7 +147,10 @@ public class AutonomousActions {
      * Deliver the duck by spinning the wheel clockwise
      */
     public void deliverDuck() {
-        deliveryWheel.rotateNumberOfCarouselRotations(1.5, 0.5);
+        deliveryWheel.startActionDeliver();
+        while(!deliveryWheel.isActionComplete()) {
+            deliveryWheel.updatePosition();
+        }
     }
 
     /**

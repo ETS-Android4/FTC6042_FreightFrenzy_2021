@@ -1,124 +1,190 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
-// FIRST APIs
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode; // Need this so we can check if "opModeIsActive"
-import com.qualcomm.robotcore.hardware.DcMotor; // Need this so we can define our motors
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-// Team APIs
-
-
 public class DeliveryWheel {
-    // Constants that need to be calibrated
-    final double TICKS_PER_WHEEL_ROTATION = 100; // Number of encoder ticks for one complete revolution of our delivery wheel
-    final double ROTATIONS_FOR_COMPLETED_DELIVERY = 10; // Enough rotations of our wheel to completely deliver the duck (plus some safety)
-    final double MAXIMUM_SAFE_RPM = 100; // Speed that will not knock the duck off.
-    final DcMotor.Direction DIRECTION_FOR_LEFT = DcMotor.Direction.REVERSE; // Set which way we should normally rotate.
-    final DcMotor.Direction DIRECTION_FOR_RIGHT = DcMotor.Direction.FORWARD; // Set which way we should normally rotate.
-    final int TICKS_PER_CAROUSEL_REVOLUTION = 3360;
 
-    DcMotor deliveryLeft = null; // Motor connected to our delivery wheel
-    DcMotor deliveryRight = null; // Motor connected to our delivery wheel
-    LinearOpMode opMode = null; // Store a soft copy of the opMode information (so we can check if we need to exit)
+    LinearOpMode opMode;
+    DcMotor leftDelivery;
+    DcMotor rightDelivery;
 
-    // Default constructor for a new DeliveryWheel object
-    public DeliveryWheel() { }
+    final DcMotorSimple.Direction LEFT_DELIVERY_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    final DcMotorSimple.Direction RIGHT_DELIVERY_DIRECTION = DcMotorSimple.Direction.FORWARD;
 
-    // Call this once to set up the mechanism
+    final double ROTATIONS_TO_DELIVER = 1.5;
+    final double SPEED_TO_DELIVER = 0.5;
+
+    // Robot and field values
+    final int TICKS_PER_MOTOR_REVOLUTION = 1120;
+    final double MOTOR_TO_OUTPUT_WHEEL_RATIO = 1;
+    final double OUTPUT_WHEEL_DIAMETER_IN_INCHES = 5;
+    final double CAROUSEL_DIAMETER_IN_INCHES = 15;
+
+    // Values found automatically by math. Do not adjust.
+    final double CAROUSEL_CIRCUMFERENCE_IN_INCHES = CAROUSEL_DIAMETER_IN_INCHES*Math.PI;
+    final double OUTPUT_WHEEL_CIRCUMFERENCE_IN_INCHES = OUTPUT_WHEEL_DIAMETER_IN_INCHES*Math.PI;
+    final double OUTPUT_WHEEL_ROTATIONS_PER_CAROUSEL_ROTATION = CAROUSEL_CIRCUMFERENCE_IN_INCHES/OUTPUT_WHEEL_CIRCUMFERENCE_IN_INCHES;
+    final double MOTOR_TICKS_PER_CAROUSEL_REVOLUTION = TICKS_PER_MOTOR_REVOLUTION*OUTPUT_WHEEL_ROTATIONS_PER_CAROUSEL_ROTATION;
+
+    boolean isActionRunning = false;
+
+    public DeliveryWheel() {
+
+    }
+
     public void init(LinearOpMode opMode) {
-        deliveryLeft = opMode.hardwareMap.get(DcMotor.class, "deliveryLeft");
-        deliveryRight = opMode.hardwareMap.get(DcMotor.class, "deliveryRight");
-        deliveryLeft.setDirection(DIRECTION_FOR_LEFT);
-        deliveryRight.setDirection(DIRECTION_FOR_RIGHT);
-        deliveryLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the wheel from turning when zero power is applied.
-        deliveryLeft.setPower(0);
-        deliveryRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // Stop the wheel from turning when zero power is applied.
-        deliveryRight.setPower(0);
         this.opMode = opMode;
-    }
-
-    // Spin our wheel at a set power
-    public void rotateAtPower(double power) {
-        deliveryLeft.setPower(power);
-        deliveryRight.setPower(power);
-    }
-
-    // Bring our wheel to a complete stop
-    public void stop() {
-        deliveryLeft.setPower(0);
-        deliveryRight.setPower(0);
-    }
-
-    // Spin our wheel a set number of degrees at the fastest safe speed, then stop the motor.
-    public void rotateNumberOfDegrees(double degrees) {
-        // ToDo: Implement this
-        // Determine the number of ticks to rotate
-        // Reset the encoders
-        // While the opModeIsActive and we haven't reached the desired number of ticks
-            // Rotate at a safe spinning power
-        // Stop the motors
-        // Bonus Points: Spin up the motor to the max safe speed using PID
-    }
-
-    //
-    // PRIVATE: FUNCTIONS BELOW HERE SHOULD NOT NORMALLY BE CALLED (except by other functions in this file)
-    //
-
-    private double ticksFromDegrees(double degrees) {
-        // ToDo: Implement this.
-        // We know how many ticks are in one revolution of our delivery wheel (see constants)
-        // Determine how many ticks are counted by the encoder for one degree of turn of our delivery wheel
-        // Convert the number of degrees passed in to the number of "ticks" the motor needs to turn
-        return 0;
-    }
-
-    // Call this whenever we need to restart the motor count (i.e. start a new delivery)
-    public void resetEncoder() {
-        deliveryLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        deliveryLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        deliveryRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        deliveryRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDelivery = opMode.hardwareMap.get(DcMotor.class, "leftDelivery");
+        rightDelivery = opMode.hardwareMap.get(DcMotor.class, "rightDelivery");
+        leftDelivery.setDirection(LEFT_DELIVERY_DIRECTION);
+        rightDelivery.setDirection(RIGHT_DELIVERY_DIRECTION);
+        leftDelivery.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDelivery.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
-     * Rotate a specified number of ticks at a specified power
-     * @param numberOfTicks The number of ticks to rotate
-     * @param power The power at which to rotate
+     * Spin both delivery wheels at the same power
+     * @param power The power at which to spin the delivery wheels
      */
-    public void rotateNumberOfTicks(int numberOfTicks, double power) {
-        //TODO add second delivery motor to this
-        numberOfTicks = Math.abs(numberOfTicks);
-        power = Math.abs(power);
+    public void setPower(double power) {
+        leftDelivery.setPower(power);
+        rightDelivery.setPower(power);
+    }
 
-        resetEncoder();
-        while(opMode.opModeIsActive() && getAverageTicks() < numberOfTicks) {
-            rotateAtPower(power);
+    /**
+     * Set both delivery wheels to two different powers
+     * @param leftPower The power at which to spin the left delivery wheel
+     * @param rightPower The power at which to spin the right delivery wheel
+     */
+    public void setPower(double leftPower, double rightPower) {
+        leftDelivery.setPower(leftPower);
+        rightDelivery.setPower(rightPower);
+    }
+
+    /**
+     * Set the power of the left delivery wheel
+     * @param power The power to set the left delivery wheel to
+     */
+    public void setLeftPower(double power) {
+        leftDelivery.setPower(power);
+    }
+
+    /**
+     * Set the power of the right delivery wheel
+     * @param power The power to set the right delivery wheel to
+     */
+    public void setRightPower(double power) {
+        rightDelivery.setPower(power);
+    }
+
+    /**
+     * Stop both motors
+     */
+    public void stop() {
+        setPower(0);
+    }
+
+    /**
+     * Stop the left delivery motor
+     */
+    public void stopLeft() {
+        leftDelivery.setPower(0);
+    }
+
+    /**
+     * Stop the right delivery motor
+     */
+    public void stopRight() {
+        rightDelivery.setPower(0);
+    }
+
+    /**
+     * Get the current encoder ticks of the left delivery motor
+     * @return The current encoder ticks of the left delivery motor
+     */
+    public int getLeftPosition() {
+        return leftDelivery.getCurrentPosition();
+    }
+
+    /**
+     * Get the current encoder ticks of the right delivery motor
+     * @return The current encoder ticks of the right delivery motor
+     */
+    public int getRightPosition() {
+        return rightDelivery.getCurrentPosition();
+    }
+
+    /**
+     * Get the highest encoder tick count
+     * @return The highest encoder tick count
+     */
+    public int getHighestPosition() {
+        int leftPosition = getLeftPosition();
+        int rightPosition = getRightPosition();
+        return Math.max(rightPosition, leftPosition);
+    }
+
+    /**
+     * Reset the encoders
+     */
+    public void resetEncoders() {
+        leftDelivery.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        rightDelivery.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        leftDelivery.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDelivery.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /**
+     * Start the deliver action
+     */
+    public void startActionDeliver() {
+        isActionRunning = true;
+        resetEncoders();
+        setPower(SPEED_TO_DELIVER);
+    }
+
+    /**
+     * Update where we are for the delivery action. This method should be called continuously in a loop in your opmode
+     */
+    public void updatePosition() {
+        if(!isActionRunning) {
+            return;
         }
+        boolean leftSideStopped = false;
+        boolean rightSideStopped = false;
+        if(getLeftPosition() > ROTATIONS_TO_DELIVER*MOTOR_TICKS_PER_CAROUSEL_REVOLUTION) {
+            stopLeft();
+            leftSideStopped = true;
+        } else {
+            setLeftPower(SPEED_TO_DELIVER);
+        }
+        if(getRightPosition() > ROTATIONS_TO_DELIVER*MOTOR_TICKS_PER_CAROUSEL_REVOLUTION) {
+            stopRight();
+            rightSideStopped = true;
+        } else {
+            setRightPower(SPEED_TO_DELIVER);
+        }
+        if(leftSideStopped && rightSideStopped) {
+            isActionRunning = false;
+        }
+    }
+
+    /**
+     * Cancel the current action
+     */
+    public void cancelAction() {
+        isActionRunning = false;
         stop();
     }
 
-    public int getAverageTicks() {
-        return (Math.abs(deliveryLeft.getCurrentPosition()) + Math.abs(deliveryRight.getCurrentPosition()))/2;
-    }
-
     /**
-     * Get the number of ticks for a certain number of carousel revolutions
-     * @param numberOfCarouselRotations The number of carousel revolutions
-     * @return The number of ticks
+     * Check if the current action is complete
+     * @return Whether or not the action has been completed
      */
-    public int carouselRotationsToTicks(double numberOfCarouselRotations) {
-        return (int) (numberOfCarouselRotations*TICKS_PER_CAROUSEL_REVOLUTION);
+    public boolean isActionComplete() {
+        return !isActionRunning;
     }
-
-    /**
-     * Rotate the carousel a number of rotations
-     * @param numberOfCarouselRotations The number of carousel rotations to rotate
-     * @param power The power at which to rotate
-     */
-    public void rotateNumberOfCarouselRotations(double numberOfCarouselRotations, double power) {
-        rotateNumberOfTicks(carouselRotationsToTicks(numberOfCarouselRotations), power);
-    }
-
 
 }
