@@ -147,7 +147,10 @@ public class AutonomousActions {
      * Deliver the duck by spinning the wheel clockwise
      */
     public void deliverDuck() {
-        deliveryWheel.rotateNumberOfCarouselRotations(1.5, 0.5);
+        deliveryWheel.startActionDeliver();
+        while(!deliveryWheel.isActionComplete()) {
+            deliveryWheel.updatePosition();
+        }
     }
 
     /**
