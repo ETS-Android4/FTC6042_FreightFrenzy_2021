@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class DeliveryWheel {
 
     LinearOpMode opMode;
-    DcMotor leftDelivery;
-    DcMotor rightDelivery;
+    DcMotor deliveryLeft;
+    DcMotor deliveryRight;
 
-    final DcMotorSimple.Direction LEFT_DELIVERY_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    final DcMotorSimple.Direction LEFT_DELIVERY_DIRECTION = DcMotorSimple.Direction.REVERSE;
     final DcMotorSimple.Direction RIGHT_DELIVERY_DIRECTION = DcMotorSimple.Direction.FORWARD;
 
-    final double ROTATIONS_TO_DELIVER = 1.5;
-    final double SPEED_TO_DELIVER = 0.5;
+    final double ROTATIONS_TO_DELIVER = 1;
+    final double SPEED_TO_DELIVER = 1;
 
     // Robot and field values
     final int TICKS_PER_MOTOR_REVOLUTION = 1120;
@@ -36,12 +36,12 @@ public class DeliveryWheel {
 
     public void init(LinearOpMode opMode) {
         this.opMode = opMode;
-        leftDelivery = opMode.hardwareMap.get(DcMotor.class, "leftDelivery");
-        rightDelivery = opMode.hardwareMap.get(DcMotor.class, "rightDelivery");
-        leftDelivery.setDirection(LEFT_DELIVERY_DIRECTION);
-        rightDelivery.setDirection(RIGHT_DELIVERY_DIRECTION);
-        leftDelivery.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightDelivery.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        deliveryLeft = opMode.hardwareMap.get(DcMotor.class, "deliveryLeft");
+        deliveryRight = opMode.hardwareMap.get(DcMotor.class, "deliveryRight");
+        deliveryLeft.setDirection(LEFT_DELIVERY_DIRECTION);
+        deliveryRight.setDirection(RIGHT_DELIVERY_DIRECTION);
+        deliveryLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        deliveryRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
@@ -49,8 +49,8 @@ public class DeliveryWheel {
      * @param power The power at which to spin the delivery wheels
      */
     public void setPower(double power) {
-        leftDelivery.setPower(power);
-        rightDelivery.setPower(power);
+        deliveryLeft.setPower(power);
+        deliveryRight.setPower(power);
     }
 
     /**
@@ -59,8 +59,8 @@ public class DeliveryWheel {
      * @param rightPower The power at which to spin the right delivery wheel
      */
     public void setPower(double leftPower, double rightPower) {
-        leftDelivery.setPower(leftPower);
-        rightDelivery.setPower(rightPower);
+        deliveryLeft.setPower(leftPower);
+        deliveryRight.setPower(rightPower);
     }
 
     /**
@@ -68,7 +68,7 @@ public class DeliveryWheel {
      * @param power The power to set the left delivery wheel to
      */
     public void setLeftPower(double power) {
-        leftDelivery.setPower(power);
+        deliveryLeft.setPower(power);
     }
 
     /**
@@ -76,7 +76,7 @@ public class DeliveryWheel {
      * @param power The power to set the right delivery wheel to
      */
     public void setRightPower(double power) {
-        rightDelivery.setPower(power);
+        deliveryRight.setPower(power);
     }
 
     /**
@@ -90,14 +90,14 @@ public class DeliveryWheel {
      * Stop the left delivery motor
      */
     public void stopLeft() {
-        leftDelivery.setPower(0);
+        deliveryLeft.setPower(0);
     }
 
     /**
      * Stop the right delivery motor
      */
     public void stopRight() {
-        rightDelivery.setPower(0);
+        deliveryRight.setPower(0);
     }
 
     /**
@@ -105,7 +105,7 @@ public class DeliveryWheel {
      * @return The current encoder ticks of the left delivery motor
      */
     public int getLeftPosition() {
-        return leftDelivery.getCurrentPosition();
+        return deliveryLeft.getCurrentPosition();
     }
 
     /**
@@ -113,7 +113,7 @@ public class DeliveryWheel {
      * @return The current encoder ticks of the right delivery motor
      */
     public int getRightPosition() {
-        return rightDelivery.getCurrentPosition();
+        return deliveryRight.getCurrentPosition();
     }
 
     /**
@@ -130,10 +130,10 @@ public class DeliveryWheel {
      * Reset the encoders
      */
     public void resetEncoders() {
-        leftDelivery.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        rightDelivery.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        leftDelivery.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDelivery.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        deliveryLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        deliveryRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        deliveryLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        deliveryRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     /**

@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class LedController {
 
     RevBlinkinLedDriver ledDriver;
+    LinearOpMode opMode;
+    char alliance;
 
     public LedController() {}
 
@@ -14,7 +16,25 @@ public class LedController {
      * @param opMode The opmode this object is in
      */
     public void init(LinearOpMode opMode) {
+        this.opMode = opMode;
         ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        setStatusRobotInitialized();
+    }
+
+    public void initNoInitLight(LinearOpMode opMode) {
+        this.opMode = opMode;
+        ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
+    }
+
+    public void init(LinearOpMode opMode, char alliance) {
+        this.opMode = opMode;
+        this.alliance = alliance;
+        ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        if(alliance == 'b') {
+            setStatusRobotInitializedBlue();
+        } else if(alliance == 'r') {
+            setStatusRobotInitializedRed();
+        }
     }
 
     /**
@@ -49,7 +69,7 @@ public class LedController {
      * Show that the robot is initialized for the blue side
      */
     public void setStatusRobotInitializedBlue() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
     }
 
 }

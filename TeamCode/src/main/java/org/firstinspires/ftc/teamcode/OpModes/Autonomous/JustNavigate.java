@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Just Navigate")
+@Autonomous(name="Navigate Only")
 public class JustNavigate extends LinearOpMode {
 
     @Override
@@ -20,8 +20,7 @@ public class JustNavigate extends LinearOpMode {
         drivetrain.init(this);
         actions.init(this);
 
-        led.setStatusRobotInitializedBlue();
-        telemetry.addLine("Robot initialized");
+        telemetry.addLine("Robot Initialized");
         telemetry.update();
 
         waitForStart();

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Blue-Rotate and Deliver")
-public class RotateAndDeliverBlue extends LinearOpMode {
+@Autonomous(name="Red Warehouse STRAIGHT")
+public class RedDeliverAndNavigateStraight extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -16,12 +16,19 @@ public class RotateAndDeliverBlue extends LinearOpMode {
         AutonomousActions actions = new AutonomousActions();
         drivetrain.init(this);
         actions.init(this);
+        telemetry.addLine("Robot Initialized");
+        telemetry.update();
         waitForStart();
-        actions.rotateRightFromWall();
-        actions.delay(500);
-        actions.driveInchesNoPid(22, 0.3);
-        actions.deliverDuck();
-        actions.driveInchesNoPid(-100, 0.5);
 
+        // Rotate from the wall
+        actions.rotateLeftFromWall();
+        actions.delay(500);
+
+        // Drive to the carousel and deliver
+        actions.driveInchesNoPid(16, 0.3);
+        actions.deliverDuck();
+
+        // Reverse into the warehouse
+        actions.driveInchesNoPid(-100, 0.5);
     }
 }

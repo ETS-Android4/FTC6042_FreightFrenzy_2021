@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.APIs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
@@ -14,6 +15,7 @@ public class AutonomousActions {
     LinearOpMode opMode;
     Drivetrain drivetrain;
     DeliveryWheel deliveryWheel;
+    LedController led;
     //Indexer indexer;
     //Intake intake;
     //Lift lift;
@@ -30,6 +32,7 @@ public class AutonomousActions {
         // Instantiate our mechanisms
         drivetrain = new Drivetrain();
         deliveryWheel = new DeliveryWheel();
+        led = new LedController();
         //indexer = new Indexer();
         //intake = new Intake();
         //lift = new Lift();
@@ -37,6 +40,7 @@ public class AutonomousActions {
         // Initialize our mechanisms
         drivetrain.init(opMode);
         deliveryWheel.init(opMode);
+        led.initNoInitLight(opMode);
         //indexer.init(opMode);
         //intake.init(opMode);
         //lift.init(opMode);
@@ -71,16 +75,16 @@ public class AutonomousActions {
      * Rotate left off of the wall
      */
     public void rotateLeftFromWall() {
-        drivetrain.driveForwardInches(2, 0.4);
-        drivetrain.rotateDegreesNoPid(-90);
+        drivetrain.driveForwardInchesNoPid(2.5, 0.4);
+        drivetrain.rotateDegreesNoPid(-85, 0.2);
     }
 
     /**
      * Rotate right off of the wall
      */
     public void rotateRightFromWall() {
-        drivetrain.driveForwardInches(2, 0.4);
-        drivetrain.rotateDegreesNoPid(90);
+        drivetrain.driveForwardInchesNoPid(2.5, 0.4);
+        drivetrain.rotateDegreesNoPid(85, 0.2);
     }
 
     /**
@@ -147,10 +151,9 @@ public class AutonomousActions {
      * Deliver the duck by spinning the wheel clockwise
      */
     public void deliverDuck() {
-        deliveryWheel.startActionDeliver();
-        while(!deliveryWheel.isActionComplete()) {
-            deliveryWheel.updatePosition();
-        }
+        deliveryWheel.setPower(1);
+        delay(3000);
+        deliveryWheel.stop();
     }
 
     /**
