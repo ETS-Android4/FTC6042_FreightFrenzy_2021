@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
+import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
 @Autonomous(name="Red Warehouse STRAIGHT")
@@ -14,8 +15,10 @@ public class RedDeliverAndNavigateStraight extends LinearOpMode {
 
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
+        LedController led = new LedController();
         drivetrain.init(this);
         actions.init(this);
+        led.init(this, 'r');
         telemetry.addLine("Robot Initialized");
         telemetry.update();
         waitForStart();
