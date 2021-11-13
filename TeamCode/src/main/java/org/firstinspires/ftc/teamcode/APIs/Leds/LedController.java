@@ -72,4 +72,8 @@ public class LedController {
         ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
     }
 
+    public void setStatusDeliveringReverse() {
+        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+    }
+
 }

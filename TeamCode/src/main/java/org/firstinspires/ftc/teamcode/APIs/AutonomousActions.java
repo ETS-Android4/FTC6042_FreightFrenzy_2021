@@ -150,9 +150,9 @@ public class AutonomousActions {
     /**
      * Deliver the duck by spinning the wheel clockwise
      */
-    public void deliverDuck() {
-        deliveryWheel.setPower(1);
-        delay(3000);
+    public void deliverDuckAutonomous() {
+        deliveryWheel.setPower(0.4);
+        delay(5000);
         deliveryWheel.stop();
     }
 
@@ -191,7 +191,7 @@ public class AutonomousActions {
      * @param degreesToRotate The number of degrees to rotate. Negative degrees are counterclockwise, and positive degrees are clockwise
      */
     public void rotateDegrees(double degreesToRotate) {
-        drivetrain.rotateDegreesNoPid(degreesToRotate);
+        drivetrain.rotateDegreesNoPid(degreesToRotate, 0.15);
     }
 
 }

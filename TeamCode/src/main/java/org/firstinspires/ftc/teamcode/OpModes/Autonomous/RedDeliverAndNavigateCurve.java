@@ -28,7 +28,7 @@ public class RedDeliverAndNavigateCurve extends LinearOpMode {
 
         // Drive to the carousel and deliver the duck
         actions.driveInchesNoPid(20, 0.3);
-        actions.deliverDuck();
+        actions.deliverDuckAutonomous();
 
         // Back up from the carousel
         actions.driveInchesNoPid(-46, 0.5);
@@ -40,9 +40,9 @@ public class RedDeliverAndNavigateCurve extends LinearOpMode {
         actions.driveInchesNoPid(-16, 0.5);
 
         // Rotate back to a somewhat normal position
-        actions.rotateDegrees(50);
+        actions.rotateDegrees(47);
 
         // Reverse into warehouse
-        actions.driveInchesNoPid(-50, 0.5);
+        actions.driveInchesNoPid(-57, 0.5);
     }
 }

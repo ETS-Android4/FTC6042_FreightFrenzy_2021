@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.sun.source.doctree.StartElementTree;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
@@ -31,21 +29,21 @@ public class BlueDeliverAndNavigateCurve extends LinearOpMode {
 
         // Drive to carousel and deliver
         actions.driveInchesNoPid(20, 0.3);
-        actions.deliverDuck();
+        actions.deliverDuckAutonomous();
 
         // Back up from carousel
-        actions.driveInchesNoPid(-43, 0.5);
+        actions.driveInchesNoPid(-46, 0.5);
 
         // Rotate once
         actions.rotateDegrees(42);
 
         // Drive a bit while rotated
-        actions.driveInchesNoPid(-16, 0.5);
+        actions.driveInchesNoPid(-15, 0.5);
 
         // Rotate back to a close to normal position
-        actions.rotateDegrees(-50);
+        actions.rotateDegrees(-47);
 
         // Back into the warehouse
-        actions.driveInchesNoPid(-53, 0.5);
+        actions.driveInchesNoPid(-57, 0.5);
     }
 }

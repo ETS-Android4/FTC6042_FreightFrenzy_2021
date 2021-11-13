@@ -30,10 +30,10 @@ public class BlueDeliverAndNavigateStraight extends LinearOpMode {
 
         // Drive to the carousel and deliver
         actions.driveInchesNoPid(22, 0.3);
-        actions.deliverDuck();
+        actions.deliverDuckAutonomous();
 
         // Drive backwards into the warehouse
-        actions.driveInchesNoPid(-100, 0.5);
+        actions.driveInchesNoPid(-110, 0.5);
 
     }
 }

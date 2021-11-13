@@ -29,7 +29,7 @@ public class RedDeliverAndStoragePark extends LinearOpMode {
         actions.driveInchesNoPid(16, 0.3);
 
         // Deliver
-        actions.deliverDuck();
+        actions.deliverDuckAutonomous();
 
         // Drive backwards
         actions.driveInchesNoPid(-10, 0.5);
@@ -40,7 +40,7 @@ public class RedDeliverAndStoragePark extends LinearOpMode {
         actions.delay(500);
 
         // Drive forward
-        actions.driveInchesNoPid(16, 0.5);
+        actions.driveInchesNoPid(14, 0.5);
         actions.delay(500);
 
         // Rotate left

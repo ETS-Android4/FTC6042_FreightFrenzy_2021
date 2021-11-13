@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
@@ -30,7 +29,7 @@ public class BlueDeliverAndStoragePark extends LinearOpMode {
 
         // Drive to carousel and deliver
         actions.driveInchesNoPid(20, 0.3);
-        actions.deliverDuck();
+        actions.deliverDuckAutonomous();
 
         // Drive backwards
         actions.driveInchesNoPid(-8, 0.5);
@@ -41,14 +40,14 @@ public class BlueDeliverAndStoragePark extends LinearOpMode {
         actions.delay(500);
 
         // Drive while rotated
-        actions.driveInchesNoPid(16, 0.5);
+        actions.driveInchesNoPid(9, 0.5);
         actions.delay(500);
 
         // Rotate back to a close to normal position
         actions.rotateDegrees(90);
         actions.delay(500);
 
-        // Back into warehouse
+        // Drive into storage zone
         actions.driveInchesNoPid(20, 0.5);
     }
 }

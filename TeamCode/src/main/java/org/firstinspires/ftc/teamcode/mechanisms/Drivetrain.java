@@ -15,7 +15,7 @@ public class Drivetrain {
     final double DRIVE_WHEEL_CIRCUMFERENCE_IN_INCHES = 3.1459*DRIVE_WHEEL_DIAMETER_IN_INCHES;
     final double MOTOR_TO_WHEEL_RATIO = 0.5; // The number of rotations on the output shaft of the motor necessary for one rotation of the wheel
     final double ENCODER_TICKS_PER_WHEEL_ROTATION = 560;
-    final double DEFAULT_ROTATE_SPEED = 0.3;
+    final double DEFAULT_ROTATE_SPEED = 0.2;
 
     // PID related constants
     //TODO tune these values
