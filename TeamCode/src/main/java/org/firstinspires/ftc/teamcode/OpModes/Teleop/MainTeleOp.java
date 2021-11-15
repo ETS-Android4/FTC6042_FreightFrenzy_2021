@@ -58,7 +58,7 @@ public class MainTeleOp extends LinearOpMode {
 
             } else if(gamepad1.left_trigger > 0.05) {
                 led.setStatusDeliveringReverse();
-                deliveryWheel.setPower(gamepad1.left_trigger);
+                deliveryWheel.setPower(-gamepad1.left_trigger);
             } else {
                 deliveryWheel.stop();
                 led.setStatusDeliveryFinished();
