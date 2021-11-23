@@ -143,10 +143,9 @@ public class Armdex {
      * Run the wrist up until it reaches its up position
      */
     public void wristUp() {
-        while(opMode.opModeIsActive() && !isWristUp()) {
-            runWristUp();
-        }
-        stopWrist();
+        wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wrist.setTargetPosition(100);
+        resetWristEncoder();
     }
 
     /**

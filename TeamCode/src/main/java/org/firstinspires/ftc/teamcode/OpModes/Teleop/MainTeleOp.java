@@ -59,6 +59,7 @@ public class MainTeleOp extends LinearOpMode {
 
             if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStopped && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
+                armdex.wristUp();
                 wasIntakeAutoStopped = true;
             }
 
