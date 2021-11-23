@@ -12,13 +12,10 @@ public class Armdex {
     LinearOpMode opMode;
     DcMotor intake;
     DcMotor wrist;
-    Servo blocker;
     TouchSensor downSwitch;
     TouchSensor upSwitch;
     ColorSensor intakeSensor;
 
-    final double BLOCKER_OPEN_POSITION = 0;
-    final double BLOCKER_CLOSED_POSITION = 0;
     final double WRIST_UP_SPEED = 1;
     final double WRIST_DOWN_SPEED = -1;
     final double INTAKE_SPEED = 1;
@@ -43,7 +40,6 @@ public class Armdex {
         this.opMode = opMode;
         intake = opMode.hardwareMap.get(DcMotor.class, "intake");
         wrist = opMode.hardwareMap.get(DcMotor.class, "wrist");
-        //blocker = opMode.hardwareMap.get(Servo.class, "blocker");
         //downSwitch = opMode.hardwareMap.get(TouchSensor.class, "downSwitch");
         //upSwitch = opMode.hardwareMap.get(TouchSensor.class, "upSwitch");
         //intakeSensor = opMode.hardwareMap.get(ColorSensor.class, "intakeSensor");
@@ -51,7 +47,6 @@ public class Armdex {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         wrist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //blockerDown();
     }
 
     /**
@@ -85,14 +80,6 @@ public class Armdex {
     }
 
     /**
-     * Set the blocker position
-     * @param position The position to set the blocker to
-     */
-    public void setBlockerPosition(double position) {
-        blocker.setPosition(position);
-    }
-
-    /**
      * Stop all of the motors in the armdex
      */
     public void stopAllMotors() {
@@ -114,20 +101,6 @@ public class Armdex {
      */
     public boolean isWristUp() {
         return upSwitch.isPressed();
-    }
-
-    /**
-     * Put the blocker up
-     */
-    public void blockerUp() {
-        blocker.setPosition(BLOCKER_OPEN_POSITION);
-    }
-
-    /**
-     * Put the blocker down
-     */
-    public void blockerDown() {
-        blocker.setPosition(BLOCKER_CLOSED_POSITION);
     }
 
     /**
