@@ -226,6 +226,9 @@ public class Armdex {
         return wrist.getCurrentPosition();
     }
 
+    /**
+     * Reset the encoder for hte intake
+     */
     public void resetIntakeEncoder() {
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
