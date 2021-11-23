@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -18,21 +19,21 @@ public class Armdex {
 
     final double BLOCKER_OPEN_POSITION = 0;
     final double BLOCKER_CLOSED_POSITION = 0;
-    final double WRIST_UP_SPEED = 0;
-    final double WRIST_DOWN_SPEED = 0;
-    final double INTAKE_SPEED = 0;
-    final double EJECT_SPEED = 0;
-    final double HANDOFF_SPEED = 0;
+    final double WRIST_UP_SPEED = 1;
+    final double WRIST_DOWN_SPEED = -1;
+    final double INTAKE_SPEED = 1;
+    final double EJECT_SPEED = -1;
     final boolean INTAKE_SENSOR_LED_DEFAULT_STATE = true;
 
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_RED = 0;
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN = 0;
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 0;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_RED = 10000;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN = 10000;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 10000;
+
+    final int INTAKE_COUNTS_PER_REVOLUTION = 288;
+    final int WRIST_COUNTS_PER_REVOLUTION = 288;
 
 
-    public Armdex() {
-
-    }
+    public Armdex() {}
 
     /**
      * Initialize this armdex object. Warning: The blocker will move on initialization
@@ -42,13 +43,15 @@ public class Armdex {
         this.opMode = opMode;
         intake = opMode.hardwareMap.get(DcMotor.class, "intake");
         wrist = opMode.hardwareMap.get(DcMotor.class, "wrist");
-        blocker = opMode.hardwareMap.get(Servo.class, "blocker");
-        downSwitch = opMode.hardwareMap.get(TouchSensor.class, "downSwitch");
-        upSwitch = opMode.hardwareMap.get(TouchSensor.class, "upSwitch");
-        intakeSensor = opMode.hardwareMap.get(ColorSensor.class, "intakeSensor");
-        intakeSensor.enableLed(INTAKE_SENSOR_LED_DEFAULT_STATE);
+        //blocker = opMode.hardwareMap.get(Servo.class, "blocker");
+        //downSwitch = opMode.hardwareMap.get(TouchSensor.class, "downSwitch");
+        //upSwitch = opMode.hardwareMap.get(TouchSensor.class, "upSwitch");
+        //intakeSensor = opMode.hardwareMap.get(ColorSensor.class, "intakeSensor");
+        //intakeSensor.enableLed(INTAKE_SENSOR_LED_DEFAULT_STATE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        blockerDown();
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
+        wrist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //blockerDown();
     }
 
     /**
@@ -234,4 +237,24 @@ public class Armdex {
         return getIntakeSensorRed() > INTAKE_SENSOR_DETECTION_THRESHOLD_RED && getIntakeSensorGreen() > INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN && getIntakeSensorBlue() > INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE;
     }
 
+    /**
+     * Get the intake's current encoder value
+     * @return The intake's current encoder value
+     */
+    public int getIntakePosition() {
+        return intake.getCurrentPosition();
+    }
+
+    /**
+     * Get the wrist's current position
+     * @return The wrist's current position
+     */
+    public int getWristPosition() {
+        return wrist.getCurrentPosition();
+    }
+
+    public void resetIntakeEncoder() {
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 }

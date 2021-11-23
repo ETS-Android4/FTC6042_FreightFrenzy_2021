@@ -3,12 +3,8 @@ package org.firstinspires.ftc.teamcode.APIs;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
-import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
-import org.firstinspires.ftc.teamcode.mechanisms.Indexer;
-import org.firstinspires.ftc.teamcode.mechanisms.Intake;
-import org.firstinspires.ftc.teamcode.mechanisms.Lift;
 
 public class AutonomousActions {
 
@@ -16,9 +12,6 @@ public class AutonomousActions {
     Drivetrain drivetrain;
     DeliveryWheel deliveryWheel;
     LedController led;
-    //Indexer indexer;
-    //Intake intake;
-    //Lift lift;
 
     public AutonomousActions() {}
 
@@ -33,17 +26,11 @@ public class AutonomousActions {
         drivetrain = new Drivetrain();
         deliveryWheel = new DeliveryWheel();
         led = new LedController();
-        //indexer = new Indexer();
-        //intake = new Intake();
-        //lift = new Lift();
 
         // Initialize our mechanisms
         drivetrain.init(opMode);
         deliveryWheel.init(opMode);
         led.initNoInitLight(opMode);
-        //indexer.init(opMode);
-        //intake.init(opMode);
-        //lift.init(opMode);
     }
 
     /**

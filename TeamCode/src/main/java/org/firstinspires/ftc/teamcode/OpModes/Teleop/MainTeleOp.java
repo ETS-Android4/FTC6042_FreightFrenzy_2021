@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
+import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
@@ -27,6 +28,8 @@ public class MainTeleOp extends LinearOpMode {
         autonomousActions.init(this);
         LedController led = new LedController();
         led.init(this);
+        Armdex armdex = new Armdex();
+        armdex.init(this);
 
         // Let the driver know the robot is done initializing
         telemetry.addLine("Robot initialized");
@@ -37,7 +40,7 @@ public class MainTeleOp extends LinearOpMode {
         // Wait for the driver to press play
         waitForStart();
 
-        boolean wasRightTriggerPressedLastRun = gamepad1.right_trigger > 0.2;
+        boolean wasIntakeAutoStopped = false;
 
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
@@ -48,44 +51,47 @@ public class MainTeleOp extends LinearOpMode {
             // Write our target powers to the telemetry
             telemetry.addLine("Left: " + leftTargetPower);
             telemetry.addLine("Right: " + rightTargetPower);
+            telemetry.addLine("R: " + armdex.getIntakeSensorRed());
+            telemetry.addLine("G: " + armdex.getIntakeSensorGreen());
+            telemetry.addLine("B: " + armdex.getIntakeSensorBlue());
             telemetry.update();
-
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
 
-            if(gamepad1.right_trigger > 0.2) {
+            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStopped && gamepad1.right_trigger > 0.2) {
+                armdex.stopIntake();
+                wasIntakeAutoStopped = true;
+            }
+
+            if(gamepad1.left_trigger > 0.2) {
+                armdex.eject();
+                wasIntakeAutoStopped = false;
+            } else if(gamepad1.right_trigger > 0.2) {
+                if(!wasIntakeAutoStopped) {
+                    armdex.intake();
+                }
+            } else {
+                wasIntakeAutoStopped = false;
+            }
+
+            if(gamepad1.dpad_up) {
+                armdex.runWristUp();
+            } else if(gamepad1.dpad_down) {
+                armdex.runWristDown();
+            } else {
+                armdex.stopWrist();
+            }
+
+
+            if(gamepad1.a) {
                 led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
-
-            } else if(gamepad1.left_trigger > 0.05) {
+            } else if(gamepad1.b) {
                 led.setStatusDeliveringReverse();
-                deliveryWheel.setPower(-gamepad1.left_trigger);
+                deliveryWheel.setPower(-0.5);
             } else {
                 deliveryWheel.stop();
                 led.setStatusDeliveryFinished();
             }
-
-//            boolean isRightTriggerPressedThisRun = gamepad1.right_trigger > 0.2;
-
-//            // Check if we've changed the position of the trigger since last run
-//            if(isRightTriggerPressedThisRun == wasRightTriggerPressedLastRun) {
-//                // We have not changed the trigger position
-//                if(!deliveryWheel.isActionComplete()) {
-//                    // We have an action running, so we need to update our positition
-//                    deliveryWheel.updatePosition();
-//                }
-//            } else {
-//                // We have changed the trigger position
-//                if (deliveryWheel.isActionComplete() && isRightTriggerPressedThisRun) {
-//                    // No action is running and the right trigger is being pressed, so we should start a new action
-//                    deliveryWheel.startActionDeliver();
-//                } else if (!deliveryWheel.isActionComplete() && isRightTriggerPressedThisRun) {
-//                    // An action is running but we're pressing the trigger, so we should cancel the action
-//                    deliveryWheel.cancelAction();
-//                } else if(!deliveryWheel.isActionComplete()) {
-//                    // An action is running so we need to update our position
-//                    deliveryWheel.updatePosition();
-//                }
-//            }
 
         }
     }
