@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 @TeleOp(name="Main Teleop")
 public class MainTeleOp extends LinearOpMode {
 
-    boolean isDuckBeingDelivered = false;
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -40,17 +38,24 @@ public class MainTeleOp extends LinearOpMode {
         // Wait for the driver to press play
         waitForStart();
 
-        boolean wasIntakeAutoStopped = false;
+        boolean wasIntakeAutoStoppedSinceLastControllerInput = false;
 
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
-            // Get our power for each side based on the left and right stick values
+
+            /*
+            ========== CODE FOR CONTROLLER 1 ==========
+             */
+
+            // Calculate our target drivetrain powers
             double leftTargetPower = -DRIVE_POWER_MULTIPLIER*gamepad1.left_stick_y;
             double rightTargetPower = -DRIVE_POWER_MULTIPLIER*gamepad1.right_stick_y;
 
             // Write our target powers to the telemetry
             telemetry.addLine("Left: " + leftTargetPower);
             telemetry.addLine("Right: " + rightTargetPower);
+
+            // Write our intake sensor values to the telemetry
             telemetry.addLine("R: " + armdex.getIntakeSensorRed());
             telemetry.addLine("G: " + armdex.getIntakeSensorGreen());
             telemetry.addLine("B: " + armdex.getIntakeSensorBlue());
@@ -64,22 +69,22 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Check if we have a block and if the intake was previously auto stopped
-            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStopped && gamepad1.right_trigger > 0.2) {
+            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
-                wasIntakeAutoStopped = true;
+                wasIntakeAutoStoppedSinceLastControllerInput = true;
             }
 
             // Operate the intake based on our controller inputs
             if(gamepad1.left_trigger > 0.2) {
                 armdex.eject();
-                wasIntakeAutoStopped = false;
+                wasIntakeAutoStoppedSinceLastControllerInput = false;
             } else if(gamepad1.right_trigger > 0.2) {
-                if(!wasIntakeAutoStopped) {
+                if(!wasIntakeAutoStoppedSinceLastControllerInput) {
                     armdex.intake();
                 }
             } else {
                 armdex.stopIntake();
-                wasIntakeAutoStopped = false;
+                wasIntakeAutoStoppedSinceLastControllerInput = false;
             }
 
             // Run the intake for dropping freight into the shipping hub
@@ -96,17 +101,47 @@ public class MainTeleOp extends LinearOpMode {
                 armdex.stopWrist();
             }
 
-            // Operate the delivery wheel
-            if(gamepad1.a) {
+            // Control the delivery mechanism
+            if(gamepad1.right_trigger > 0.2) {
                 led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
-            } else if(gamepad1.b) {
+            } else if(gamepad1.left_trigger > 0.05) {
                 led.setStatusDeliveringReverse();
-                deliveryWheel.setPower(-0.5);
+                deliveryWheel.setPower(-gamepad1.left_trigger);
             } else {
                 deliveryWheel.stop();
                 led.setStatusDeliveryFinished();
             }
+
+            /*
+            ========== CODE FOR CONTROLLER 2 ==========
+             */
+
+            /*
+            Check if the intake needs to be auto stopped. This checks to see if there's a block and if it was already auto stopped
+             */
+            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad2.right_trigger > 0.2) {
+                armdex.stopIntake();
+                wasIntakeAutoStoppedSinceLastControllerInput = true;
+            }
+
+            // Control the intake
+            if(gamepad2.left_trigger > 0.2) {
+                // Eject the freight
+                armdex.eject();
+                wasIntakeAutoStoppedSinceLastControllerInput = false;
+            } else if(gamepad2.right_trigger > 0.2) {
+                // Intake the freight unless we are stopped
+                if(!wasIntakeAutoStoppedSinceLastControllerInput) {
+                    armdex.intake();
+                }
+            } else {
+                // Don't intake anything
+                wasIntakeAutoStoppedSinceLastControllerInput = false;
+            }
+
+            // Update the telemetry
+            telemetry.update();
 
         }
     }
