@@ -22,9 +22,9 @@ public class Armdex {
     final double EJECT_SPEED = -1;
     final boolean INTAKE_SENSOR_LED_DEFAULT_STATE = true;
 
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_RED = 10000;
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN = 10000;
-    final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 10000;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_RED = 2800;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN = 2900;
+    final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 0;
 
     final int INTAKE_COUNTS_PER_REVOLUTION = 288;
     final int WRIST_COUNTS_PER_REVOLUTION = 288;
@@ -42,11 +42,13 @@ public class Armdex {
         wrist = opMode.hardwareMap.get(DcMotor.class, "wrist");
         //downSwitch = opMode.hardwareMap.get(TouchSensor.class, "downSwitch");
         //upSwitch = opMode.hardwareMap.get(TouchSensor.class, "upSwitch");
-        //intakeSensor = opMode.hardwareMap.get(ColorSensor.class, "intakeSensor");
-        //intakeSensor.enableLed(INTAKE_SENSOR_LED_DEFAULT_STATE);
+        intakeSensor = opMode.hardwareMap.get(ColorSensor.class, "intakeSensor");
+        intakeSensor.enableLed(INTAKE_SENSOR_LED_DEFAULT_STATE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setDirection(DcMotorSimple.Direction.REVERSE);
         wrist.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        resetWristEncoder();
+        resetIntakeEncoder();
     }
 
     /**
@@ -143,9 +145,10 @@ public class Armdex {
      * Run the wrist up until it reaches its up position
      */
     public void wristUp() {
-        wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wrist.setTargetPosition(100);
-        resetWristEncoder();
+        while(opMode.opModeIsActive() && !isWristUp()) {
+            runWristUp();
+        }
+        stopWrist();
     }
 
     /**

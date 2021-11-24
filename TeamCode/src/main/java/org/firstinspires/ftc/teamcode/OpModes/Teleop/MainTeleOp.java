@@ -17,7 +17,7 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        final double DRIVE_POWER_MULTIPLIER = 1;
+        final double DRIVE_POWER_MULTIPLIER = 0.5;
 
         // Instantiate and initialize our drivetrain
         Drivetrain drivetrain = new Drivetrain();
@@ -54,15 +54,22 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine("R: " + armdex.getIntakeSensorRed());
             telemetry.addLine("G: " + armdex.getIntakeSensorGreen());
             telemetry.addLine("B: " + armdex.getIntakeSensorBlue());
-            telemetry.update();
+
+            // Drive at the target power
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
 
+            // If we detect a block, add it to the telemetry
+            if(armdex.isObjectDetectedInIntake()) {
+                telemetry.addLine("Block detected");
+            }
+
+            // Check if we have a block and if the intake was previously auto stopped
             if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStopped && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
-                armdex.wristUp();
                 wasIntakeAutoStopped = true;
             }
 
+            // Operate the intake based on our controller inputs
             if(gamepad1.left_trigger > 0.2) {
                 armdex.eject();
                 wasIntakeAutoStopped = false;
@@ -71,9 +78,16 @@ public class MainTeleOp extends LinearOpMode {
                     armdex.intake();
                 }
             } else {
+                armdex.stopIntake();
                 wasIntakeAutoStopped = false;
             }
 
+            // Run the intake for dropping freight into the shipping hub
+            if(gamepad1.right_bumper) {
+                armdex.setIntakePower(0.3);
+            }
+
+            // Operate the wrist
             if(gamepad1.dpad_up) {
                 armdex.runWristUp();
             } else if(gamepad1.dpad_down) {
@@ -82,7 +96,7 @@ public class MainTeleOp extends LinearOpMode {
                 armdex.stopWrist();
             }
 
-
+            // Operate the delivery wheel
             if(gamepad1.a) {
                 led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
