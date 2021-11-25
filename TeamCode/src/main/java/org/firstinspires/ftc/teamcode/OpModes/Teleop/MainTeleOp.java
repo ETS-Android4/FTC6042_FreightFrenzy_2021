@@ -43,6 +43,15 @@ public class MainTeleOp extends LinearOpMode {
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
 
+            // If we detect a block, add it to the telemetry
+            if(armdex.isObjectDetectedInIntake()) {
+                telemetry.addLine("Block detected");
+            }
+            // Write our intake sensor values to the telemetry
+            telemetry.addLine("Intake Sensor R: " + armdex.getIntakeSensorRed());
+            telemetry.addLine("Intake Sensor G: " + armdex.getIntakeSensorGreen());
+            telemetry.addLine("Intake Sensor B: " + armdex.getIntakeSensorBlue());
+
             /*
             ========== CODE FOR CONTROLLER 1 ==========
              */
@@ -52,54 +61,11 @@ public class MainTeleOp extends LinearOpMode {
             double rightTargetPower = -DRIVE_POWER_MULTIPLIER*gamepad1.right_stick_y;
 
             // Write our target powers to the telemetry
-            telemetry.addLine("Left: " + leftTargetPower);
-            telemetry.addLine("Right: " + rightTargetPower);
-
-            // Write our intake sensor values to the telemetry
-            telemetry.addLine("R: " + armdex.getIntakeSensorRed());
-            telemetry.addLine("G: " + armdex.getIntakeSensorGreen());
-            telemetry.addLine("B: " + armdex.getIntakeSensorBlue());
+            telemetry.addLine("Left Drive: " + leftTargetPower);
+            telemetry.addLine("Right Drive: " + rightTargetPower);
 
             // Drive at the target power
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
-
-            // If we detect a block, add it to the telemetry
-            if(armdex.isObjectDetectedInIntake()) {
-                telemetry.addLine("Block detected");
-            }
-
-            // Check if we have a block and if the intake was previously auto stopped
-            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
-                armdex.stopIntake();
-                wasIntakeAutoStoppedSinceLastControllerInput = true;
-            }
-
-            // Operate the intake based on our controller inputs
-            if(gamepad1.left_trigger > 0.2) {
-                armdex.eject();
-                wasIntakeAutoStoppedSinceLastControllerInput = false;
-            } else if(gamepad1.right_trigger > 0.2) {
-                if(!wasIntakeAutoStoppedSinceLastControllerInput) {
-                    armdex.intake();
-                }
-            } else {
-                armdex.stopIntake();
-                wasIntakeAutoStoppedSinceLastControllerInput = false;
-            }
-
-            // Run the intake for dropping freight into the shipping hub
-            if(gamepad1.right_bumper) {
-                armdex.setIntakePower(0.3);
-            }
-
-            // Operate the wrist
-            if(gamepad1.dpad_up) {
-                armdex.runWristUp();
-            } else if(gamepad1.dpad_down) {
-                armdex.runWristDown();
-            } else {
-                armdex.stopWrist();
-            }
 
             // Control the delivery mechanism
             if(gamepad1.right_trigger > 0.2) {
@@ -138,6 +104,20 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 // Don't intake anything
                 wasIntakeAutoStoppedSinceLastControllerInput = false;
+            }
+
+            // Operate the wrist
+            if(gamepad2.right_bumper) {
+                armdex.runWristUp();
+            } else if(gamepad2.left_bumper) {
+                armdex.runWristDown();
+            } else {
+                armdex.stopWrist();
+            }
+
+            // Force the intake to run
+            if(gamepad2.a) {
+                armdex.setIntakePower(.4);
             }
 
             // Update the telemetry
