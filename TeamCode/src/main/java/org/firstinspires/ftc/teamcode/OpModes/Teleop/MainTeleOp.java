@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
+import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
@@ -15,7 +17,8 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        final double DRIVE_POWER_MULTIPLIER = 0.5;
+        final double NORMAL_DRIVE_MAX_POWER = 0.5;
+        final double OVERDRIVE_MAX_POWER = 1;
 
         // Instantiate and initialize our drivetrain
         Drivetrain drivetrain = new Drivetrain();
@@ -28,12 +31,11 @@ public class MainTeleOp extends LinearOpMode {
         led.init(this);
         Armdex armdex = new Armdex();
         armdex.init(this);
+        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex).init(telemetry);
 
         // Let the driver know the robot is done initializing
-        telemetry.addLine("Robot initialized");
-        telemetry.update();
+        output.robotInitialized();
         led.setStatusRobotInitialized();
-
 
         // Wait for the driver to press play
         waitForStart();
@@ -43,26 +45,31 @@ public class MainTeleOp extends LinearOpMode {
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
 
-            // If we detect a block, add it to the telemetry
-            if(armdex.isObjectDetectedInIntake()) {
-                telemetry.addLine("Block detected");
+            double drivePowerMultiplier = NORMAL_DRIVE_MAX_POWER;
+            // Check if driver is using overdrive mode
+            if(gamepad1.right_bumper) {
+                drivePowerMultiplier = OVERDRIVE_MAX_POWER;
+                output.addLine("OVERDRIVE ENABLED");
             }
+
+            // If we detect a block, write it to the telemetry
+            if(armdex.isObjectDetectedInIntake()) {
+                output.addFreightDetected();
+            }
+
             // Write our intake sensor values to the telemetry
-            telemetry.addLine("Intake Sensor R: " + armdex.getIntakeSensorRed());
-            telemetry.addLine("Intake Sensor G: " + armdex.getIntakeSensorGreen());
-            telemetry.addLine("Intake Sensor B: " + armdex.getIntakeSensorBlue());
+            output.addIntakeSensorValues();
 
             /*
             ========== CODE FOR CONTROLLER 1 ==========
              */
 
             // Calculate our target drivetrain powers
-            double leftTargetPower = -DRIVE_POWER_MULTIPLIER*gamepad1.left_stick_y;
-            double rightTargetPower = -DRIVE_POWER_MULTIPLIER*gamepad1.right_stick_y;
+            double leftTargetPower = -NORMAL_DRIVE_MAX_POWER*gamepad1.left_stick_y;
+            double rightTargetPower = -NORMAL_DRIVE_MAX_POWER*gamepad1.right_stick_y;
 
             // Write our target powers to the telemetry
-            telemetry.addLine("Left Drive: " + leftTargetPower);
-            telemetry.addLine("Right Drive: " + rightTargetPower);
+            output.addLine("Left Target Power: " + leftTargetPower).addLine("Right Target Power: " + rightTargetPower);
 
             // Drive at the target power
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
@@ -121,8 +128,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Update the telemetry
-            telemetry.update();
-
+            output.update();
         }
     }
 
