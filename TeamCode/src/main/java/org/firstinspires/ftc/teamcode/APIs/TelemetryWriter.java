@@ -80,12 +80,10 @@ public class TelemetryWriter {
 
     /**
      * Write that the robot has been initialized to the telemetry
-     * @return This object
      */
-    public TelemetryWriter robotInitialized()  {
+    public void robotInitialized()  {
         addLine("Robot initialized");
         update();
-        return this;
     }
 
     /**
