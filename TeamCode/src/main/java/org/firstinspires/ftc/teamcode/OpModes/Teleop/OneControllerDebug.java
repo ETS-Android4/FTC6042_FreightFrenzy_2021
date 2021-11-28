@@ -2,17 +2,15 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@TeleOp(name="Main TeleOp (Two Controllers)")
-public class MainTeleOp extends LinearOpMode {
+@TeleOp(name="Debug/Test (One Controller)")
+public class OneControllerDebug extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,29 +18,22 @@ public class MainTeleOp extends LinearOpMode {
         final double NORMAL_DRIVE_MAX_POWER = 0.5;
         final double OVERDRIVE_MAX_POWER = 1;
 
-        // Instantiate and initialize our drivetrain
         Drivetrain drivetrain = new Drivetrain();
         drivetrain.init(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel();
-        deliveryWheel.init(this);
-        AutonomousActions autonomousActions = new AutonomousActions();
-        autonomousActions.init(this);
-        LedController led = new LedController();
-        led.init(this);
         Armdex armdex = new Armdex();
         armdex.init(this);
-        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex).init(telemetry);
+        DeliveryWheel deliveryWheel = new DeliveryWheel();
+        deliveryWheel.init(this);
+        LedController led = new LedController();
+        TelemetryWriter output =  new TelemetryWriter();
+        output.setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel).init(telemetry);
 
-        // Let the driver know the robot is done initializing
+        led.init(this);
         output.robotInitialized();
-        led.setStatusRobotInitialized();
-
-        // Wait for the driver to press play
         waitForStart();
 
         boolean wasIntakeAutoStoppedSinceLastControllerInput = false;
 
-        // Repeat while the opmode is still active
         while(opModeIsActive()) {
 
             double drivePowerMultiplier = NORMAL_DRIVE_MAX_POWER;
@@ -63,10 +54,6 @@ public class MainTeleOp extends LinearOpMode {
             // Write our intake sensor values to the telemetry
             output.addIntakeSensorValues();
 
-            /*
-            ========== CODE FOR CONTROLLER 1 ==========
-             */
-
             // Calculate our target drivetrain powers
             double leftTargetPower = -drivePowerMultiplier*gamepad1.left_stick_y;
             double rightTargetPower = -drivePowerMultiplier*gamepad1.right_stick_y;
@@ -78,35 +65,31 @@ public class MainTeleOp extends LinearOpMode {
             drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
 
             // Control the delivery mechanism
-            if(gamepad1.right_trigger > 0.2) {
+            if(gamepad1.a) {
                 led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
-            } else if(gamepad1.left_trigger > 0.05) {
+            } else if(gamepad1.b) {
                 led.setStatusDeliveringReverse();
-                deliveryWheel.setPower(-gamepad1.left_trigger);
+                deliveryWheel.setPower(-0.5);
             } else {
                 deliveryWheel.stop();
                 led.setStatusDeliveryFinished();
             }
 
             /*
-            ========== CODE FOR CONTROLLER 2 ==========
-             */
-
-            /*
             Check if the intake needs to be auto stopped. This checks to see if there's a block and if it was already auto stopped
              */
-            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad2.right_trigger > 0.2) {
+            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
                 wasIntakeAutoStoppedSinceLastControllerInput = true;
             }
 
             // Control the intake
-            if(gamepad2.left_trigger > 0.2) {
+            if(gamepad1.left_trigger > 0.2) {
                 // Eject the freight
                 armdex.eject();
                 wasIntakeAutoStoppedSinceLastControllerInput = false;
-            } else if(gamepad2.right_trigger > 0.2) {
+            } else if(gamepad1.right_trigger > 0.2) {
                 // Intake the freight unless we are stopped
                 if(!wasIntakeAutoStoppedSinceLastControllerInput) {
                     armdex.intake();
@@ -118,13 +101,13 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Operate the wrist
-            if(gamepad2.right_bumper) {
+            if(gamepad1.dpad_up) {
                 if(!armdex.isWristUp()) {
                     armdex.runWristUp();
                 } else {
                     armdex.stopWrist();
                 }
-            } else if(gamepad2.left_bumper) {
+            } else if(gamepad1.dpad_down) {
                 if(!armdex.isWristDown()) {
                     armdex.runWristDown();
                 } else {
@@ -135,13 +118,14 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Force the intake to run
-            if(gamepad2.a) {
+            if(gamepad1.left_bumper) {
                 armdex.setIntakePower(.4);
             }
 
             // Update the telemetry
             output.update();
-        }
-    }
 
+        }
+
+    }
 }
