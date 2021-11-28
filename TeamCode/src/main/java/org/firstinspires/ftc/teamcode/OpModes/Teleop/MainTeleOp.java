@@ -57,6 +57,9 @@ public class MainTeleOp extends LinearOpMode {
                 output.addFreightDetected();
             }
 
+            // Write our wrist sensor info to the telemetry
+            output.addIsWristUp().addIsWristDown().addWristSensorValues();
+
             // Write our intake sensor values to the telemetry
             output.addIntakeSensorValues();
 
@@ -65,8 +68,8 @@ public class MainTeleOp extends LinearOpMode {
              */
 
             // Calculate our target drivetrain powers
-            double leftTargetPower = -NORMAL_DRIVE_MAX_POWER*gamepad1.left_stick_y;
-            double rightTargetPower = -NORMAL_DRIVE_MAX_POWER*gamepad1.right_stick_y;
+            double leftTargetPower = -drivePowerMultiplier*gamepad1.left_stick_y;
+            double rightTargetPower = -drivePowerMultiplier*gamepad1.right_stick_y;
 
             // Write our target powers to the telemetry
             output.addLine("Left Target Power: " + leftTargetPower).addLine("Right Target Power: " + rightTargetPower);
@@ -111,6 +114,7 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 // Don't intake anything
                 wasIntakeAutoStoppedSinceLastControllerInput = false;
+                armdex.stopIntake();
             }
 
             // Operate the wrist

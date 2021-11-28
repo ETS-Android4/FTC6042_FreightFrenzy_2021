@@ -242,11 +242,11 @@ public class TelemetryWriter {
      * Add whether the up limit switch is being triggered to the telemetry
      * @return This object
      */
-    public TelemetryWriter addUpLimitSwitch() {
+    public TelemetryWriter addIsWristUp() {
         if(armdex.isWristUp()) {
-            telemetry.addLine("Wrist Up Sensor: Active");
+            telemetry.addLine("Wrist Up: True");
         } else {
-            telemetry.addLine("Wrist Up Sensor: Not Active");
+            telemetry.addLine("Wrist Up: False");
         }
         return this;
     }
@@ -255,12 +255,23 @@ public class TelemetryWriter {
      * Add whether the down limit switch is being triggered to the telemetry
      * @return This object
      */
-    public TelemetryWriter addDownLimitSwitch() {
+    public TelemetryWriter addIsWristDown() {
         if(armdex.isWristDown()) {
-            telemetry.addLine("Wrist Down Sensor: Active");
+            telemetry.addLine("Wrist Down: True");
         } else {
-            telemetry.addLine("Wrist Down Sensor: Not Active");
+            telemetry.addLine("Wrist Down: False");
         }
+        return this;
+    }
+
+    /**
+     * Add the wrist sensor RGB values to the telemetry
+     * @return This object
+     */
+    public TelemetryWriter addWristSensorValues() {
+        telemetry.addLine("Wrist Sensor R: " + armdex.getWristSensorRed());
+        telemetry.addLine("Wrist Sensor G: " + armdex.getWristSensorGreen());
+        telemetry.addLine("Wrist Sensor B: " + armdex.getWristSensorBlue());
         return this;
     }
 
