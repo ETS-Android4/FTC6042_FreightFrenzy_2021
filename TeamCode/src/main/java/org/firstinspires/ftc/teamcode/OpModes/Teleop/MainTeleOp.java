@@ -107,8 +107,17 @@ public class MainTeleOp extends LinearOpMode {
                 armdex.eject();
                 wasIntakeAutoStoppedSinceLastControllerInput = false;
             } else if(gamepad2.right_trigger > 0.2) {
-                // Intake the freight unless we are stopped
-                if(!wasIntakeAutoStoppedSinceLastControllerInput) {
+                // Determine where our wrist is
+                if(armdex.isWristDown()) {
+                    // Intake the freight unless the intake is stopped
+                    if (!wasIntakeAutoStoppedSinceLastControllerInput) {
+                        armdex.intake();
+                    }
+                } else if(armdex.isWristUp()) {
+                    // Place the block at the normal place speed
+                    armdex.place();
+                } else {
+                    // We're probably in an emergency situation, and the driver expects the intake to run normally.
                     armdex.intake();
                 }
             } else {

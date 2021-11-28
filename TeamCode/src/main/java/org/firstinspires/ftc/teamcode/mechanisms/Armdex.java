@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Armdex {
 
@@ -30,12 +28,13 @@ public class Armdex {
     final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 0;
 
     // The value both added and subtracted from the RGB values below to determine if the sensor is seeing a certain color
-    final int WRIST_SENSOR_DEAD_ZONE = 200;
+    final int WRIST_SENSOR_DOWN_DEAD_ZONE = 200;
+    final int WRIST_SENSOR_UP_DEAD_ZONE = 400;
 
     // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "up"
-    final int WRIST_SENSOR_UP_POSITION_RED = 2960;
+    final int WRIST_SENSOR_UP_POSITION_RED = 3050;
     final int WRIST_SENSOR_UP_POSITION_GREEN = 3880;
-    final int WRIST_SENSOR_UP_POSITION_BLUE = 9350;
+    final int WRIST_SENSOR_UP_POSITION_BLUE = 9000;
 
     // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "down"
     final int WRIST_SENSOR_DOWN_POSITION_RED = 289;
@@ -111,7 +110,7 @@ public class Armdex {
      * @return Whether the wrist is in the down position
      */
     public boolean isWristDown() {
-        return isValueInWristDeadZone(wristSensor.red(), WRIST_SENSOR_DOWN_POSITION_RED) && isValueInWristDeadZone(wristSensor.green(), WRIST_SENSOR_DOWN_POSITION_GREEN) && isValueInWristDeadZone(wristSensor.blue(), WRIST_SENSOR_DOWN_POSITION_BLUE);
+        return isValueInWristDownDeadZone(wristSensor.red(), WRIST_SENSOR_DOWN_POSITION_RED) && isValueInWristDownDeadZone(wristSensor.green(), WRIST_SENSOR_DOWN_POSITION_GREEN) && isValueInWristDownDeadZone(wristSensor.blue(), WRIST_SENSOR_DOWN_POSITION_BLUE);
     }
 
     /**
@@ -119,7 +118,7 @@ public class Armdex {
      * @return Whether the wrist is in the up position
      */
     public boolean isWristUp() {
-        return isValueInWristDeadZone(wristSensor.red(), WRIST_SENSOR_UP_POSITION_RED) && isValueInWristDeadZone(wristSensor.green(), WRIST_SENSOR_UP_POSITION_GREEN) && isValueInWristDeadZone(wristSensor.blue(), WRIST_SENSOR_UP_POSITION_BLUE);
+        return isValueInWristUpDeadZone(wristSensor.red(), WRIST_SENSOR_UP_POSITION_RED) && isValueInWristUpDeadZone(wristSensor.green(), WRIST_SENSOR_UP_POSITION_GREEN) && isValueInWristUpDeadZone(wristSensor.blue(), WRIST_SENSOR_UP_POSITION_BLUE);
     }
 
     /**
@@ -293,13 +292,23 @@ public class Armdex {
     }
 
     /**
-     * Check if the color seen is within the dead zone for a certain value. This is to be used for the wrist color sensor and nothing else.
+     * Check if the color seen is within the wrist up dead zone for a certain value. This is to be used for the wrist color sensor and nothing else.
      * @param colorSeen The color value seen (either R, G, or B)
      * @param colorToCheckFor The color that we're checking for (the variable that contains the target R, G, or B value)
      * @return Whether or not the color seen is within the dead zone for the color to check for.
      */
-    private boolean isValueInWristDeadZone(int colorSeen, int colorToCheckFor) {
-        return (colorSeen > colorToCheckFor - WRIST_SENSOR_DEAD_ZONE) && (colorSeen < colorToCheckFor + WRIST_SENSOR_DEAD_ZONE);
+    private boolean isValueInWristUpDeadZone(int colorSeen, int colorToCheckFor) {
+        return (colorSeen > colorToCheckFor - WRIST_SENSOR_UP_DEAD_ZONE) && (colorSeen < colorToCheckFor + WRIST_SENSOR_UP_DEAD_ZONE);
+    }
+
+    /**
+     * Check if the color seen is within the wrist down dead zone for a certain value. This is to be used for the wrist color sensor and nothing else.
+     * @param colorSeen The color value seen (either R, G, or B)
+     * @param colorToCheckFor The color that we're checking for (the variable that contains the target R, G, or B value)
+     * @return Whether or not the color seen is within the dead zone for the color to check for.
+     */
+    private boolean isValueInWristDownDeadZone(int colorSeen, int colorToCheckFor) {
+        return (colorSeen > colorToCheckFor - WRIST_SENSOR_DOWN_DEAD_ZONE) && (colorSeen < colorToCheckFor + WRIST_SENSOR_DOWN_DEAD_ZONE);
     }
 
 }
