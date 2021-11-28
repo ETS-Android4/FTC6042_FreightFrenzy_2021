@@ -20,6 +20,7 @@ public class Armdex {
     final double WRIST_DOWN_SPEED = -1;
     final double INTAKE_SPEED = 1;
     final double EJECT_SPEED = -1;
+    final double PLACE_SPEED = 0.5;
     final boolean INTAKE_SENSOR_LED_DEFAULT_STATE = true;
     final boolean WRIST_SENSOR_LED_DEFAULT_STATE = true;
 
@@ -133,6 +134,13 @@ public class Armdex {
      */
     public void eject() {
         intake.setPower(EJECT_SPEED);
+    }
+
+    /**
+     * Place the object at the default place speed
+     */
+    public void place() {
+        intake.setPower(PLACE_SPEED);
     }
 
     /**

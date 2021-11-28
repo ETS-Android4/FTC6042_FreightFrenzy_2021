@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.APIs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
+import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
@@ -11,6 +13,7 @@ public class AutonomousActions {
     LinearOpMode opMode;
     Drivetrain drivetrain;
     DeliveryWheel deliveryWheel;
+    Armdex armdex;
     LedController led;
 
     public AutonomousActions() {}
@@ -25,11 +28,13 @@ public class AutonomousActions {
         // Instantiate our mechanisms
         drivetrain = new Drivetrain();
         deliveryWheel = new DeliveryWheel();
+        armdex = new Armdex();
         led = new LedController();
 
         // Initialize our mechanisms
         drivetrain.init(opMode);
         deliveryWheel.init(opMode);
+        armdex.init(opMode);
         led.initNoInitLight(opMode);
     }
 
@@ -42,20 +47,6 @@ public class AutonomousActions {
         while(opMode.opModeIsActive() && System.currentTimeMillis() < loopStartTimeInMillis+millisToDelay) {
 
         }
-    }
-
-    /**
-     * Score a preloaded object, assuming the alliance specific shipping hub is to our left.
-     */
-    public void scorePreloadLeft() {
-        //TODO Implement this
-    }
-
-    /**
-     * Score a preload object, assuming the alliance specific shipping hub is to our right.
-     */
-    public void scorePreloadRight() {
-        //TODO Implement this
     }
 
     /**
@@ -101,8 +92,6 @@ public class AutonomousActions {
             drivetrain.driveAtPower(-0.2);
         }
     }
-
-    // TODO create a backwards version of the method below
 
     /**
      * Drive straight to the delivery wheel from near the near barcode
@@ -179,6 +168,16 @@ public class AutonomousActions {
      */
     public void rotateDegrees(double degreesToRotate) {
         drivetrain.rotateDegreesNoPid(degreesToRotate, 0.15);
+    }
+
+    /**
+     * Move straight off the wall and place a loaded freight onto the shipping hub
+     */
+    public void placeFreightStraightFromWall() {
+        drivetrain.driveForwardInchesNoPid(13, 0.4);
+        armdex.place();
+        delay(3000);
+        armdex.stopIntake();
     }
 
 }
