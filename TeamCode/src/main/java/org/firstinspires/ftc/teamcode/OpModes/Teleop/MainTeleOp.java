@@ -124,13 +124,12 @@ public class MainTeleOp extends LinearOpMode {
                 } else {
                     armdex.stopWrist();
                 }
-            } else if(gamepad2.left_bumper) {
+            } else if(gamepad1.left_bumper) {
                 if(!armdex.isWristDown()) {
                     armdex.runWristDown();
                 } else {
                     armdex.stopWrist();
                 }
-                armdex.runWristDown();
             } else {
                 armdex.stopWrist();
             }
