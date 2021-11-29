@@ -31,16 +31,7 @@ public class TelemetryWriter {
      */
     public TelemetryWriter setDrivetrain(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
-        return this;
-    }
-
-    /**
-     * Set the gyroscope for this debug object
-     * @param gyro The gyroscope API object
-     * @return This object
-     */
-    public TelemetryWriter setGyroscope(GyroscopeApi gyro) {
-        this.gyro = gyro;
+        gyro = drivetrain.getGyroscopeApi();
         return this;
     }
 
@@ -192,9 +183,7 @@ public class TelemetryWriter {
      * @return This object
      */
     public TelemetryWriter addIntakeSensorValues() {
-        telemetry.addLine("Intake Sensor R: " + armdex.getIntakeSensorRed());
-        telemetry.addLine("Intake Sensor G: " + armdex.getIntakeSensorGreen());
-        telemetry.addLine("Intake Sensor B: " + armdex.getIntakeSensorBlue());
+        telemetry.addLine("Intake Sensor R: " + armdex.getIntakeSensorRed() + " G: " + armdex.getIntakeSensorGreen() + " B: " + armdex.getIntakeSensorBlue());
         return this;
     }
 
@@ -269,9 +258,17 @@ public class TelemetryWriter {
      * @return This object
      */
     public TelemetryWriter addWristSensorValues() {
-        telemetry.addLine("Wrist Sensor R: " + armdex.getWristSensorRed());
-        telemetry.addLine("Wrist Sensor G: " + armdex.getWristSensorGreen());
-        telemetry.addLine("Wrist Sensor B: " + armdex.getWristSensorBlue());
+        telemetry.addLine("Wrist Sensor R: " + armdex.getWristSensorRed() + " G: " + armdex.getWristSensorGreen() + " B: " + armdex.getWristSensorBlue());
+        return this;
+    }
+
+    /**
+     * Add all of the armdex encoders to the telemetry
+     * @return This object
+     */
+    public TelemetryWriter addAllArmdexEncoders() {
+        telemetry.addLine("Intake Encoder: " + armdex.getIntakePosition());
+        telemetry.addLine("Wrist Encoder: " + armdex.getWristPosition());
         return this;
     }
 

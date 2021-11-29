@@ -501,5 +501,12 @@ public class Drivetrain {
         return rearRight.getCurrentPosition();
     }
 
+    /**
+     * Get the gyroscope API used by this drivetrain object
+     * @return The gyroscope API used by this drivetrain object
+     */
+    public GyroscopeApi getGyroscopeApi() {
+        return gyro;
+    }
 
 }
