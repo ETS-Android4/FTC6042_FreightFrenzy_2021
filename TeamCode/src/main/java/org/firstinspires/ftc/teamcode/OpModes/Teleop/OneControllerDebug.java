@@ -81,6 +81,7 @@ public class OneControllerDebug extends LinearOpMode {
              */
             if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
+                armdex.wristUp();
                 wasIntakeAutoStoppedSinceLastControllerInput = true;
             }
 
