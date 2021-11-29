@@ -135,11 +135,6 @@ public class MainTeleOp extends LinearOpMode {
                 armdex.stopWrist();
             }
 
-            // Force the intake to run
-            if(gamepad2.a) {
-                armdex.setIntakePower(.4);
-            }
-
             // Update the telemetry
             output.update();
         }
