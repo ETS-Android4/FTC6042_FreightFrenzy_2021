@@ -111,17 +111,9 @@ public class OneControllerDebug extends LinearOpMode {
 
             // Operate the wrist
             if(gamepad1.dpad_up) {
-                if(!armdex.isWristUp()) {
-                    armdex.runWristUp();
-                } else {
-                    armdex.stopWrist();
-                }
+                armdex.wristUp();
             } else if(gamepad1.dpad_down) {
-                if(!armdex.isWristDown()) {
-                    armdex.runWristDown();
-                } else {
-                    armdex.stopWrist();
-                }
+                armdex.wristDown();
             } else {
                 armdex.stopWrist();
             }

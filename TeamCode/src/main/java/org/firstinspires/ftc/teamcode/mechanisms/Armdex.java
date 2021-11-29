@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.ActionThreads.WristDownAction;
+import org.firstinspires.ftc.teamcode.ActionThreads.WristUpAction;
+
 public class Armdex {
 
     LinearOpMode opMode;
@@ -29,10 +32,10 @@ public class Armdex {
 
     // The value both added and subtracted from the RGB values below to determine if the sensor is seeing a certain color
     final int WRIST_SENSOR_DOWN_DEAD_ZONE = 200;
-    final int WRIST_SENSOR_UP_DEAD_ZONE = 400;
+    final int WRIST_SENSOR_UP_DEAD_ZONE = 500;
 
     // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "up"
-    final int WRIST_SENSOR_UP_POSITION_RED = 3050;
+    final int WRIST_SENSOR_UP_POSITION_RED = 3150;
     final int WRIST_SENSOR_UP_POSITION_GREEN = 3880;
     final int WRIST_SENSOR_UP_POSITION_BLUE = 9000;
 
@@ -45,6 +48,7 @@ public class Armdex {
     final int INTAKE_COUNTS_PER_REVOLUTION = 288;
     final int WRIST_COUNTS_PER_REVOLUTION = 288;
 
+    public Thread currentlyRunningThread = null;
 
     public Armdex() {}
 
@@ -168,20 +172,44 @@ public class Armdex {
      * Run the wrist up until it reaches its up position
      */
     public void wristUp() {
-        while(opMode.opModeIsActive() && !isWristUp()) {
-            runWristUp();
+        // Don't continue to run if the wrist is already up
+        if(isWristUp()) {
+            return;
         }
-        stopWrist();
+        // See if we're currently running a thread, and cancel it if we are
+        if(currentlyRunningThread != null) {
+            // Check if the running thread is for a wrist up action, and don't create another action if it is
+            if(currentlyRunningThread.getClass() == WristUpAction.class) {
+                return;
+            }
+            currentlyRunningThread.interrupt();
+        }
+        // Create a new action thread and run it
+        WristUpAction wristUpAction = new WristUpAction(this, opMode);
+        currentlyRunningThread = wristUpAction;
+        wristUpAction.start();
     }
 
     /**
      * Run the wrist down until it reaches its down position
      */
     public void wristDown() {
-        while(opMode.opModeIsActive() && !isWristDown()) {
-            runWristDown();
+        // Don't continue to run if the wrist is already up
+        if(isWristDown()) {
+            return;
         }
-        stopWrist();
+        // See if we're currently running a thread, and cancel it if we are
+        if(currentlyRunningThread != null) {
+            // Check if the running thread is for a wrist up action, and don't create another action if it is
+            if(currentlyRunningThread.getClass() == WristDownAction.class) {
+                return;
+            }
+            currentlyRunningThread.interrupt();
+        }
+        // Create a new action thread and run it
+        WristDownAction wristDownAction = new WristDownAction(this, opMode);
+        currentlyRunningThread = wristDownAction;
+        wristDownAction.start();
     }
 
     /**
