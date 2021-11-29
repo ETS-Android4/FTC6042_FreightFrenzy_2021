@@ -128,17 +128,9 @@ public class MainTeleOp extends LinearOpMode {
 
             // Operate the wrist
             if(gamepad2.right_bumper) {
-                if(!armdex.isWristUp()) {
-                    armdex.runWristUp();
-                } else {
-                    armdex.stopWrist();
-                }
+                armdex.wristUp();
             } else if(gamepad2.left_bumper) {
-                if(!armdex.isWristDown()) {
-                    armdex.runWristDown();
-                } else {
-                    armdex.stopWrist();
-                }
+                armdex.wristDown();
             } else {
                 armdex.stopWrist();
             }
