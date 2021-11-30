@@ -81,8 +81,8 @@ public class OneControllerDebug extends LinearOpMode {
              */
             if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
                 armdex.stopIntake();
-                armdex.wristUp();
                 wasIntakeAutoStoppedSinceLastControllerInput = true;
+                armdex.wristUp();
             }
 
             // Control the intake
@@ -99,7 +99,9 @@ public class OneControllerDebug extends LinearOpMode {
                     }
                 } else if(armdex.isWristUp()) {
                     // Place the block at the normal place speed
-                    armdex.place();
+                    if(!wasIntakeAutoStoppedSinceLastControllerInput) {
+                        armdex.place();
+                    }
                 } else {
                     // We're probably in an emergency situation, and the driver expects the intake to run normally.
                     armdex.intake();
@@ -115,8 +117,6 @@ public class OneControllerDebug extends LinearOpMode {
                 armdex.wristUp();
             } else if(gamepad1.dpad_down) {
                 armdex.wristDown();
-            } else {
-                armdex.stopWrist();
             }
 
             // Update the telemetry

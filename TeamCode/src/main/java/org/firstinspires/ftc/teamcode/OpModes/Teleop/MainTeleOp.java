@@ -98,8 +98,8 @@ public class MainTeleOp extends LinearOpMode {
              */
             if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad2.right_trigger > 0.2) {
                 armdex.stopIntake();
-                armdex.wristUp();
                 wasIntakeAutoStoppedSinceLastControllerInput = true;
+                armdex.wristUp();
             }
 
             // Control the intake
@@ -113,13 +113,23 @@ public class MainTeleOp extends LinearOpMode {
                     // Intake the freight unless the intake is stopped
                     if (!wasIntakeAutoStoppedSinceLastControllerInput) {
                         armdex.intake();
+                    } else {
+                        armdex.stopIntake();
                     }
                 } else if(armdex.isWristUp()) {
                     // Place the block at the normal place speed
-                    armdex.place();
+                    if(!wasIntakeAutoStoppedSinceLastControllerInput) {
+                        armdex.place();
+                    } else {
+                        armdex.stopIntake();
+                    }
                 } else {
                     // We're probably in an emergency situation, and the driver expects the intake to run normally.
-                    armdex.intake();
+                    if(!wasIntakeAutoStoppedSinceLastControllerInput) {
+                        armdex.intake();
+                    } else {
+                        armdex.stopIntake();
+                    }
                 }
             } else {
                 // Don't intake anything
@@ -128,12 +138,16 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Operate the wrist
-            if(gamepad2.right_bumper) {
+            if(gamepad2.y) {
                 armdex.wristUp();
-            } else if(gamepad2.left_bumper) {
+            } else if(gamepad2.a) {
                 armdex.wristDown();
-            } else {
-                armdex.stopWrist();
+            } else if(gamepad2.x || gamepad2.b) {
+                if(armdex.isWristUp()) {
+                    armdex.wristDown();
+                } else if(armdex.isWristDown()) {
+                    armdex.wristUp();
+                }
             }
 
             // Update the telemetry

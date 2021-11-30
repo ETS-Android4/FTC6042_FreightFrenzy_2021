@@ -20,6 +20,7 @@ public class WristDownAction extends Thread {
             armdex.runWristDown();
         }
         armdex.stopWrist();
+        armdex.currentlyRunningThread = null;
     }
 
 }
