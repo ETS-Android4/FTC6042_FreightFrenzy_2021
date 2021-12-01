@@ -19,7 +19,7 @@ public class Armdex {
     // Variables for this subsystem
     final double WRIST_UP_SPEED = 1;
     final double WRIST_DOWN_SPEED = -1;
-    final double INTAKE_SPEED = 1;
+    final double INTAKE_SPEED = 0.75;
     final double EJECT_SPEED = -1;
     final double PLACE_SPEED = 0.5;
     final boolean INTAKE_SENSOR_LED_DEFAULT_STATE = true;
@@ -29,21 +29,6 @@ public class Armdex {
     final int INTAKE_SENSOR_DETECTION_THRESHOLD_RED = 2800;
     final int INTAKE_SENSOR_DETECTION_THRESHOLD_GREEN = 2900;
     final int INTAKE_SENSOR_DETECTION_THRESHOLD_BLUE = 0;
-
-    // The value both added and subtracted from the RGB values below to determine if the sensor is seeing a certain color
-    final int WRIST_SENSOR_DOWN_DEAD_ZONE = 200;
-    final int WRIST_SENSOR_UP_DEAD_ZONE = 1300;
-
-    // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "up"
-    final int WRIST_SENSOR_UP_POSITION_RED = 3150;
-    final int WRIST_SENSOR_UP_POSITION_GREEN = 3880;
-    final int WRIST_SENSOR_UP_POSITION_BLUE = 8800;
-
-    // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "down"
-    final int WRIST_SENSOR_DOWN_POSITION_RED = 289;
-    final int WRIST_SENSOR_DOWN_POSITION_GREEN = 990;
-    final int WRIST_SENSOR_DOWN_POSITION_BLUE = 615;
-
 
     final int INTAKE_COUNTS_PER_REVOLUTION = 288;
     final int WRIST_COUNTS_PER_REVOLUTION = 288;
@@ -114,7 +99,7 @@ public class Armdex {
      * @return Whether the wrist is in the down position
      */
     public boolean isWristDown() {
-        return isValueInWristDownDeadZone(wristSensor.red(), WRIST_SENSOR_DOWN_POSITION_RED) && isValueInWristDownDeadZone(wristSensor.green(), WRIST_SENSOR_DOWN_POSITION_GREEN) && isValueInWristDownDeadZone(wristSensor.blue(), WRIST_SENSOR_DOWN_POSITION_BLUE);
+        return getWristSensorGreen() > 0.8*(getWristSensorRed()+getWristSensorBlue()) && getWristSensorBlue() > 1.7*getWristSensorRed();
     }
 
     /**
@@ -122,7 +107,7 @@ public class Armdex {
      * @return Whether the wrist is in the up position
      */
     public boolean isWristUp() {
-        return isValueInWristUpDeadZone(wristSensor.red(), WRIST_SENSOR_UP_POSITION_RED) && isValueInWristUpDeadZone(wristSensor.green(), WRIST_SENSOR_UP_POSITION_GREEN) && isValueInWristUpDeadZone(wristSensor.blue(), WRIST_SENSOR_UP_POSITION_BLUE);
+        return getWristSensorBlue() > 2 * getWristSensorRed() && getWristSensorGreen() < getWristSensorBlue();
     }
 
     /**
@@ -317,26 +302,6 @@ public class Armdex {
     public void resetIntakeEncoder() {
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    /**
-     * Check if the color seen is within the wrist up dead zone for a certain value. This is to be used for the wrist color sensor and nothing else.
-     * @param colorSeen The color value seen (either R, G, or B)
-     * @param colorToCheckFor The color that we're checking for (the variable that contains the target R, G, or B value)
-     * @return Whether or not the color seen is within the dead zone for the color to check for.
-     */
-    private boolean isValueInWristUpDeadZone(int colorSeen, int colorToCheckFor) {
-        return (colorSeen > colorToCheckFor - WRIST_SENSOR_UP_DEAD_ZONE) && (colorSeen < colorToCheckFor + WRIST_SENSOR_UP_DEAD_ZONE);
-    }
-
-    /**
-     * Check if the color seen is within the wrist down dead zone for a certain value. This is to be used for the wrist color sensor and nothing else.
-     * @param colorSeen The color value seen (either R, G, or B)
-     * @param colorToCheckFor The color that we're checking for (the variable that contains the target R, G, or B value)
-     * @return Whether or not the color seen is within the dead zone for the color to check for.
-     */
-    private boolean isValueInWristDownDeadZone(int colorSeen, int colorToCheckFor) {
-        return (colorSeen > colorToCheckFor - WRIST_SENSOR_DOWN_DEAD_ZONE) && (colorSeen < colorToCheckFor + WRIST_SENSOR_DOWN_DEAD_ZONE);
     }
 
 }
