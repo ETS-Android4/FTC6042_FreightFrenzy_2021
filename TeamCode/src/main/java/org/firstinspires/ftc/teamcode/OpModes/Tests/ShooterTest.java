@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
 @TeleOp(name="Shooter Test")
-@Disabled
 public class ShooterTest extends LinearOpMode {
 
     @Override
@@ -35,10 +34,8 @@ public class ShooterTest extends LinearOpMode {
                 armdex.stopIntake();
             }
 
-            if(gamepad2.dpad_up) {
-                armdex.runWristUp();
-            } else if(gamepad2.dpad_down) {
-                armdex.runWristDown();
+            if(Math.abs(gamepad2.right_stick_y) > 0.1) {
+                armdex.setWristPower(-gamepad2.right_stick_y);
             } else {
                 armdex.stopWrist();
             }
