@@ -32,7 +32,7 @@ public class Armdex {
 
     // The value both added and subtracted from the RGB values below to determine if the sensor is seeing a certain color
     final int WRIST_SENSOR_DOWN_DEAD_ZONE = 200;
-    final int WRIST_SENSOR_UP_DEAD_ZONE = 700;
+    final int WRIST_SENSOR_UP_DEAD_ZONE = 1300;
 
     // The RGB values that must be met, plus or minus the dead zone value, for the wrist to be considered "up"
     final int WRIST_SENSOR_UP_POSITION_RED = 3150;
