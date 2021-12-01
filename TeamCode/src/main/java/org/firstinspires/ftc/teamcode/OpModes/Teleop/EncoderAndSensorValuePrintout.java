@@ -21,7 +21,7 @@ public class EncoderAndSensorValuePrintout extends LinearOpMode {
         Armdex armdex = new Armdex();
         armdex.init(this);
 
-        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDrivetrain(drivetrain).setArmdex(armdex);
+        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex);
         output.init(telemetry);
 
         output.robotInitialized();
