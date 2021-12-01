@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red Place Straight Deliver Storage Park")
-public class RedStraightPlaceDeliverStoragePark extends LinearOpMode {
+@Autonomous(name="Red Place Deliver Warehouse")
+public class RedPlaceDeliverNavigate extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +43,7 @@ public class RedStraightPlaceDeliverStoragePark extends LinearOpMode {
         // Drive to wheel
         drivetrain.driveForwardInchesNoPid(15, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
-        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
+        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1500)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
@@ -52,24 +52,10 @@ public class RedStraightPlaceDeliverStoragePark extends LinearOpMode {
         actions.deliverDuckAutonomous();
         actions.delay(1000);
 
-        // Drive backwards
-        actions.driveInchesNoPid(-10, 0.5);
-        actions.delay(500);
+        // Drive back to warehouse
+        actions.parkInWarehouseFromCarouselBackwards();
 
-        // Rotate right
-        actions.rotateDegrees(90);
-        actions.delay(500);
-
-        // Drive forward
-        actions.driveInchesNoPid(14, 0.5);
-        actions.delay(500);
-
-        // Rotate left
-        actions.rotateDegrees(-90);
-        actions.delay(500);
-
-        // Park in zone
-        actions.driveInchesNoPid(16, 0.5);
+        armdex.wristUp();
 
     }
 }
