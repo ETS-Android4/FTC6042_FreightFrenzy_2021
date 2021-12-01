@@ -40,6 +40,8 @@ public class MainTeleOp extends LinearOpMode {
         // Wait for the driver to press play
         waitForStart();
 
+        armdex.wristUp();
+
         boolean wasIntakeAutoStoppedSinceLastControllerInput = false;
 
         // Repeat while the opmode is still active
@@ -62,6 +64,11 @@ public class MainTeleOp extends LinearOpMode {
 
             // Write our intake sensor values to the telemetry
             output.addIntakeSensorValues();
+
+            // Emergency stop drivetrain
+            if(gamepad2.dpad_left || gamepad2.dpad_right || (gamepad2.left_stick_y > 0.5 && gamepad2.right_stick_y > 0.5)) {
+                drivePowerMultiplier = -0.2;
+            }
 
             /*
             ========== CODE FOR CONTROLLER 1 ==========
@@ -118,11 +125,7 @@ public class MainTeleOp extends LinearOpMode {
                     }
                 } else if(armdex.isWristUp()) {
                     // Place the block at the normal place speed
-                    if(!wasIntakeAutoStoppedSinceLastControllerInput) {
-                        armdex.place();
-                    } else {
-                        armdex.stopIntake();
-                    }
+                    armdex.place();
                 } else {
                     // We're probably in an emergency situation, and the driver expects the intake to run normally.
                     if(!wasIntakeAutoStoppedSinceLastControllerInput) {
@@ -148,6 +151,11 @@ public class MainTeleOp extends LinearOpMode {
                 } else if(armdex.isWristDown()) {
                     armdex.wristUp();
                 }
+            }
+
+            // Force block to expel
+            if(gamepad2.dpad_up) {
+                armdex.setIntakePower(1);
             }
 
             // Update the telemetry
