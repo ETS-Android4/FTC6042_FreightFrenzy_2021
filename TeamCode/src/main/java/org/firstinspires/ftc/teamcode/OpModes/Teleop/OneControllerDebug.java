@@ -32,7 +32,7 @@ public class OneControllerDebug extends LinearOpMode {
         output.robotInitialized();
         waitForStart();
 
-        boolean wasIntakeAutoStoppedSinceLastControllerInput = false;
+        boolean overrideIntake = false;
 
         while(opModeIsActive()) {
 
@@ -76,39 +76,35 @@ public class OneControllerDebug extends LinearOpMode {
                 led.setStatusDeliveryFinished();
             }
 
-            /*
-            Check if the intake needs to be auto stopped. This checks to see if there's a block and if it was already auto stopped
-             */
-            if(armdex.isObjectDetectedInIntake() && !wasIntakeAutoStoppedSinceLastControllerInput && gamepad1.right_trigger > 0.2) {
-                armdex.stopIntake();
-                wasIntakeAutoStoppedSinceLastControllerInput = true;
-                armdex.wristUp();
-            }
-
             // Control the intake
+            boolean isRightTriggerPressed = gamepad1.right_trigger > 0.2;
+            boolean isBlockPresentInIntake = armdex.isObjectDetectedInIntake();
+
+            if(!isRightTriggerPressed) {
+                if(isBlockPresentInIntake) {
+                    overrideIntake = true;
+                } else {
+                    overrideIntake = false;
+                }
+            }
             if(gamepad1.left_trigger > 0.2) {
-                // Eject the freight
                 armdex.eject();
-                wasIntakeAutoStoppedSinceLastControllerInput = false;
-            } else if(gamepad1.right_trigger > 0.2) {
-                // Determine where our wrist is
-                if(armdex.isWristDown()) {
-                    // Intake the freight unless the intake is stopped
-                    if (!wasIntakeAutoStoppedSinceLastControllerInput) {
+            } else if(isRightTriggerPressed) {
+                if(!overrideIntake) {
+                    if(!isBlockPresentInIntake) {
                         armdex.intake();
-                    }
-                } else if(armdex.isWristUp()) {
-                    // Place the block at the normal place speed
-                    if(!wasIntakeAutoStoppedSinceLastControllerInput) {
-                        armdex.place();
+                    } else {
+                        armdex.stopIntake();
+                        armdex.wristUp();
                     }
                 } else {
-                    // We're probably in an emergency situation, and the driver expects the intake to run normally.
-                    armdex.intake();
+                    if(armdex.isWristUp()) {
+                        armdex.place();
+                    } else {
+                        armdex.intake();
+                    }
                 }
             } else {
-                // Don't intake anything
-                wasIntakeAutoStoppedSinceLastControllerInput = false;
                 armdex.stopIntake();
             }
 
