@@ -92,7 +92,11 @@ public class OneControllerDebug extends LinearOpMode {
             } else if(isRightTriggerPressed) {
                 if(!overrideIntake) {
                     if(!isBlockPresentInIntake) {
-                        armdex.intake();
+                        if(!armdex.isWristUp()) {
+                            armdex.intake();
+                        } else {
+                            armdex.stopIntake();
+                        }
                     } else {
                         armdex.stopIntake();
                         armdex.wristUp();

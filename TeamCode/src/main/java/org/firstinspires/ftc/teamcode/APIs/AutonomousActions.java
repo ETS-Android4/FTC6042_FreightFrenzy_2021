@@ -53,7 +53,7 @@ public class AutonomousActions {
      * Rotate left off of the wall
      */
     public void rotateLeftFromWall() {
-        drivetrain.driveForwardInchesNoPid(2.5, 0.4);
+        drivetrain.driveForwardInchesNoPid(3.5, 0.4);
         drivetrain.rotateDegreesNoPid(-85, 0.2);
     }
 
@@ -61,7 +61,7 @@ public class AutonomousActions {
      * Rotate right off of the wall
      */
     public void rotateRightFromWall() {
-        drivetrain.driveForwardInchesNoPid(2.5, 0.4);
+        drivetrain.driveForwardInchesNoPid(3.5, 0.4);
         drivetrain.rotateDegreesNoPid(85, 0.2);
     }
 
@@ -136,14 +136,14 @@ public class AutonomousActions {
      * Park in the warehouse from the Carousel
      */
     public void parkInWarehouseFromCarousel() {
-        driveInches(102);
+        driveInchesNoPid(102, 0.5);
     }
 
     /**
      * Park in the warehouse by driving backwards
      */
     public void parkInWarehouseFromCarouselBackwards() {
-        driveInches(-102);
+        driveInchesNoPid(-102, 0.5);
     }
 
     /**

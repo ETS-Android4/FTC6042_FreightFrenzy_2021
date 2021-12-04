@@ -96,6 +96,13 @@ public class MainTeleOp extends LinearOpMode {
                 led.setStatusDeliveryFinished();
             }
 
+            // Control the arm
+            if(gamepad1.dpad_up) {
+                armdex.wristUp();
+            } else if(gamepad1.dpad_down) {
+                armdex.wristDown();
+            }
+
             /*
             ========== CODE FOR CONTROLLER 2 ==========
              */
@@ -110,15 +117,19 @@ public class MainTeleOp extends LinearOpMode {
                     overrideIntake = false;
                 }
             }
-
             if(gamepad2.left_trigger > 0.2) {
                 armdex.eject();
             } else if(isRightTriggerPressed) {
                 if(!overrideIntake) {
                     if(!isBlockPresentInIntake) {
-                        armdex.intake();
+                        if(!armdex.isWristUp()) {
+                            armdex.intake();
+                        } else {
+                            armdex.stopIntake();
+                        }
                     } else {
                         armdex.stopIntake();
+                        armdex.wristUp();
                     }
                 } else {
                     if(armdex.isWristUp()) {
@@ -141,6 +152,8 @@ public class MainTeleOp extends LinearOpMode {
                     armdex.wristDown();
                 } else if(armdex.isWristDown()) {
                     armdex.wristUp();
+                } else {
+                    armdex.wristDown();
                 }
             }
 
