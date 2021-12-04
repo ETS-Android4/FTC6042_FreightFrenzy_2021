@@ -41,7 +41,7 @@ public class RedPlaceDeliverStoragePark extends LinearOpMode {
         actions.delay(500);
 
         // Drive to wheel
-        drivetrain.driveForwardInchesNoPid(18, 0.5);
+        drivetrain.driveForwardInchesNoPid(18.5, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
         while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
             drivetrain.driveAtPower(0.2);
@@ -61,11 +61,11 @@ public class RedPlaceDeliverStoragePark extends LinearOpMode {
         actions.delay(500);
 
         // Drive forward
-        actions.driveInchesNoPid(14, 0.5);
+        actions.driveInchesNoPid(12, 0.5);
         actions.delay(500);
 
         // Rotate left
-        actions.rotateDegrees(-90);
+        actions.rotateDegrees(-92);
         actions.delay(500);
 
         // Park in zone
