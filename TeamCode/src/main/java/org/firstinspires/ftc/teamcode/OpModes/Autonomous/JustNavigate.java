@@ -25,7 +25,7 @@ public class JustNavigate extends LinearOpMode {
 
         waitForStart();
 
-        drivetrain.driveForwardInchesNoPid(40, 0.75);
+        drivetrain.driveForwardInchesNoPid(-40, 0.5);
 
     }
 }
