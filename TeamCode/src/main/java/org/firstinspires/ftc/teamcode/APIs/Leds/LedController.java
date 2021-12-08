@@ -43,7 +43,7 @@ public class LedController {
     public void setEffectDefault() {
         //TODO make sure this is the same as the current default pattern
         currentColor = NONE;
-        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE);
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE);
     }
 
     public void setColorRed() {
