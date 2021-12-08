@@ -341,7 +341,6 @@ public class Drivetrain {
 
         // Get our current orientation and record it as our starting position
         gyro.update();
-        //TODO change all axis instances to the proper axis
         float startingRotation = gyro.getY();
 
         // Instantiate our PID object for rotation
