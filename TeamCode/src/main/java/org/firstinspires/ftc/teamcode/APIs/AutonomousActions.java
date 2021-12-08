@@ -35,7 +35,6 @@ public class AutonomousActions {
         drivetrain.init(opMode);
         deliveryWheel.init(opMode);
         armdex.init(opMode);
-        led.initNoInitLight(opMode);
     }
 
     /**

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
@@ -35,7 +34,6 @@ public class MainTeleOp extends LinearOpMode {
 
         // Let the driver know the robot is done initializing
         output.robotInitialized();
-        led.setStatusRobotInitialized();
 
         // Wait for the driver to press play
         waitForStart();
@@ -86,14 +84,11 @@ public class MainTeleOp extends LinearOpMode {
 
             // Control the delivery mechanism
             if(gamepad1.right_trigger > 0.2) {
-                led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
             } else if(gamepad1.left_trigger > 0.05) {
-                led.setStatusDeliveringReverse();
                 deliveryWheel.setPower(-gamepad1.left_trigger);
             } else {
                 deliveryWheel.stop();
-                led.setStatusDeliveryFinished();
             }
 
             // Control the arm

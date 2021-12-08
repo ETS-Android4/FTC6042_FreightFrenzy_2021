@@ -66,14 +66,11 @@ public class OneControllerDebug extends LinearOpMode {
 
             // Control the delivery mechanism
             if(gamepad1.a) {
-                led.setStatusDeliveringDuck();
                 deliveryWheel.setPower(0.6);
             } else if(gamepad1.b) {
-                led.setStatusDeliveringReverse();
                 deliveryWheel.setPower(-0.5);
             } else {
                 deliveryWheel.stop();
-                led.setStatusDeliveryFinished();
             }
 
             // Control the intake

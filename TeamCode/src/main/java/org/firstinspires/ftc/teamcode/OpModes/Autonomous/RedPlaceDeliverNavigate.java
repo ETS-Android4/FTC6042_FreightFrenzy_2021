@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
+import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
@@ -23,6 +24,8 @@ public class RedPlaceDeliverNavigate extends LinearOpMode {
         deliveryWheel.init(this);
         AutonomousActions actions = new AutonomousActions();
         actions.init(this);
+        LedController led = new LedController();
+        led.init(this, 'r');
         TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
         output.init(telemetry);
         output.robotInitialized();

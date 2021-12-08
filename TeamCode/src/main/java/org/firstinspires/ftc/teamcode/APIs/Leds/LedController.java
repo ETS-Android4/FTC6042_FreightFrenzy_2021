@@ -5,75 +5,110 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class LedController {
 
-    RevBlinkinLedDriver ledDriver;
+    RevBlinkinLedDriver led;
     LinearOpMode opMode;
-    char alliance;
+    final int NONE = -1;
+    final int RED = 0;
+    final int ORANGE = 1;
+    final int YELLOW = 2;
+    final int GREEN = 3;
+    final int BLUE = 4;
+    final int PURPLE = 5;
+    final int WHITE = 6;
 
-    public LedController() {}
+    int currentColor = NONE;
 
     /**
-     * Initialize the LED controller
-     * @param opMode The opmode this object is in
+     * Initialize this LedController object
+     * @param opMode The LinearOpMode this LedController is running in
      */
     public void init(LinearOpMode opMode) {
         this.opMode = opMode;
-        ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
-        setStatusRobotInitialized();
-    }
-
-    public void initNoInitLight(LinearOpMode opMode) {
-        this.opMode = opMode;
-        ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        led = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
     }
 
     public void init(LinearOpMode opMode, char alliance) {
         this.opMode = opMode;
-        this.alliance = alliance;
-        ledDriver = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
-        if(alliance == 'b') {
-            setStatusRobotInitializedBlue();
-        } else if(alliance == 'r') {
-            setStatusRobotInitializedRed();
+        led = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
+        if(alliance == 'r') {
+            setColorRed();
+        } else if(alliance == 'b') {
+            setColorBlue();
         }
     }
 
     /**
-     * Signify that the duck is being delivered
+     * Set the LEDs to their default effect
      */
-    public void setStatusDeliveringDuck() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+    public void setEffectDefault() {
+        //TODO make sure this is the same as the current default pattern
+        currentColor = NONE;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE);
+    }
+
+    public void setColorRed() {
+        currentColor = RED;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+    }
+
+    public void setColorOrange() {
+        currentColor = ORANGE;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
+    }
+
+    public void setColorYellow() {
+        currentColor = YELLOW;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+    }
+
+    public void setColorGreen() {
+        currentColor = GREEN;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+    }
+
+    public void setColorBlue() {
+        currentColor = BLUE;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
+    }
+
+    public void setColorPurple() {
+        currentColor = PURPLE;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+    }
+
+    public void setColorWhite() {
+        currentColor = WHITE;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
     }
 
     /**
-     * Signify that the duck has been delivered
+     * Switch to the next color in the rainbow
      */
-    public void setStatusDeliveryFinished() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-    }
-
-    /**
-     * Show that the robot is initialized
-     */
-    public void setStatusRobotInitialized() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_GRAY);
-    }
-
-    /**
-     * Show that the robot is initialized for the red side
-     */
-    public void setStatusRobotInitializedRed() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_RED);
-    }
-
-    /**
-     * Show that the robot is initialized for the blue side
-     */
-    public void setStatusRobotInitializedBlue() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BREATH_BLUE);
-    }
-
-    public void setStatusDeliveringReverse() {
-        ledDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+    public void nextColor() {
+        switch(currentColor) {
+            case NONE:
+            case WHITE:
+                setColorRed();
+                break;
+            case RED:
+                setColorOrange();
+                break;
+            case ORANGE:
+                setColorYellow();
+                break;
+            case YELLOW:
+                setColorGreen();
+                break;
+            case GREEN:
+                setColorBlue();
+                break;
+            case BLUE:
+                setColorPurple();
+                break;
+            case PURPLE:
+                setColorWhite();
+                break;
+        }
     }
 
 }
