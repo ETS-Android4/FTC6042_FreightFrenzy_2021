@@ -13,8 +13,9 @@ public class LedController {
     final int YELLOW = 2;
     final int GREEN = 3;
     final int BLUE = 4;
-    final int PURPLE = 5;
-    final int WHITE = 6;
+    final int CYAN = 5;
+    final int PURPLE = 6;
+    final int WHITE = 7;
 
     int currentColor = NONE;
 
@@ -71,6 +72,11 @@ public class LedController {
         led.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
     }
 
+    public void setColorCyan() {
+        currentColor = CYAN;
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.SKY_BLUE);
+    }
+
     public void setColorPurple() {
         currentColor = PURPLE;
         led.setPattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
@@ -103,6 +109,9 @@ public class LedController {
                 setColorBlue();
                 break;
             case BLUE:
+                setColorCyan();
+                break;
+            case CYAN:
                 setColorPurple();
                 break;
             case PURPLE:
