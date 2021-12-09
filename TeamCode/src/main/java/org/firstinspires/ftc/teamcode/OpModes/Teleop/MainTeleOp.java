@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
@@ -41,6 +40,7 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         armdex.wristUp();
+        boolean isWristSupposedToBeUp = true;
 
         boolean overrideIntake = false;
 
@@ -96,10 +96,12 @@ public class MainTeleOp extends LinearOpMode {
                 led.setStatusDeliveryFinished();
             }
 
-            // Control the arm
+            // Control the wrist
             if(gamepad1.dpad_up) {
+                isWristSupposedToBeUp = true;
                 armdex.wristUp();
             } else if(gamepad1.dpad_down) {
+                isWristSupposedToBeUp = false;
                 armdex.wristDown();
             }
 
@@ -129,6 +131,7 @@ public class MainTeleOp extends LinearOpMode {
                         }
                     } else {
                         armdex.stopIntake();
+                        isWristSupposedToBeUp = true;
                         armdex.wristUp();
                     }
                 } else {
@@ -145,14 +148,19 @@ public class MainTeleOp extends LinearOpMode {
             // Operate the wrist
             if(gamepad2.y) {
                 armdex.wristUp();
+                isWristSupposedToBeUp = true;
             } else if(gamepad2.a) {
+                isWristSupposedToBeUp = false;
                 armdex.wristDown();
             } else if(gamepad2.x || gamepad2.b) {
                 if(armdex.isWristUp()) {
+                    isWristSupposedToBeUp = false;
                     armdex.wristDown();
                 } else if(armdex.isWristDown()) {
+                    isWristSupposedToBeUp = true;
                     armdex.wristUp();
                 } else {
+                    isWristSupposedToBeUp = false;
                     armdex.wristDown();
                 }
             }
@@ -160,6 +168,11 @@ public class MainTeleOp extends LinearOpMode {
             // Force block to expel
             if(gamepad2.dpad_up) {
                 armdex.setIntakePower(1);
+            }
+
+            // Raise the wrist if it's supposed to be up but it's falling down
+            if(isWristSupposedToBeUp && armdex.isWristDetectingRed()) {
+                armdex.wristUp();
             }
 
             // Update the telemetry
