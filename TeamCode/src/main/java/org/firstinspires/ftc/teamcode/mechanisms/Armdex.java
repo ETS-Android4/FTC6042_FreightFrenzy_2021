@@ -99,7 +99,7 @@ public class Armdex {
      * @return Whether the wrist is in the down position
      */
     public boolean isWristDown() {
-        return getWristSensorGreen() > 0.8*(getWristSensorRed()+getWristSensorBlue()) && getWristSensorBlue() > 1.7*getWristSensorRed();
+        return isWristDetectingGreen();
     }
 
     /**
@@ -107,7 +107,7 @@ public class Armdex {
      * @return Whether the wrist is in the up position
      */
     public boolean isWristUp() {
-        return getWristSensorBlue() > 2 * getWristSensorRed() && getWristSensorGreen() < getWristSensorBlue();
+        return isWristDetectingPurple();
     }
 
     /**
@@ -302,6 +302,30 @@ public class Armdex {
     public void resetIntakeEncoder() {
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /**
+     * Check if the wrist color sensor is detecting the color purple
+     * @return Whether the wrist color sensor is detecting the color purple
+     */
+    public boolean isWristDetectingPurple() {
+        return getWristSensorBlue() > 2 * getWristSensorRed() && getWristSensorGreen() < getWristSensorBlue();
+    }
+
+    /**
+     * CHeck if the wrist color sensor is detecting the color green
+     * @return Whether the wrist color sensor is detecting the color green
+     */
+    public boolean isWristDetectingGreen() {
+        return getWristSensorGreen() > 0.8*(getWristSensorRed()+getWristSensorBlue()) && getWristSensorBlue() > 1.7*getWristSensorRed();
+    }
+
+    /**
+     * Check if the wrist color sensor is detecting the color red
+     * @return Whether the wrist color sensor is detecting the color red
+     */
+    public boolean isWristDetectingRed() {
+        return getWristSensorRed() > 1.8*getWristSensorBlue();
     }
 
 }
