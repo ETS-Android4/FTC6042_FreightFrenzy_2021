@@ -40,17 +40,25 @@ public class MainTeleOp extends LinearOpMode {
 
         armdex.wristUp();
         boolean isWristSupposedToBeUp = true;
-
+        boolean isRampRunning = false;
         boolean overrideIntake = false;
+        boolean isAutoDriveEnabled = false;
 
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
 
             double drivePowerMultiplier = NORMAL_DRIVE_MAX_POWER;
-            // Check if driver is using overdrive mode
+            // Check if driver is using overdrive mode or auto drive mode
             if(gamepad1.right_bumper) {
                 drivePowerMultiplier = OVERDRIVE_MAX_POWER;
                 output.addLine("OVERDRIVE ENABLED");
+            }
+
+            if(gamepad1.left_bumper) {
+                isAutoDriveEnabled = true;
+                //output.addLine("AUTO DRIVE ENABLED");
+            } else {
+                isAutoDriveEnabled = false;
             }
 
             // If we detect a block, write it to the telemetry
@@ -81,16 +89,27 @@ public class MainTeleOp extends LinearOpMode {
             output.addLine("Left Target Power: " + leftTargetPower).addLine("Right Target Power: " + rightTargetPower);
 
             // Drive at the target power
-            drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
+            if(!isAutoDriveEnabled) {
+                drivetrain.driveAtPower(leftTargetPower, rightTargetPower);
+            } else {
+                drivetrain.driveAtPower(-1);
+            }
 
             // Control the delivery mechanism
-            if(gamepad1.right_trigger > 0.2) {
-                deliveryWheel.setPower(0.6);
-            } else if(gamepad1.left_trigger > 0.05) {
-                deliveryWheel.setPower(-gamepad1.left_trigger);
+            if(gamepad1.right_trigger > 0.5) {
+                if(!isRampRunning) {
+                    deliveryWheel.startRamp();
+                    isRampRunning = true;
+                } else {
+                    deliveryWheel.updateRamp();
+                }
             } else {
-                deliveryWheel.stop();
+                if(isRampRunning) {
+                    deliveryWheel.stopRamp();
+                    isRampRunning = false;
+                }
             }
+            //TODO add backwards delivery mechanism code to above
 
             // Control the wrist
             if(gamepad1.dpad_up) {

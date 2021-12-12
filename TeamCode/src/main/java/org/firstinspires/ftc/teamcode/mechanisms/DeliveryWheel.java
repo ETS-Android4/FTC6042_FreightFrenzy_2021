@@ -13,20 +13,24 @@ public class DeliveryWheel {
     final DcMotorSimple.Direction LEFT_DELIVERY_DIRECTION = DcMotorSimple.Direction.REVERSE;
     final DcMotorSimple.Direction RIGHT_DELIVERY_DIRECTION = DcMotorSimple.Direction.FORWARD;
 
-    final double ROTATIONS_TO_DELIVER = 1;
-    final double SPEED_TO_DELIVER = 1;
-
     // Robot and field values
     final int TICKS_PER_MOTOR_REVOLUTION = 1120;
     final double MOTOR_TO_OUTPUT_WHEEL_RATIO = 1;
     final double OUTPUT_WHEEL_DIAMETER_IN_INCHES = 5;
     final double CAROUSEL_DIAMETER_IN_INCHES = 15;
 
-    // Values found automatically by math. Do not adjust.
+    // Values found automatically by the wonderful thing called math. Do not adjust.
     final double CAROUSEL_CIRCUMFERENCE_IN_INCHES = CAROUSEL_DIAMETER_IN_INCHES*Math.PI;
     final double OUTPUT_WHEEL_CIRCUMFERENCE_IN_INCHES = OUTPUT_WHEEL_DIAMETER_IN_INCHES*Math.PI;
     final double OUTPUT_WHEEL_ROTATIONS_PER_CAROUSEL_ROTATION = CAROUSEL_CIRCUMFERENCE_IN_INCHES/OUTPUT_WHEEL_CIRCUMFERENCE_IN_INCHES;
     final double MOTOR_TICKS_PER_CAROUSEL_REVOLUTION = TICKS_PER_MOTOR_REVOLUTION*OUTPUT_WHEEL_ROTATIONS_PER_CAROUSEL_ROTATION;
+
+    // Ramp values
+    final double DELIVERY_TARGET_SPEED = 1;
+    final double SPEED_TO_INCREASE_PER_SECOND = 2; // The percent of our top speed to increase by per second run
+    final double SPEED_TO_INCREASE_PER_MILLISECOND = SPEED_TO_INCREASE_PER_SECOND/1000;
+    final double RAMP_START_SPEED = 0.4;
+    long rampStartTimeInMillis = 0;
 
     boolean isActionRunning = false;
 
@@ -137,54 +141,28 @@ public class DeliveryWheel {
     }
 
     /**
-     * Start the deliver action
+     * Start the ramp. This should be called the first time the button is detected as pressed.
      */
-    public void startActionDeliver() {
-        isActionRunning = true;
-        resetEncoders();
-        setPower(SPEED_TO_DELIVER);
+    public void startRamp() {
+        rampStartTimeInMillis = System.currentTimeMillis();
+        setPower(RAMP_START_SPEED);
     }
 
     /**
-     * Update where we are for the delivery action. This method should be called continuously in a loop in your opmode
+     * Update the ramp. This should be called every time the ramp is supposed to be run after it has started
      */
-    public void updatePosition() {
-        if(!isActionRunning) {
-            return;
-        }
-        boolean leftSideStopped = false;
-        boolean rightSideStopped = false;
-        if(getLeftPosition() > ROTATIONS_TO_DELIVER*MOTOR_TICKS_PER_CAROUSEL_REVOLUTION) {
-            stopLeft();
-            leftSideStopped = true;
-        } else {
-            setLeftPower(SPEED_TO_DELIVER);
-        }
-        if(getRightPosition() > ROTATIONS_TO_DELIVER*MOTOR_TICKS_PER_CAROUSEL_REVOLUTION) {
-            stopRight();
-            rightSideStopped = true;
-        } else {
-            setRightPower(SPEED_TO_DELIVER);
-        }
-        if(leftSideStopped && rightSideStopped) {
-            isActionRunning = false;
-        }
+    public void updateRamp() {
+        long millisecondsElapsedSinceStart = (System.currentTimeMillis()-rampStartTimeInMillis);
+        double targetPower = millisecondsElapsedSinceStart*SPEED_TO_INCREASE_PER_MILLISECOND;
+        setPower(targetPower);
     }
 
     /**
-     * Cancel the current action
+     * Stop the delivery wheel
      */
-    public void cancelAction() {
-        isActionRunning = false;
+    public void stopRamp() {
         stop();
-    }
-
-    /**
-     * Check if the current action is complete
-     * @return Whether or not the action has been completed
-     */
-    public boolean isActionComplete() {
-        return !isActionRunning;
+        rampStartTimeInMillis = 0;
     }
 
 }
