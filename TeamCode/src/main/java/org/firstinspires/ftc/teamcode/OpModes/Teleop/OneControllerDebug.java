@@ -33,6 +33,9 @@ public class OneControllerDebug extends LinearOpMode {
         waitForStart();
 
         boolean overrideIntake = false;
+        armdex.wristUp();
+        boolean isWristSupposedToBeUp = true;
+
 
         while(opModeIsActive()) {
 
@@ -97,6 +100,7 @@ public class OneControllerDebug extends LinearOpMode {
                     } else {
                         armdex.stopIntake();
                         armdex.wristUp();
+                        isWristSupposedToBeUp = true;
                     }
                 } else {
                     if(armdex.isWristUp()) {
@@ -112,8 +116,10 @@ public class OneControllerDebug extends LinearOpMode {
             // Operate the wrist
             if(gamepad1.dpad_up) {
                 armdex.wristUp();
+                isWristSupposedToBeUp = true;
             } else if(gamepad1.dpad_down) {
                 armdex.wristDown();
+                isWristSupposedToBeUp = false;
             }
 
             // Update the telemetry
