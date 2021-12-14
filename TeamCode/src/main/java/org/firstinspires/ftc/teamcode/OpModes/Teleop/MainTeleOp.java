@@ -43,6 +43,7 @@ public class MainTeleOp extends LinearOpMode {
         boolean isRampRunning = false;
         boolean overrideIntake = false;
         boolean isAutoDriveEnabled = false;
+        boolean wasRightTriggerPressedPreviously = false;
 
         output.addLine("Robot Running");
 
@@ -82,6 +83,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Control the delivery mechanism
             if(gamepad1.right_trigger > 0.5) {
+                led.setColorRed();
                 if (!isRampRunning) {
                     deliveryWheel.startRamp();
                     isRampRunning = true;
@@ -92,6 +94,7 @@ public class MainTeleOp extends LinearOpMode {
                 if(isRampRunning) {
                     deliveryWheel.stopRamp();
                     isRampRunning = false;
+                    led.setColorGreen();
                 }
             }
             //TODO add backwards delivery mechanism code to above
@@ -112,6 +115,10 @@ public class MainTeleOp extends LinearOpMode {
             boolean isRightTriggerPressed = gamepad2.right_trigger > 0.2;
             boolean isBlockPresentInIntake = armdex.isObjectDetectedInIntake();
 
+            if(isBlockPresentInIntake && isWristSupposedToBeUp && overrideIntake) {
+                led.setColorGreen();
+            }
+
             if(!isRightTriggerPressed) {
                 if(isBlockPresentInIntake) {
                     overrideIntake = true;
@@ -126,6 +133,7 @@ public class MainTeleOp extends LinearOpMode {
                     if(!isBlockPresentInIntake) {
                         if(!armdex.isWristUp()) {
                             armdex.intake();
+                            led.setColorYellow();
                         } else {
                             armdex.stopIntake();
                         }
@@ -133,6 +141,7 @@ public class MainTeleOp extends LinearOpMode {
                         armdex.stopIntake();
                         isWristSupposedToBeUp = true;
                         armdex.wristUp();
+                        led.setColorRed();
                     }
                 } else {
                     if(armdex.isWristUp()) {
@@ -144,6 +153,12 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 armdex.stopIntake();
             }
+
+            if(!isRightTriggerPressed && wasRightTriggerPressedPreviously && !isBlockPresentInIntake) {
+                led.setEffectDefault();
+            }
+
+            wasRightTriggerPressedPreviously = isRightTriggerPressed;
 
             // Operate the wrist
             if(gamepad2.y) {
