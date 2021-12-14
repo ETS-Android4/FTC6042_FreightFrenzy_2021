@@ -44,6 +44,8 @@ public class MainTeleOp extends LinearOpMode {
         boolean overrideIntake = false;
         boolean isAutoDriveEnabled = false;
 
+        output.addLine("Robot Running");
+
         // Repeat while the opmode is still active
         while(opModeIsActive()) {
 
@@ -51,26 +53,11 @@ public class MainTeleOp extends LinearOpMode {
             // Check if driver is using overdrive mode or auto drive mode
             if(gamepad1.right_bumper) {
                 drivePowerMultiplier = OVERDRIVE_MAX_POWER;
-                output.addLine("OVERDRIVE ENABLED");
-            }
-
-            if(gamepad1.left_bumper) {
+            } else if(gamepad1.left_bumper) {
                 isAutoDriveEnabled = true;
-                //output.addLine("AUTO DRIVE ENABLED");
             } else {
                 isAutoDriveEnabled = false;
             }
-
-            // If we detect a block, write it to the telemetry
-            if(armdex.isObjectDetectedInIntake()) {
-                output.addFreightDetected();
-            }
-
-            // Write our wrist sensor info to the telemetry
-            output.addIsWristUp().addIsWristDown().addWristSensorValues();
-
-            // Write our intake sensor values to the telemetry
-            output.addIntakeSensorValues();
 
             // Emergency stop drivetrain
             if(gamepad2.dpad_left || gamepad2.dpad_right || (gamepad2.left_stick_y > 0.5 && gamepad2.right_stick_y > 0.5)) {
@@ -85,8 +72,6 @@ public class MainTeleOp extends LinearOpMode {
             double leftTargetPower = -drivePowerMultiplier*gamepad1.left_stick_y;
             double rightTargetPower = -drivePowerMultiplier*gamepad1.right_stick_y;
 
-            // Write our target powers to the telemetry
-            output.addLine("Left Target Power: " + leftTargetPower).addLine("Right Target Power: " + rightTargetPower);
 
             // Drive at the target power
             if(!isAutoDriveEnabled) {
@@ -97,7 +82,7 @@ public class MainTeleOp extends LinearOpMode {
 
             // Control the delivery mechanism
             if(gamepad1.right_trigger > 0.5) {
-                if(!isRampRunning) {
+                if (!isRampRunning) {
                     deliveryWheel.startRamp();
                     isRampRunning = true;
                 } else {
@@ -189,9 +174,6 @@ public class MainTeleOp extends LinearOpMode {
             if(isWristSupposedToBeUp && armdex.isWristDetectingRed()) {
                 armdex.wristUp();
             }
-
-            // Update the telemetry
-            output.update();
         }
     }
 
