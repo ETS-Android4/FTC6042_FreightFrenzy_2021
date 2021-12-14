@@ -309,7 +309,7 @@ public class Armdex {
      * @return Whether the wrist color sensor is detecting the color purple
      */
     public boolean isWristDetectingPurple() {
-        return getWristSensorBlue() > 2 * getWristSensorRed() && getWristSensorGreen() < getWristSensorBlue();
+        return getWristSensorBlue() > getWristSensorRed() && getWristSensorGreen() < getWristSensorBlue();
     }
 
     /**
