@@ -126,9 +126,12 @@ public class AutonomousActions {
      * Deliver the duck by spinning the wheel clockwise
      */
     public void deliverDuckAutonomous() {
-        deliveryWheel.setPower(0.4);
-        delay(5000);
-        deliveryWheel.stop();
+        long startTime = System.currentTimeMillis();
+        deliveryWheel.startRamp();
+        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTime+4000) {
+            deliveryWheel.updateRamp();
+        }
+        deliveryWheel.stopRamp();
     }
 
     /**
