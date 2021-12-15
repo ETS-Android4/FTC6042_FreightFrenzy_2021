@@ -44,9 +44,9 @@ public class BluePlaceDeliverStoragePark extends LinearOpMode {
         actions.delay(500);
 
         // Drive to wheel
-        drivetrain.driveForwardInchesNoPid(18, 0.5);
+        drivetrain.driveForwardInchesNoPid(19.5, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
-        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
+        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+2000)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
