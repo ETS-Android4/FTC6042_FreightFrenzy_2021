@@ -7,43 +7,42 @@ import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Blue Warehouse CURVE")
-public class BlueDeliverAndNavigateCurve extends LinearOpMode {
+@Autonomous(name="Red DWC")
+public class RedDeliverWarehouseCurve extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
         LedController led = new LedController();
-        led.init(this, 'b');
+        led.init(this, 'r');
         drivetrain.init(this);
         actions.init(this);
         telemetry.addLine("Robot Initialized");
         telemetry.update();
-
         waitForStart();
 
-        // Rotate from wall
-        actions.rotateRightFromWall();
+        // Rotate from the wall
+        actions.rotateLeftFromWall();
         actions.delay(500);
 
-        // Drive to carousel and deliver
+        // Drive to the carousel and deliver the duck
         actions.driveInchesNoPid(20, 0.3);
         actions.deliverDuckAutonomous();
 
-        // Back up from carousel
+        // Back up from the carousel
         actions.driveInchesNoPid(-46, 0.5);
 
-        // Rotate once
-        actions.rotateDegrees(42);
+        // Rotate the robot
+        actions.rotateDegrees(-42);
 
-        // Drive a bit while rotated
-        actions.driveInchesNoPid(-15, 0.5);
+        // Drive backwards while rotated
+        actions.driveInchesNoPid(-16, 0.5);
 
-        // Rotate back to a close to normal position
-        actions.rotateDegrees(-47);
+        // Rotate back to a somewhat normal position
+        actions.rotateDegrees(47);
 
-        // Back into the warehouse
+        // Reverse into warehouse
         actions.driveInchesNoPid(-57, 0.5);
     }
 }

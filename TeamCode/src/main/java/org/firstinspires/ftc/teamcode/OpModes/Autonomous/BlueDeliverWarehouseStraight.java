@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red Warehouse STRAIGHT")
-public class RedDeliverAndNavigateStraight extends LinearOpMode {
+@Autonomous(name="Blue DWS")
+public class BlueDeliverWarehouseStraight extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -16,22 +16,24 @@ public class RedDeliverAndNavigateStraight extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
         LedController led = new LedController();
+        led.init(this, 'b');
         drivetrain.init(this);
         actions.init(this);
-        led.init(this, 'r');
         telemetry.addLine("Robot Initialized");
         telemetry.update();
+
         waitForStart();
 
         // Rotate from the wall
-        actions.rotateLeftFromWall();
+        actions.rotateRightFromWall();
         actions.delay(500);
 
         // Drive to the carousel and deliver
-        actions.driveInchesNoPid(16, 0.3);
+        actions.driveInchesNoPid(22, 0.3);
         actions.deliverDuckAutonomous();
 
-        // Reverse into the warehouse
+        // Drive backwards into the warehouse
         actions.driveInchesNoPid(-110, 0.5);
+
     }
 }

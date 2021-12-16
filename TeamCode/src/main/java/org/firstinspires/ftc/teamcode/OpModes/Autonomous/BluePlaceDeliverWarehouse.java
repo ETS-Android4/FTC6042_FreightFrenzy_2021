@@ -10,12 +10,11 @@ import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red Place Deliver Storage Park")
-public class RedPlaceDeliverStoragePark extends LinearOpMode {
+@Autonomous(name="Blue PDW")
+public class BluePlaceDeliverWarehouse extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         Drivetrain drivetrain = new Drivetrain();
         drivetrain.init(this);
         Armdex armdex = new Armdex();
@@ -26,7 +25,7 @@ public class RedPlaceDeliverStoragePark extends LinearOpMode {
         actions.init(this);
         TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
         LedController led = new LedController();
-        led.init(this, 'r');
+        led.init(this, 'b');
         output.init(telemetry);
         output.robotInitialized();
 
@@ -40,13 +39,13 @@ public class RedPlaceDeliverStoragePark extends LinearOpMode {
         actions.driveInchesNoPid(-20, 0.4);
         actions.delay(500);
 
-        actions.rotateLeftFromWall();
+        actions.rotateRightFromWall();
         actions.delay(500);
 
         // Drive to wheel
-        drivetrain.driveForwardInchesNoPid(20, 0.5);
+        drivetrain.driveForwardInchesNoPid(19.5, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
-        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
+        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+2000)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
@@ -55,24 +54,9 @@ public class RedPlaceDeliverStoragePark extends LinearOpMode {
         actions.deliverDuckAutonomous();
         actions.delay(1000);
 
-        // Drive backwards
-        actions.driveInchesNoPid(-10, 0.5);
-        actions.delay(500);
+        // Drive back to warehouse
+        actions.parkInWarehouseFromCarouselBackwards();
 
-        // Rotate right
-        actions.rotateDegrees(90);
-        actions.delay(500);
-
-        // Drive forward
-        actions.driveInchesNoPid(12, 0.5);
-        actions.delay(500);
-
-        // Rotate left
-        actions.rotateDegrees(-92);
-        actions.delay(500);
-
-        // Park in zone
-        actions.driveInchesNoPid(16, 0.5);
-
+        armdex.wristUp();
     }
 }

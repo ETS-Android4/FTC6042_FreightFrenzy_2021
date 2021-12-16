@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Blue Place Deliver Storage Park")
-public class BluePlaceDeliverStoragePark extends LinearOpMode {
+@Autonomous(name="Red PDS")
+public class RedPlaceDeliverStorage extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,7 +26,7 @@ public class BluePlaceDeliverStoragePark extends LinearOpMode {
         actions.init(this);
         TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
         LedController led = new LedController();
-        led.init(this, 'b');
+        led.init(this, 'r');
         output.init(telemetry);
         output.robotInitialized();
 
@@ -40,13 +40,13 @@ public class BluePlaceDeliverStoragePark extends LinearOpMode {
         actions.driveInchesNoPid(-20, 0.4);
         actions.delay(500);
 
-        actions.rotateRightFromWall();
+        actions.rotateLeftFromWall();
         actions.delay(500);
 
         // Drive to wheel
-        drivetrain.driveForwardInchesNoPid(19.5, 0.5);
+        drivetrain.driveForwardInchesNoPid(20, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
-        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+2000)) {
+        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
@@ -59,16 +59,16 @@ public class BluePlaceDeliverStoragePark extends LinearOpMode {
         actions.driveInchesNoPid(-10, 0.5);
         actions.delay(500);
 
-        // Rotate left
-        actions.rotateDegrees(-90);
+        // Rotate right
+        actions.rotateDegrees(90);
         actions.delay(500);
 
         // Drive forward
-        actions.driveInchesNoPid(14, 0.5);
+        actions.driveInchesNoPid(12, 0.5);
         actions.delay(500);
 
-        // Rotate right
-        actions.rotateDegrees(90);
+        // Rotate left
+        actions.rotateDegrees(-92);
         actions.delay(500);
 
         // Park in zone

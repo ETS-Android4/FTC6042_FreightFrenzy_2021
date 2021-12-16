@@ -7,42 +7,48 @@ import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red Warehouse CURVE")
-public class RedDeliverAndNavigateCurve extends LinearOpMode {
+@Autonomous(name="Red DS")
+public class RedDeliverStorage extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
         LedController led = new LedController();
         led.init(this, 'r');
         drivetrain.init(this);
         actions.init(this);
-        telemetry.addLine("Robot Initialized");
-        telemetry.update();
         waitForStart();
 
-        // Rotate from the wall
+        // Rotate from wall
         actions.rotateLeftFromWall();
         actions.delay(500);
 
-        // Drive to the carousel and deliver the duck
-        actions.driveInchesNoPid(20, 0.3);
+        // Drive to carousel
+        actions.driveInchesNoPid(16, 0.3);
+
+        // Deliver
         actions.deliverDuckAutonomous();
 
-        // Back up from the carousel
-        actions.driveInchesNoPid(-46, 0.5);
+        // Drive backwards
+        actions.driveInchesNoPid(-10, 0.5);
+        actions.delay(500);
 
-        // Rotate the robot
-        actions.rotateDegrees(-42);
+        // Rotate right
+        actions.rotateDegrees(90);
+        actions.delay(500);
 
-        // Drive backwards while rotated
-        actions.driveInchesNoPid(-16, 0.5);
+        // Drive forward
+        actions.driveInchesNoPid(14, 0.5);
+        actions.delay(500);
 
-        // Rotate back to a somewhat normal position
-        actions.rotateDegrees(47);
+        // Rotate left
+        actions.rotateDegrees(-90);
+        actions.delay(500);
 
-        // Reverse into warehouse
-        actions.driveInchesNoPid(-57, 0.5);
+        // Park in zone
+        actions.driveInchesNoPid(16, 0.5);
+
     }
 }

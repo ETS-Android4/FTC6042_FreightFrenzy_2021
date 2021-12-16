@@ -5,19 +5,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
+import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Blue STORAGE")
-public class BlueDeliverAndStoragePark extends LinearOpMode {
+@Autonomous(name="Blue DWC")
+public class BlueDeliverWarehouseCurve extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
-        drivetrain.init(this);
-        actions.init(this);
+        Armdex armdex = new Armdex();
+        armdex.init(this);
         LedController led = new LedController();
         led.init(this, 'b');
+        drivetrain.init(this);
+        actions.init(this);
         telemetry.addLine("Robot Initialized");
         telemetry.update();
 
@@ -31,23 +34,22 @@ public class BlueDeliverAndStoragePark extends LinearOpMode {
         actions.driveInchesNoPid(20, 0.3);
         actions.deliverDuckAutonomous();
 
-        // Drive backwards
-        actions.driveInchesNoPid(-8, 0.5);
-        actions.delay(500);
+        // Back up from carousel
+        actions.driveInchesNoPid(-46, 0.5);
 
-        // Rotate a little bit
-        actions.rotateDegrees(-90);
-        actions.delay(500);
+        // Rotate once
+        actions.rotateDegrees(42);
 
-        // Drive while rotated
-        actions.driveInchesNoPid(9, 0.5);
-        actions.delay(500);
+        // Drive a bit while rotated
+        actions.driveInchesNoPid(-15, 0.5);
 
         // Rotate back to a close to normal position
-        actions.rotateDegrees(90);
-        actions.delay(500);
+        actions.rotateDegrees(-47);
 
-        // Drive into storage zone
-        actions.driveInchesNoPid(20, 0.5);
+        // Raise wrist
+        armdex.wristUp();
+
+        // Back into the warehouse
+        actions.driveInchesNoPid(-57, 0.5);
     }
 }

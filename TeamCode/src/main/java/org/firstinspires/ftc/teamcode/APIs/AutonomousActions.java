@@ -60,7 +60,7 @@ public class AutonomousActions {
      * Rotate right off of the wall
      */
     public void rotateRightFromWall() {
-        drivetrain.driveForwardInchesNoPid(3.5, 0.4);
+        drivetrain.driveForwardInchesNoPid(5, 0.4);
         drivetrain.rotateDegreesNoPid(85, 0.2);
     }
 

@@ -7,48 +7,47 @@ import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red STORAGE")
-public class RedDeliverAndStoragePark extends LinearOpMode {
+@Autonomous(name="Blue DS")
+public class BlueDeliverStorage extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         Drivetrain drivetrain = new Drivetrain();
         AutonomousActions actions = new AutonomousActions();
-        LedController led = new LedController();
-        led.init(this, 'r');
         drivetrain.init(this);
         actions.init(this);
+        LedController led = new LedController();
+        led.init(this, 'b');
+        telemetry.addLine("Robot Initialized");
+        telemetry.update();
+
         waitForStart();
 
         // Rotate from wall
-        actions.rotateLeftFromWall();
+        actions.rotateRightFromWall();
         actions.delay(500);
 
-        // Drive to carousel
-        actions.driveInchesNoPid(16, 0.3);
-
-        // Deliver
+        // Drive to carousel and deliver
+        actions.driveInchesNoPid(20, 0.3);
         actions.deliverDuckAutonomous();
 
         // Drive backwards
-        actions.driveInchesNoPid(-10, 0.5);
+        actions.driveInchesNoPid(-8, 0.5);
         actions.delay(500);
 
-        // Rotate right
-        actions.rotateDegrees(90);
-        actions.delay(500);
-
-        // Drive forward
-        actions.driveInchesNoPid(14, 0.5);
-        actions.delay(500);
-
-        // Rotate left
+        // Rotate a little bit
         actions.rotateDegrees(-90);
         actions.delay(500);
 
-        // Park in zone
-        actions.driveInchesNoPid(16, 0.5);
+        // Drive while rotated
+        actions.driveInchesNoPid(9, 0.5);
+        actions.delay(500);
 
+        // Rotate back to a close to normal position
+        actions.rotateDegrees(90);
+        actions.delay(500);
+
+        // Drive into storage zone
+        actions.driveInchesNoPid(20, 0.5);
     }
 }
