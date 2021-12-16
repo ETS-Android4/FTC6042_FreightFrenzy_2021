@@ -82,7 +82,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // Control the delivery mechanism
-            if(gamepad1.right_trigger > 0.5) {
+            if(gamepad1.right_trigger > 0.5 && !(gamepad1.left_trigger > 0.1)) {
                 led.setColorRed();
                 if (!isRampRunning) {
                     deliveryWheel.startRamp();
@@ -90,14 +90,18 @@ public class MainTeleOp extends LinearOpMode {
                 } else {
                     deliveryWheel.updateRamp();
                 }
+            } else if(gamepad1.left_trigger > 0.1 && !(gamepad1.right_trigger > 0.5)) {
+                deliveryWheel.setPower(-gamepad1.left_trigger);
+                led.setColorYellow();
             } else {
                 if(isRampRunning) {
                     deliveryWheel.stopRamp();
                     isRampRunning = false;
                     led.setColorGreen();
+                } else {
+                    deliveryWheel.stop();
                 }
             }
-            //TODO add backwards delivery mechanism code to above
 
             // Control the wrist
             if(gamepad1.dpad_up) {
