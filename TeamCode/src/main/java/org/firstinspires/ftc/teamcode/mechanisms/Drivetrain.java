@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.APIs.Gyroscope.GyroscopeApi;
 import org.firstinspires.ftc.teamcode.APIs.PID.PidApi;
 
@@ -36,28 +38,14 @@ public class Drivetrain {
     DcMotor rearRight;
     LinearOpMode opMode;
     GyroscopeApi gyro;
+    DistanceSensor frontLeftDistance;
+    DistanceSensor frontRightDistance;
+    DistanceSensor rearLeftDistance;
+    DistanceSensor rearRightDistance;
+
+    final DistanceUnit DEFAULT_UNIT = DistanceUnit.CM;
 
     public Drivetrain() {}
-
-    /**
-     * Initialize this drivetrain object, feeding it the four drive motors and the opmode
-     * @param frontLeft Front left drive motor
-     * @param frontRight Front right drive motor
-     * @param rearLeft Rear left drive motor
-     * @param rearRight Rear right drive motor
-     * @param opMode The opmode this object is being instantiating in
-     */
-    public void init(DcMotor frontLeft, DcMotor frontRight, DcMotor rearLeft, DcMotor rearRight, LinearOpMode opMode) {
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.rearLeft = rearLeft;
-        this.rearRight = rearRight;
-        this.opMode = opMode;
-        gyro = new GyroscopeApi(opMode.hardwareMap);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        resetEncoders();
-    }
 
     /**
      * Initialize this drivetrain object, feeding it the opmode which will be for fetching the drive motor objects
@@ -72,6 +60,10 @@ public class Drivetrain {
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         rearRight.setDirection(DcMotorSimple.Direction.REVERSE);
         gyro = new GyroscopeApi(opMode.hardwareMap);
+        frontLeftDistance = opMode.hardwareMap.get(DistanceSensor.class, "frontLeftDistance");
+        frontRightDistance = opMode.hardwareMap.get(DistanceSensor.class, "frontRightDistance");
+        rearLeftDistance = opMode.hardwareMap.get(DistanceSensor.class, "rearLeftDistance");
+        rearRightDistance = opMode.hardwareMap.get(DistanceSensor.class, "rearRightDistance");
         resetEncoders();
     }
 
@@ -506,6 +498,54 @@ public class Drivetrain {
      */
     public GyroscopeApi getGyroscopeApi() {
         return gyro;
+    }
+
+    /**
+     * Get the distance from the front left distance sensor
+     * @return The distance in cm
+     */
+    public double getFrontLeftDistance() {
+        return frontLeftDistance.getDistance(DEFAULT_UNIT);
+    }
+
+    /**
+     * Get the distance from the front right distance sensor
+     * @return The distance in cm
+     */
+    public double getFrontRightDistance() {
+        return frontRightDistance.getDistance(DEFAULT_UNIT);
+    }
+
+    /**
+     * Get the distance from the rear left distance sensor
+     * @return The distance in cm
+     */
+    public double getRearLeftDistance() {
+        return rearLeftDistance.getDistance(DEFAULT_UNIT);
+    }
+
+    /**
+     * Get the distance from the rear right distance sensor
+     * @return The distance in cm
+     */
+    public double getRearRightDistance() {
+        return rearRightDistance.getDistance(DEFAULT_UNIT);
+    }
+
+    /**
+     * Get the average distance from the front of the robot
+     * @return The average distance in cm
+     */
+    public double getAverageFrontDistance() {
+        return (getFrontLeftDistance()+getFrontRightDistance())/2;
+    }
+
+    /**
+     * Get the average distance from the rear of the robot
+     * @return The average distance in cm
+     */
+    public double getAverageRearDistance() {
+        return (getRearLeftDistance()+getRearRightDistance())/2;
     }
 
 }
