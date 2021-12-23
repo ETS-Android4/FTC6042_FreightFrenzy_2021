@@ -34,11 +34,11 @@ public class DeliveryWheel {
 
     boolean isActionRunning = false;
 
-    public DeliveryWheel() {
-
-    }
-
-    public void init(LinearOpMode opMode) {
+    /**
+     * Instantiate and initialize this DeliveryWheel object
+     * @param opMode The OpMode this DeliveryWheel object exists in
+     */
+    public DeliveryWheel(LinearOpMode opMode) {
         this.opMode = opMode;
         deliveryLeft = opMode.hardwareMap.get(DcMotor.class, "deliveryLeft");
         deliveryRight = opMode.hardwareMap.get(DcMotor.class, "deliveryRight");

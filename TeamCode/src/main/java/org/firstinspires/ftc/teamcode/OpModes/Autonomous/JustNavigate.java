@@ -13,12 +13,9 @@ public class JustNavigate extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        LedController led = new LedController();
-        Drivetrain drivetrain = new Drivetrain();
-        AutonomousActions actions = new AutonomousActions();
-        led.init(this);
-        drivetrain.init(this);
-        actions.init(this);
+        LedController led = new LedController(this);
+        Drivetrain drivetrain = new Drivetrain(this);
+        AutonomousActions actions = new AutonomousActions(this);
 
         telemetry.addLine("Robot Initialized");
         telemetry.update();

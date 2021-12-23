@@ -16,18 +16,12 @@ public class RedPlaceDeliverWarehouse extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Drivetrain drivetrain = new Drivetrain();
-        drivetrain.init(this);
-        Armdex armdex = new Armdex();
-        armdex.init(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel();
-        deliveryWheel.init(this);
-        AutonomousActions actions = new AutonomousActions();
-        actions.init(this);
-        LedController led = new LedController();
-        led.init(this, 'r');
-        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
-        output.init(telemetry);
+        Drivetrain drivetrain = new Drivetrain(this);
+        Armdex armdex = new Armdex(this);
+        DeliveryWheel deliveryWheel = new DeliveryWheel(this);
+        AutonomousActions actions = new AutonomousActions(this);
+        LedController led = new LedController(this, 'r');
+        TelemetryWriter output = new TelemetryWriter(telemetry).setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
         output.robotInitialized();
 
         waitForStart();

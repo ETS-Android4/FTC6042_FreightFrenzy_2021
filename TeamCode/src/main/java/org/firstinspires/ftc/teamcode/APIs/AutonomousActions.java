@@ -16,25 +16,18 @@ public class AutonomousActions {
     Armdex armdex;
     LedController led;
 
-    public AutonomousActions() {}
-
     /**
-     * Initialize this object. This instantiates and initializes an object for each of our mechanisms.
-     * @param opMode The opMode this autonomous actions object is running in
+     * Instantiate and initialize this autonomous actions. This also instantiates and initializes each of our mechanisms.
+     * @param opMode The OpMode this Autonomous Actions object exists in
      */
-    public void init(LinearOpMode opMode) {
+    public AutonomousActions(LinearOpMode opMode) {
         this.opMode = opMode;
 
         // Instantiate our mechanisms
-        drivetrain = new Drivetrain();
-        deliveryWheel = new DeliveryWheel();
-        armdex = new Armdex();
-        led = new LedController();
-
-        // Initialize our mechanisms
-        drivetrain.init(opMode);
-        deliveryWheel.init(opMode);
-        armdex.init(opMode);
+        drivetrain = new Drivetrain(opMode);
+        deliveryWheel = new DeliveryWheel(opMode);
+        armdex = new Armdex(opMode);
+        led = new LedController(opMode);
     }
 
     /**

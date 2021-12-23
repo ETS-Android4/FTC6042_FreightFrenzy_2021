@@ -13,14 +13,10 @@ public class BlueDeliverWarehouseCurve extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drivetrain = new Drivetrain();
-        AutonomousActions actions = new AutonomousActions();
-        Armdex armdex = new Armdex();
-        armdex.init(this);
-        LedController led = new LedController();
-        led.init(this, 'b');
-        drivetrain.init(this);
-        actions.init(this);
+        Drivetrain drivetrain = new Drivetrain(this);
+        AutonomousActions actions = new AutonomousActions(this);
+        Armdex armdex = new Armdex(this);
+        LedController led = new LedController(this, 'b');
         telemetry.addLine("Robot Initialized");
         telemetry.update();
 

@@ -35,13 +35,11 @@ public class Armdex {
 
     public Thread currentlyRunningThread = null;
 
-    public Armdex() {}
-
     /**
-     * Initialize this armdex object. Warning: The blocker will move on initialization
+     * Instantiate and initialize this armdex object. Warning: The blocker will move on initialization
      * @param opMode The opmode this armdex object exists in
      */
-    public void init(LinearOpMode opMode) {
+    public Armdex(LinearOpMode opMode) {
         this.opMode = opMode;
         intake = opMode.hardwareMap.get(DcMotor.class, "intake");
         wrist = opMode.hardwareMap.get(DcMotor.class, "wrist");

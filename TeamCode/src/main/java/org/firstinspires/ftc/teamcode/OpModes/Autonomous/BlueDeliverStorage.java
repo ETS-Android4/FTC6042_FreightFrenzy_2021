@@ -12,12 +12,9 @@ public class BlueDeliverStorage extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drivetrain = new Drivetrain();
-        AutonomousActions actions = new AutonomousActions();
-        drivetrain.init(this);
-        actions.init(this);
-        LedController led = new LedController();
-        led.init(this, 'b');
+        Drivetrain drivetrain = new Drivetrain(this);
+        AutonomousActions actions = new AutonomousActions(this);
+        LedController led = new LedController(this, 'b');
         telemetry.addLine("Robot Initialized");
         telemetry.update();
 

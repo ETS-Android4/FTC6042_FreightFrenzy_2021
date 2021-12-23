@@ -45,13 +45,11 @@ public class Drivetrain {
 
     final DistanceUnit DEFAULT_UNIT = DistanceUnit.CM;
 
-    public Drivetrain() {}
-
     /**
-     * Initialize this drivetrain object, feeding it the opmode which will be for fetching the drive motor objects
-     * @param opMode The opmode this object is being instantiated in
+     * Instantiate and initialize this drivetrain object.
+     * @param opMode The OpMode this object is being instantiated in
      */
-    public void init(LinearOpMode opMode) {
+    public Drivetrain(LinearOpMode opMode) {
         this.opMode = opMode;
         frontLeft = opMode.hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontRight");

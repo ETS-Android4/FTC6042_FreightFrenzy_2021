@@ -20,15 +20,20 @@ public class LedController {
     int currentColor = NONE;
 
     /**
-     * Initialize this LedController object
-     * @param opMode The LinearOpMode this LedController is running in
+     * Instantiate and initialize this LedController object
+     * @param opMode The OpMode this LedController object is running in
      */
-    public void init(LinearOpMode opMode) {
+    public LedController(LinearOpMode opMode) {
         this.opMode = opMode;
         led = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
     }
 
-    public void init(LinearOpMode opMode, char alliance) {
+    /**
+     * Instantiate and initialize this LedController object, and set the LEDs to the corresponding alliance color
+     * @param opMode The OpMode this LedController object is running in
+     * @param alliance R or B to represent the alliance
+     */
+    public LedController(LinearOpMode opMode, char alliance) {
         this.opMode = opMode;
         led = opMode.hardwareMap.get(RevBlinkinLedDriver.class, "led");
         if(alliance == 'r') {

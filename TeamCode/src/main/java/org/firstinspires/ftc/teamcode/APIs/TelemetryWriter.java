@@ -15,13 +15,11 @@ public class TelemetryWriter {
     Armdex armdex;
 
     /**
-     * Initialize the Debug object with a telemetry to write to
-     * @param telemetry The telemetry to write to
-     * @return This object
+     * Instantiate and initialize the output object for writing to telemetry
+     * @param telemetry
      */
-    public TelemetryWriter init(Telemetry telemetry) {
+    public TelemetryWriter(Telemetry telemetry) {
         this.telemetry = telemetry;
-        return this;
     }
 
     /**

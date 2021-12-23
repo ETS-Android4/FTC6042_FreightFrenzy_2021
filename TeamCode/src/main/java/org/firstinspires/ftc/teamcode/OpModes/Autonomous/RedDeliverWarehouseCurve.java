@@ -12,12 +12,9 @@ public class RedDeliverWarehouseCurve extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drivetrain = new Drivetrain();
-        AutonomousActions actions = new AutonomousActions();
-        LedController led = new LedController();
-        led.init(this, 'r');
-        drivetrain.init(this);
-        actions.init(this);
+        Drivetrain drivetrain = new Drivetrain(this);
+        AutonomousActions actions = new AutonomousActions(this);
+        LedController led = new LedController(this, 'r');
         telemetry.addLine("Robot Initialized");
         telemetry.update();
         waitForStart();
