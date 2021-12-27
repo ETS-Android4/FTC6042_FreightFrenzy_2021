@@ -15,9 +15,10 @@ public class ServoUpAndDown extends LinearOpMode {
 
         Servo servo = hardwareMap.get(Servo.class, "servoToTest");
 
+        servo.setPosition(defaultPosition);
+
         waitForStart();
 
-        servo.setPosition(defaultPosition);
         double targetPosition = defaultPosition;
         boolean wasUpPreviouslyPressed = false;
         boolean wasDownPreviouslyPressed = false;
