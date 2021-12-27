@@ -14,15 +14,11 @@ public class EncoderAndSensorValuePrintout extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Drivetrain drivetrain = new Drivetrain();
-        drivetrain.init(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel();
-        deliveryWheel.init(this);
-        Armdex armdex = new Armdex();
-        armdex.init(this);
+        Drivetrain drivetrain = new Drivetrain(this);
+        DeliveryWheel deliveryWheel = new DeliveryWheel(this);
+        Armdex armdex = new Armdex(this);
 
-        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex);
-        output.init(telemetry);
+        TelemetryWriter output = new TelemetryWriter(telemetry).setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex);
 
         output.robotInitialized();
 
@@ -38,6 +34,7 @@ public class EncoderAndSensorValuePrintout extends LinearOpMode {
                     .addWristSensorValues()
                     .addIsWristUp()
                     .addIsWristDown()
+                    .addAllDistanceSensors()
                     .update();
         }
 

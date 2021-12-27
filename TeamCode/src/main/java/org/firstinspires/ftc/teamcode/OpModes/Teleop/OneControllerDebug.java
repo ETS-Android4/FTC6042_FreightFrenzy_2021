@@ -18,17 +18,13 @@ public class OneControllerDebug extends LinearOpMode {
         final double NORMAL_DRIVE_MAX_POWER = 0.5;
         final double OVERDRIVE_MAX_POWER = 1;
 
-        Drivetrain drivetrain = new Drivetrain();
-        drivetrain.init(this);
-        Armdex armdex = new Armdex();
-        armdex.init(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel();
-        deliveryWheel.init(this);
-        LedController led = new LedController();
-        TelemetryWriter output =  new TelemetryWriter();
-        output.setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel).init(telemetry);
+        Drivetrain drivetrain = new Drivetrain(this);
+        Armdex armdex = new Armdex(this);
+        DeliveryWheel deliveryWheel = new DeliveryWheel(this);
+        LedController led = new LedController(this);
+        TelemetryWriter output =  new TelemetryWriter(telemetry);
+        output.setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
 
-        led.init(this);
         output.robotInitialized();
         waitForStart();
 

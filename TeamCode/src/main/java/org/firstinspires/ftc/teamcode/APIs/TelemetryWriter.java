@@ -270,4 +270,10 @@ public class TelemetryWriter {
         return this;
     }
 
+    public TelemetryWriter addAllDistanceSensors() {
+        telemetry.addLine("Distance Sensors: FL: " + drivetrain.getFrontLeftDistance() + " FR: " + drivetrain.getFrontRightDistance());
+        telemetry.addLine("RL: " + drivetrain.getRearLeftDistance() + " RR: " + drivetrain.getRearRightDistance());
+        return this;
+    }
+
 }

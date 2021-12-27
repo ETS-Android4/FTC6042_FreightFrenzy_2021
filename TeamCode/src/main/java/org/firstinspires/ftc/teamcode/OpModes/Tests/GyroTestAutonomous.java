@@ -13,8 +13,7 @@ public class GyroTestAutonomous extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Drivetrain drivetrain = new Drivetrain();
-        drivetrain.init(this);
+        Drivetrain drivetrain = new Drivetrain(this);
 
         waitForStart();
 

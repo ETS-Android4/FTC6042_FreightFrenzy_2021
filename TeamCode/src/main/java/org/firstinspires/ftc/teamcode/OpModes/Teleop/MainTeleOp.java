@@ -20,17 +20,11 @@ public class MainTeleOp extends LinearOpMode {
         final double OVERDRIVE_MAX_POWER = 1;
 
         // Instantiate and initialize our drivetrain
-        Drivetrain drivetrain = new Drivetrain();
-        drivetrain.init(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel();
-        deliveryWheel.init(this);
-        AutonomousActions autonomousActions = new AutonomousActions();
-        autonomousActions.init(this);
-        LedController led = new LedController();
-        led.init(this);
-        Armdex armdex = new Armdex();
-        armdex.init(this);
-        TelemetryWriter output = new TelemetryWriter().setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex).init(telemetry);
+        Drivetrain drivetrain = new Drivetrain(this);
+        DeliveryWheel deliveryWheel = new DeliveryWheel(this);
+        LedController led = new LedController(this);
+        Armdex armdex = new Armdex(this);
+        TelemetryWriter output = new TelemetryWriter(telemetry).setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex);
 
         // Let the driver know the robot is done initializing
         output.robotInitialized();
