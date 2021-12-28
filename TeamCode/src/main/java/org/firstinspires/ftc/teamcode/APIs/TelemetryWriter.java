@@ -276,4 +276,10 @@ public class TelemetryWriter {
         return this;
     }
 
+    public TelemetryWriter addAverageDistances() {
+        telemetry.addLine("Average Front Distance: " + drivetrain.getAverageFrontDistance());
+        telemetry.addLine("Average Rear Distance: " + drivetrain.getAverageRearDistance());
+        return this;
+    }
+
 }

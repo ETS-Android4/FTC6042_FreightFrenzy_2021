@@ -35,6 +35,7 @@ public class EncoderAndSensorValuePrintout extends LinearOpMode {
                     .addIsWristUp()
                     .addIsWristDown()
                     .addAllDistanceSensors()
+                    .addAverageDistances()
                     .update();
         }
 
