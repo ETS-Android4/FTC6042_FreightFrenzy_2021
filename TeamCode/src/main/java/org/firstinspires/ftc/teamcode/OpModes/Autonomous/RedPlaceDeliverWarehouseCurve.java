@@ -25,7 +25,7 @@ public class RedPlaceDeliverWarehouseCurve extends LinearOpMode {
         waitForStart();
 
         // Place block
-        actions.placeFreightStraightFromWall();
+        actions.dropFreightOnLevelOne();
         actions.delay(500);
 
         // Back into wall

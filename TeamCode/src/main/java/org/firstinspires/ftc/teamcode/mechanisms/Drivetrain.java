@@ -546,4 +546,28 @@ public class Drivetrain {
         return (getRearLeftDistance()+getRearRightDistance())/2;
     }
 
+    /**
+     * Drive until the average distance in front of the robot is a certain value
+     * @param distanceInCm The value to drive until
+     * @param power The power at which to drive
+     */
+    public void driveUntilFrontDistance(double distanceInCm, double power) {
+        while(opMode.opModeIsActive() && getAverageFrontDistance() > distanceInCm) {
+            driveAtPower(power);
+        }
+        stopMotors();
+    }
+
+    /**
+     * Drive until the average distance behind hte robot is a certain value
+     * @param distanceInCm The value to drive until
+     * @param power The power at which to drive
+     */
+    public void driveUntilRearDistance(double distanceInCm, double power) {
+        while(opMode.opModeIsActive() && getAverageRearDistance() > distanceInCm) {
+            driveAtPower(power);
+        }
+        stopMotors();
+    }
+
 }

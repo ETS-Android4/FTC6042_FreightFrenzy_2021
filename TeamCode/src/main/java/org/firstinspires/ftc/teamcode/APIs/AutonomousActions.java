@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.APIs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
 public class AutonomousActions {
 
@@ -15,6 +15,10 @@ public class AutonomousActions {
     DeliveryWheel deliveryWheel;
     Armdex armdex;
     LedController led;
+    Placer placer;
+
+    // The number of time to wait between setting the placer position and opening the hand in millis
+    final int PLACE_DELAY_IN_MILLIS = 500;
 
     /**
      * Instantiate and initialize this autonomous actions. This also instantiates and initializes each of our mechanisms.
@@ -28,6 +32,7 @@ public class AutonomousActions {
         deliveryWheel = new DeliveryWheel(opMode);
         armdex = new Armdex(opMode);
         led = new LedController(opMode);
+        placer = new Placer(opMode);
     }
 
     /**
@@ -55,64 +60,6 @@ public class AutonomousActions {
     public void rotateRightFromWall() {
         drivetrain.driveForwardInchesNoPid(5, 0.4);
         drivetrain.rotateDegreesNoPid(85, 0.2);
-    }
-
-    /**
-     * Drive straight to the delivery wheel from near the far barcode
-     */
-    public void driveToDeliveryWheelFromFarBarcode() {
-        // Get us close to the delivery wheel
-        drivetrain.driveForwardInchesNoPid(54, 0.5);
-
-        // Slow down but keep moving forward until we hit the wheel
-        long startTimeInMillis = System.currentTimeMillis();
-        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
-            drivetrain.driveAtPower(0.2);
-        }
-    }
-
-    /**
-     * Drive straight to the delivery wheel from near the far barcode
-     */
-    public void driveToDeliveryWheelFromFarBarcodeBackwards() {
-        // Get us close to the delivery wheel
-        drivetrain.driveForwardInchesNoPid(-54, 0.5);
-
-        // Slow down but keep moving forward until we hit the wheel
-        long startTimeInMillis = System.currentTimeMillis();
-        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
-            drivetrain.driveAtPower(-0.2);
-        }
-    }
-
-    /**
-     * Drive straight to the delivery wheel from near the near barcode
-     */
-    public void driveToDeliveryWheelFromNearBarcode() {
-
-        // Get us close to the delivery wheel
-        drivetrain.driveForwardInches(12, 0.5);
-
-        // Slow down but keep moving forward until we hit the week
-        long startTimeInMillis = System.currentTimeMillis();
-        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
-            drivetrain.driveAtPower(0.2);
-        }
-    }
-
-    /**
-     * Drive straight to the delivery wheel from near the near barcode
-     */
-    public void driveToDeliveryWheelFromNearBarcodeBackwards() {
-
-        // Get us close to the delivery wheel
-        drivetrain.driveForwardInches(-12, 0.5);
-
-        // Slow down but keep moving forward until we hit the week
-        long startTimeInMillis = System.currentTimeMillis();
-        while(opMode.opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+3000)) {
-            drivetrain.driveAtPower(-0.2);
-        }
     }
 
     /**
@@ -166,13 +113,78 @@ public class AutonomousActions {
     }
 
     /**
-     * Move straight off the wall and place a loaded freight onto the shipping hub
+     * Move straight off the wall and place a loaded freight onto the bottom level of the shipping hub
      */
-    public void placeFreightStraightFromWall() {
+    public void dropFreightOnLevelOne() {
         drivetrain.driveForwardInchesNoPid(13, 0.4);
         armdex.place();
         delay(3000);
         armdex.stopIntake();
+    }
+
+    /**
+     * Detect and place the freight on the proper level from the left side of the shipping hub
+     */
+    public void placeFreightFromLeftAndReturn() {
+        drivetrain.driveForwardInchesNoPid(-10, 0.3);
+        delay(500);
+        if(drivetrain.getRearLeftDistance() < 20) {
+            // Level 3
+            led.setColorGreen();
+        } else if(drivetrain.getRearRightDistance() < 20) {
+            // Level 2
+            led.setColorYellow();
+        } else {
+            // Level 1
+            led.setColorRed();
+        }
+
+        //TODO add placement code here
+
+        // Drive back to the wall
+        drivetrain.driveUntilFrontDistance(25, 0.3);
+
+    }
+
+    /**
+     * Detect and place the freight on the proper level from the right side of the shipping hub
+     */
+    public void placeFreightFromRightAndReturn() {
+        drivetrain.driveForwardInchesNoPid(8, 0.3);
+        delay(500);
+        if(drivetrain.getFrontLeftDistance() < 20) {
+            // Level 1
+            led.setColorRed();
+        } else if(drivetrain.getFrontRightDistance() < 20) {
+            // Level 2
+            led.setColorYellow();
+        } else {
+            // Level 3
+            led.setColorGreen();
+        }
+
+        //TODO add placement code here
+
+        // Drive back to the wall
+        drivetrain.driveUntilRearDistance(30, -0.3);
+    }
+
+    private void placeLevelOne() {
+        placer.armLevelOne();
+        delay(PLACE_DELAY_IN_MILLIS);
+        placer.openHand();
+    }
+
+    private void placeLevelTwo() {
+        placer.armLevelTwo();
+        delay(PLACE_DELAY_IN_MILLIS);
+        placer.openHand();
+    }
+
+    private void placeLevelThree() {
+        placer.armLevelThree();
+        delay(PLACE_DELAY_IN_MILLIS);
+        placer.openHand();
     }
 
 }

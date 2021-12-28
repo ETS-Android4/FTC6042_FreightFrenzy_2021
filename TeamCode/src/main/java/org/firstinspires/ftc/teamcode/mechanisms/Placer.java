@@ -23,29 +23,29 @@ public class Placer {
      */
     public Placer(LinearOpMode opMode) {
         this.opMode = opMode;
-        arm = opMode.hardwareMap.get(Servo.class, "PlacerArm");
-        hand = opMode.hardwareMap.get(Servo.class, "PlacerHand");
+        //arm = opMode.hardwareMap.get(Servo.class, "placerArm");
+        //hand = opMode.hardwareMap.get(Servo.class, "placerHand");
     }
 
     /**
      * Set the servos in this mechanism to their initialized position
      */
     public void init() {
-        handClosed();
+        closeHand();
         armDefaultPosition();
     }
 
     /**
      * Open the hand
      */
-    public void handOpen() {
+    public void openHand() {
         hand.setPosition(OPEN);
     }
 
     /**
      * Close the hand
      */
-    public void handClosed() {
+    public void closeHand() {
         hand.setPosition(CLOSED);
     }
 
@@ -59,21 +59,21 @@ public class Placer {
     /**
      * Set the arm to its level 1 position
      */
-    public void armLevel1() {
+    public void armLevelOne() {
         arm.setPosition(LEVEL_1_POSITION);
     }
 
     /**
      * Set the arm to its level 2 position
      */
-    public void armLevel2() {
+    public void armLevelTwo() {
         arm.setPosition(LEVEL_2_POSITION);
     }
 
     /**
      * Set the arm to its level 3 position
      */
-    public void armLevel3() {
+    public void armLevelThree() {
         arm.setPosition(LEVEL_3_POSITION);
     }
 

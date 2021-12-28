@@ -6,48 +6,36 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
-import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
-import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 
-@Autonomous(name="Red PDS")
-public class RedPlaceDeliverStorage extends LinearOpMode {
+@Autonomous(name="Red LDeDS")
+public class RedLeftDetectDeliverStorage extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         Drivetrain drivetrain = new Drivetrain(this);
-        Armdex armdex = new Armdex(this);
-        DeliveryWheel deliveryWheel = new DeliveryWheel(this);
         AutonomousActions actions = new AutonomousActions(this);
-        TelemetryWriter output = new TelemetryWriter(telemetry).setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
+        TelemetryWriter output = new TelemetryWriter(telemetry);
         LedController led = new LedController(this, 'r');
-        output.robotInitialized();
 
+        output.robotInitialized();
         waitForStart();
 
-        // Place block
-        actions.dropFreightOnLevelOne();
+        actions.placeFreightFromLeftAndReturn();
+        actions.rotateDegrees(95);
         actions.delay(500);
 
-        // Back into wall
-        actions.driveInchesNoPid(-20, 0.4);
-        actions.delay(500);
-
-        actions.rotateLeftFromWall();
-        actions.delay(500);
-
-        // Drive to wheel
-        drivetrain.driveForwardInchesNoPid(20, 0.5);
+        // Drive to delivery wheel
+        drivetrain.driveForwardInchesNoPid(5, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
         while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
 
-        // Deliver
+        // Deliver duck
         actions.deliverDuckAutonomous();
-        actions.delay(1000);
 
         // Drive backwards
         actions.driveInchesNoPid(-10, 0.5);
