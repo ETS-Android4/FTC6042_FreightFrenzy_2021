@@ -19,7 +19,7 @@ public class Armdex {
     // Variables for this subsystem
     final double WRIST_UP_SPEED = 1;
     final double WRIST_DOWN_SPEED = -0.5;
-    final double INTAKE_SPEED = 0.75;
+    final double INTAKE_SPEED = 0.5;
     final double EJECT_SPEED = -1;
     final double PLACE_SPEED = 0.7;
     final boolean INTAKE_SENSOR_LED_DEFAULT_STATE = true;
