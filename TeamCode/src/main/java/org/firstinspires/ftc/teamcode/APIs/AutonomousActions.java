@@ -139,7 +139,8 @@ public class AutonomousActions {
             led.setColorRed();
         }
 
-        //TODO add placement code here
+        //TODO Add placement code here
+        delay(3000);
 
         // Drive back to the wall
         drivetrain.driveUntilFrontDistance(25, 0.3);
@@ -163,7 +164,8 @@ public class AutonomousActions {
             led.setColorGreen();
         }
 
-        //TODO add placement code here
+        //TODO Add placement code here
+        delay(3000);
 
         // Drive back to the wall
         drivetrain.driveUntilRearDistance(30, -0.3);
