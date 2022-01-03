@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
 @TeleOp(name="Main TeleOp (Two Controllers)")
 public class MainTeleOp extends LinearOpMode {
@@ -24,6 +25,7 @@ public class MainTeleOp extends LinearOpMode {
         DeliveryWheel deliveryWheel = new DeliveryWheel(this);
         LedController led = new LedController(this);
         Armdex armdex = new Armdex(this);
+        Placer placer = new Placer(this);
         TelemetryWriter output = new TelemetryWriter(telemetry).setDrivetrain(drivetrain).setDeliveryWheel(deliveryWheel).setArmdex(armdex);
 
         // Let the driver know the robot is done initializing
@@ -32,6 +34,8 @@ public class MainTeleOp extends LinearOpMode {
         // Wait for the driver to press play
         waitForStart();
 
+        placer.closeHand();
+        placer.armStraightUp();
         armdex.wristUp();
         boolean isWristSupposedToBeUp = true;
         boolean isRampRunning = false;
@@ -104,6 +108,13 @@ public class MainTeleOp extends LinearOpMode {
             } else if(gamepad1.dpad_down) {
                 isWristSupposedToBeUp = false;
                 armdex.wristDown();
+            }
+
+            // Control the placer
+            if(gamepad1.dpad_right) {
+                placer.armStartingPosition();
+            } else if(gamepad1.dpad_left) {
+                placer.armStraightUp();
             }
 
             /*

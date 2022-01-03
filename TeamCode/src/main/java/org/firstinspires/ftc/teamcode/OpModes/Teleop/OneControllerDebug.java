@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.DeliveryWheel;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
 @TeleOp(name="Debug/Test (One Controller)")
 public class OneControllerDebug extends LinearOpMode {
@@ -22,6 +23,7 @@ public class OneControllerDebug extends LinearOpMode {
         Armdex armdex = new Armdex(this);
         DeliveryWheel deliveryWheel = new DeliveryWheel(this);
         LedController led = new LedController(this);
+        Placer placer = new Placer(this);
         TelemetryWriter output =  new TelemetryWriter(telemetry);
         output.setDrivetrain(drivetrain).setArmdex(armdex).setDeliveryWheel(deliveryWheel);
 
@@ -29,6 +31,8 @@ public class OneControllerDebug extends LinearOpMode {
         waitForStart();
 
         boolean overrideIntake = false;
+        placer.closeHand();
+        placer.armStraightUp();
         armdex.wristUp();
         boolean isWristSupposedToBeUp = true;
 
