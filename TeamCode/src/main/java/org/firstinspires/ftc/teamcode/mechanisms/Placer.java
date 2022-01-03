@@ -10,13 +10,13 @@ public class Placer {
     Servo hand;
 
     // Servo positions
-    final double STARTING_POSITION = 0;
-    final double STRAIGHT_UP_POSITION = 0;
+    final double STARTING_POSITION = 1;
+    final double STRAIGHT_UP_POSITION = 0.63;
     final double LEVEL_1_POSITION = 0;
-    final double LEVEL_2_POSITION = 0;
-    final double LEVEL_3_POSITION = 0;
+    final double LEVEL_2_POSITION = 0.2;
+    final double LEVEL_3_POSITION = 0.4;
     final double OPEN = 0.5;
-    final double CLOSED = 1;
+    final double CLOSED = 0;
 
     /**
      * Instantiate the Placer object
@@ -24,8 +24,17 @@ public class Placer {
      */
     public Placer(LinearOpMode opMode) {
         this.opMode = opMode;
-        //arm = opMode.hardwareMap.get(Servo.class, "placerArm");
-        //hand = opMode.hardwareMap.get(Servo.class, "placerHand");
+        arm = opMode.hardwareMap.get(Servo.class, "placerArm");
+        hand = opMode.hardwareMap.get(Servo.class, "placerHand");
+    }
+
+    public Placer(LinearOpMode opMode, boolean init) {
+        this.opMode = opMode;
+        arm = opMode.hardwareMap.get(Servo.class, "placerArm");
+        hand = opMode.hardwareMap.get(Servo.class, "placerHand");
+        if(init) {
+            init();
+        }
     }
 
     /**
@@ -99,6 +108,22 @@ public class Placer {
      */
     public void setHandPosition(double position) {
         hand.setPosition(position);
+    }
+
+    /**
+     * Get the hand's current position
+     * @return
+     */
+    public double getHandPosition() {
+        return hand.getPosition();
+    }
+
+    /**
+     * Get the arm's current position
+     * @return
+     */
+    public double getArmPosition() {
+        return arm.getPosition();
     }
 
 }
