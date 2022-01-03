@@ -565,7 +565,7 @@ public class Drivetrain {
      */
     public void driveUntilRearDistance(double distanceInCm, double power) {
         while(opMode.opModeIsActive() && getAverageRearDistance() > distanceInCm) {
-            driveAtPower(power);
+            driveAtPower(-power);
         }
         stopMotors();
     }
