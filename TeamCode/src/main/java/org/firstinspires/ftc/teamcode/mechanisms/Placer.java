@@ -10,11 +10,12 @@ public class Placer {
     Servo hand;
 
     // Servo positions
-    final double DEFAULT_POSITION = 0.2;
+    final double STARTING_POSITION = 0;
+    final double STRAIGHT_UP_POSITION = 0;
     final double LEVEL_1_POSITION = 0;
-    final double LEVEL_2_POSITION = 0.5;
-    final double LEVEL_3_POSITION = 1;
-    final double OPEN = 0;
+    final double LEVEL_2_POSITION = 0;
+    final double LEVEL_3_POSITION = 0;
+    final double OPEN = 0.5;
     final double CLOSED = 1;
 
     /**
@@ -32,7 +33,7 @@ public class Placer {
      */
     public void init() {
         closeHand();
-        armDefaultPosition();
+        armStartingPosition();
     }
 
     /**
@@ -50,10 +51,17 @@ public class Placer {
     }
 
     /**
-     * Set the arm to its default position
+     * Set the arm to the starting position
      */
-    public void armDefaultPosition() {
-        arm.setPosition(DEFAULT_POSITION);
+    public void armStartingPosition() {
+        arm.setPosition(STARTING_POSITION);
+    }
+
+    /**
+     * Set the arm to the straight up position
+     */
+    public void armStraightUp() {
+        arm.setPosition(STRAIGHT_UP_POSITION);
     }
 
     /**
