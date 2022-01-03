@@ -17,8 +17,8 @@ public class AutonomousActions {
     LedController led;
     Placer placer;
 
-    // The number of time to wait between setting the placer position and opening the hand in millis
-    final int PLACE_DELAY_IN_MILLIS = 500;
+    final int ARM_MOVE_DELAY_IN_MILLIS = 1500; // The time to wait for the arm to position itself
+    final int PLACE_DELAY_IN_MILLIS = 2000; // The time to wait to place after opening the hand
 
     /**
      * Instantiate and initialize this autonomous actions. This also instantiates and initializes each of our mechanisms.
@@ -131,16 +131,40 @@ public class AutonomousActions {
         if(drivetrain.getRearLeftDistance() < 20) {
             // Level 3
             led.setColorGreen();
+            placer.armLevelThree();
+            drivetrain.driveForwardInchesNoPid(-10, 0.2);
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            armdex.wristUp();
+            drivetrain.driveUntilFrontDistance(22, 0.3);
+            placer.closeHand();
+            placer.armStartingPosition();
         } else if(drivetrain.getRearRightDistance() < 20) {
             // Level 2
             led.setColorYellow();
+            placer.armLevelTwo();
+            drivetrain.driveForwardInchesNoPid(-8, 0.2);
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            armdex.wristUp();
+            drivetrain.driveUntilFrontDistance(22, 0.3);
+            placer.closeHand();
+            placer.armStartingPosition();
         } else {
             // Level 1
             led.setColorRed();
+            placer.armLevelOne();
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(-6.5, 0.2);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            armdex.wristUp();
+            drivetrain.driveUntilFrontDistance(22, 0.3);
+            placer.closeHand();
+            placer.armStartingPosition();
         }
-
-        //TODO Add placement code here
-        delay(3000);
 
         // Drive back to the wall
         drivetrain.driveUntilFrontDistance(25, 0.3);
@@ -156,37 +180,48 @@ public class AutonomousActions {
         if(drivetrain.getFrontLeftDistance() < 20) {
             // Level 1
             led.setColorRed();
+            drivetrain.driveForwardInchesNoPid(40, 0.35);
+            placer.armLevelOne();
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(-3, 0.2);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(4, 0.35);
+            placer.armStartingPosition();
+            placer.closeHand();
+            armdex.wristUp();
+
         } else if(drivetrain.getFrontRightDistance() < 20) {
             // Level 2
             led.setColorYellow();
+            drivetrain.driveForwardInchesNoPid(40, 0.35);
+            placer.armLevelTwo();
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(-4, 0.2);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(4, 0.35);
+            placer.armStartingPosition();
+            placer.closeHand();
+            armdex.wristUp();
         } else {
             // Level 3
             led.setColorGreen();
+            drivetrain.driveForwardInchesNoPid(40, 0.35);
+            placer.armLevelThree();
+            delay(ARM_MOVE_DELAY_IN_MILLIS);
+            drivetrain.driveForwardInchesNoPid(-7, 0.2);
+            placer.openHand();
+            delay(PLACE_DELAY_IN_MILLIS);
+            placer.armStartingPosition();
+            placer.closeHand();
+            armdex.wristUp();
         }
 
         //TODO Add placement code here
-        delay(3000);
 
         // Drive back to the wall
-        drivetrain.driveUntilRearDistance(30, -0.3);
-    }
-
-    private void placeLevelOne() {
-        placer.armLevelOne();
-        delay(PLACE_DELAY_IN_MILLIS);
-        placer.openHand();
-    }
-
-    private void placeLevelTwo() {
-        placer.armLevelTwo();
-        delay(PLACE_DELAY_IN_MILLIS);
-        placer.openHand();
-    }
-
-    private void placeLevelThree() {
-        placer.armLevelThree();
-        delay(PLACE_DELAY_IN_MILLIS);
-        placer.openHand();
+        drivetrain.driveUntilRearDistance(30, 0.3);
     }
 
 }
