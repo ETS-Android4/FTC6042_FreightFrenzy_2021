@@ -27,8 +27,8 @@ public class DeliveryWheel {
 
     // Ramp values
     final double DELIVERY_TARGET_SPEED = 1;
-    final double SPEED_TO_INCREASE_PER_SECOND = 2; // The percent of our top speed to increase by per second run
-    final double SPEED_TO_INCREASE_PER_MILLISECOND = SPEED_TO_INCREASE_PER_SECOND/1000;
+    final double PERCENT_TO_INCREASE_PER_SECOND = 2; // The percent of our top speed to increase by per second run
+    final double PERCENT_TO_INCREASE_PER_MILLISECOND = PERCENT_TO_INCREASE_PER_SECOND /1000;
     final double RAMP_START_SPEED = 0.4;
     long rampStartTimeInMillis = 0;
 
@@ -152,8 +152,12 @@ public class DeliveryWheel {
      * Update the ramp. This should be called every time the ramp is supposed to be run after it has started
      */
     public void updateRamp() {
+        double speedToIncreaseBy = PERCENT_TO_INCREASE_PER_MILLISECOND*DELIVERY_TARGET_SPEED;
         long millisecondsElapsedSinceStart = (System.currentTimeMillis()-rampStartTimeInMillis);
-        double targetPower = millisecondsElapsedSinceStart*SPEED_TO_INCREASE_PER_MILLISECOND;
+        double targetPower = millisecondsElapsedSinceStart* speedToIncreaseBy;
+        if(targetPower > DELIVERY_TARGET_SPEED) {
+            targetPower = DELIVERY_TARGET_SPEED;
+        }
         setPower(targetPower);
     }
 
