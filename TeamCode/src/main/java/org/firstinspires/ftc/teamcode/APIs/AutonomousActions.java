@@ -18,7 +18,7 @@ public class AutonomousActions {
     Placer placer;
 
     final int ARM_MOVE_DELAY_IN_MILLIS = 1500; // The time to wait for the arm to position itself
-    final int PLACE_DELAY_IN_MILLIS = 2000; // The time to wait to place after opening the hand
+    final int PLACE_DELAY_IN_MILLIS = 1000; // The time to wait to place after opening the hand
 
     /**
      * Instantiate and initialize this autonomous actions. This also instantiates and initializes each of our mechanisms.
@@ -68,7 +68,7 @@ public class AutonomousActions {
     public void deliverDuckAutonomous() {
         long startTime = System.currentTimeMillis();
         deliveryWheel.startRamp();
-        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTime+4000) {
+        while(opMode.opModeIsActive() && System.currentTimeMillis() < startTime+3000) {
             deliveryWheel.updateRamp();
         }
         deliveryWheel.stopRamp();
@@ -144,7 +144,7 @@ public class AutonomousActions {
             // Level 2
             led.setColorYellow();
             placer.armLevelTwo();
-            drivetrain.driveForwardInchesNoPid(-8, 0.2);
+            drivetrain.driveForwardInchesNoPid(-7, 0.2);
             delay(ARM_MOVE_DELAY_IN_MILLIS);
             placer.openHand();
             delay(PLACE_DELAY_IN_MILLIS);
@@ -175,6 +175,7 @@ public class AutonomousActions {
      * Detect and place the freight on the proper level from the right side of the shipping hub
      */
     public void placeFreightFromRightAndReturn() {
+        armdex.wristUp();
         drivetrain.driveForwardInchesNoPid(8, 0.3);
         delay(500);
         if(drivetrain.getFrontLeftDistance() < 20) {
@@ -185,11 +186,13 @@ public class AutonomousActions {
             delay(ARM_MOVE_DELAY_IN_MILLIS);
             drivetrain.driveForwardInchesNoPid(-3, 0.2);
             placer.openHand();
+            armdex.wristUp();
             delay(PLACE_DELAY_IN_MILLIS);
+            armdex.wristUp();
             drivetrain.driveForwardInchesNoPid(4, 0.35);
+            delay(500);
             placer.armStartingPosition();
             placer.closeHand();
-            armdex.wristUp();
 
         } else if(drivetrain.getFrontRightDistance() < 20) {
             // Level 2
@@ -197,13 +200,13 @@ public class AutonomousActions {
             drivetrain.driveForwardInchesNoPid(40, 0.35);
             placer.armLevelTwo();
             delay(ARM_MOVE_DELAY_IN_MILLIS);
-            drivetrain.driveForwardInchesNoPid(-4, 0.2);
+            drivetrain.driveForwardInchesNoPid(-3, 0.2);
             placer.openHand();
+            armdex.wristUp();
             delay(PLACE_DELAY_IN_MILLIS);
             drivetrain.driveForwardInchesNoPid(4, 0.35);
             placer.armStartingPosition();
             placer.closeHand();
-            armdex.wristUp();
         } else {
             // Level 3
             led.setColorGreen();
@@ -212,16 +215,15 @@ public class AutonomousActions {
             delay(ARM_MOVE_DELAY_IN_MILLIS);
             drivetrain.driveForwardInchesNoPid(-7, 0.2);
             placer.openHand();
+            armdex.wristUp();
             delay(PLACE_DELAY_IN_MILLIS);
             placer.armStartingPosition();
             placer.closeHand();
-            armdex.wristUp();
+
         }
 
-        //TODO Add placement code here
-
         // Drive back to the wall
-        drivetrain.driveUntilRearDistance(30, 0.3);
+        drivetrain.driveUntilRearDistance(35, 0.3);
     }
 
 }

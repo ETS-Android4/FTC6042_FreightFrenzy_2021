@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
+import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
 @Autonomous(name="Blue RDeDS")
 public class BlueRightDetectDeliverStorage extends LinearOpMode {
@@ -17,13 +19,21 @@ public class BlueRightDetectDeliverStorage extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain(this);
         AutonomousActions actions = new AutonomousActions(this);
         TelemetryWriter output = new TelemetryWriter(telemetry);
+        Armdex armdex = new Armdex(this);
+        Placer placer = new Placer(this);
         LedController led = new LedController(this, 'b');
 
         output.robotInitialized();
         waitForStart();
 
+        placer.armStraightUp();
+        actions.delay(100);
+        armdex.wristUp();
+
         actions.placeFreightFromRightAndReturn();
-        actions.rotateDegrees(85);
+        led.setColorBlue();
+
+        actions.rotateDegrees(88);
         actions.delay(500);
 
         // Drive to delivery wheel
@@ -46,7 +56,7 @@ public class BlueRightDetectDeliverStorage extends LinearOpMode {
         actions.delay(500);
 
         // Drive forward
-        actions.driveInchesNoPid(14, 0.5);
+        actions.driveInchesNoPid(12, 0.5);
         actions.delay(500);
 
         // Rotate right

@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.OpModes.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.APIs.TelemetryWriter;
+import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
 @Autonomous(name="Red LDeDS")
 public class RedLeftDetectDeliverStorage extends LinearOpMode {
@@ -17,12 +20,20 @@ public class RedLeftDetectDeliverStorage extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain(this);
         AutonomousActions actions = new AutonomousActions(this);
         TelemetryWriter output = new TelemetryWriter(telemetry);
+        Armdex armdex = new Armdex(this);
+        Placer placer = new Placer(this);
         LedController led = new LedController(this, 'r');
 
         output.robotInitialized();
         waitForStart();
 
+        placer.armStraightUp();
+        actions.delay(100);
+        armdex.wristUp();
+
         actions.placeFreightFromLeftAndReturn();
+        led.setColorRed();
+
         actions.rotateDegrees(95);
         actions.delay(500);
 
@@ -54,7 +65,7 @@ public class RedLeftDetectDeliverStorage extends LinearOpMode {
         actions.delay(500);
 
         // Park in zone
-        actions.driveInchesNoPid(16, 0.5);
+        drivetrain.driveUntilFrontDistance(11, 0.5);
 
     }
 }
