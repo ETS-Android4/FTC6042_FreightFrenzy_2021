@@ -126,7 +126,7 @@ public class AutonomousActions {
      * Detect and place the freight on the proper level from the left side of the shipping hub
      */
     public void placeFreightFromLeftAndReturn() {
-        drivetrain.driveForwardInchesNoPid(-10, 0.3);
+        drivetrain.driveForwardInchesNoPid(-11, 0.3);
         delay(500);
         if(drivetrain.getRearLeftDistance() < 20) {
             // Level 3
@@ -138,6 +138,7 @@ public class AutonomousActions {
             delay(PLACE_DELAY_IN_MILLIS);
             armdex.wristUp();
             drivetrain.driveUntilFrontDistance(22, 0.3);
+            delay(500);
             placer.closeHand();
             placer.armStartingPosition();
         } else if(drivetrain.getRearRightDistance() < 20) {
@@ -150,6 +151,7 @@ public class AutonomousActions {
             delay(PLACE_DELAY_IN_MILLIS);
             armdex.wristUp();
             drivetrain.driveUntilFrontDistance(22, 0.3);
+            delay(500);
             placer.closeHand();
             placer.armStartingPosition();
         } else {
@@ -162,12 +164,13 @@ public class AutonomousActions {
             delay(PLACE_DELAY_IN_MILLIS);
             armdex.wristUp();
             drivetrain.driveUntilFrontDistance(22, 0.3);
+            delay(500);
             placer.closeHand();
             placer.armStartingPosition();
         }
 
         // Drive back to the wall
-        drivetrain.driveUntilFrontDistance(25, 0.3);
+        drivetrain.driveUntilFrontDistance(45, 0.3);
 
     }
 
@@ -205,6 +208,7 @@ public class AutonomousActions {
             armdex.wristUp();
             delay(PLACE_DELAY_IN_MILLIS);
             drivetrain.driveForwardInchesNoPid(4, 0.35);
+            delay(500);
             placer.armStartingPosition();
             placer.closeHand();
         } else {
@@ -217,13 +221,14 @@ public class AutonomousActions {
             placer.openHand();
             armdex.wristUp();
             delay(PLACE_DELAY_IN_MILLIS);
+            delay(500);
             placer.armStartingPosition();
             placer.closeHand();
 
         }
 
         // Drive back to the wall
-        drivetrain.driveUntilRearDistance(35, 0.3);
+        drivetrain.driveUntilRearDistance(30, 0.3);
     }
 
 }

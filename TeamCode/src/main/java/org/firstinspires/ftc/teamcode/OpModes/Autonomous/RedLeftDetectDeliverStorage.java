@@ -34,6 +34,10 @@ public class RedLeftDetectDeliverStorage extends LinearOpMode {
         actions.placeFreightFromLeftAndReturn();
         led.setColorRed();
 
+        actions.driveInchesNoPid(-1, 0.3);
+        actions.delay(250);
+
+
         actions.rotateDegrees(95);
         actions.delay(500);
 

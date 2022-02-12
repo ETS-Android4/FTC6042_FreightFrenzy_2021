@@ -33,16 +33,18 @@ public class BlueRightDetectDeliverStorage extends LinearOpMode {
         actions.placeFreightFromRightAndReturn();
         led.setColorBlue();
 
-        actions.rotateDegrees(88);
+        actions.rotateDegrees(90);
         actions.delay(500);
 
         // Drive to delivery wheel
-        drivetrain.driveForwardInchesNoPid(5, 0.5);
+        drivetrain.driveForwardInchesNoPid(7, 0.5);
         long startTimeInMillis = System.currentTimeMillis();
-        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1600)) {
+        while(opModeIsActive() && (System.currentTimeMillis() < startTimeInMillis+1800)) {
             drivetrain.driveAtPower(0.2);
         }
         drivetrain.stopMotors();
+
+        actions.delay(250);
 
         // Deliver duck
         actions.deliverDuckAutonomous();
