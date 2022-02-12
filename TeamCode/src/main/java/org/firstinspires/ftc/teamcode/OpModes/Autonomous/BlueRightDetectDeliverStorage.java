@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
-@Autonomous(name="Blue RDeDS")
+@Autonomous(name="1. Blue RDeDS")
 public class BlueRightDetectDeliverStorage extends LinearOpMode {
 
     @Override

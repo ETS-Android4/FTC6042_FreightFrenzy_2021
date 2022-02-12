@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 import org.firstinspires.ftc.teamcode.mechanisms.Armdex;
 import org.firstinspires.ftc.teamcode.mechanisms.Placer;
 
-@Autonomous(name="Blue LDeW")
+@Autonomous(name="1. Blue LDeW")
 public class BlueLeftDetectWarehouse extends LinearOpMode {
 
     @Override

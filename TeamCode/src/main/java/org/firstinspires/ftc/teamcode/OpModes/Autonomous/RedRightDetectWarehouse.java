@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.APIs.AutonomousActions;
 import org.firstinspires.ftc.teamcode.APIs.Leds.LedController;
 
-@Autonomous(name="Red RDeW")
+@Autonomous(name="1. Red RDeW")
 public class RedRightDetectWarehouse extends LinearOpMode {
 
     @Override
