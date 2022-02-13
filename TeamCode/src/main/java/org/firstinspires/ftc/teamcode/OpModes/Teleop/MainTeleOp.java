@@ -116,6 +116,12 @@ public class MainTeleOp extends LinearOpMode {
             } else if(gamepad1.dpad_left) {
                 placer.armStraightUp();
             }
+            if(gamepad1.y) {
+                placer.openHand();
+            }
+            if(gamepad1.a) {
+                placer.closeHand();
+            }
 
             /*
             ========== CODE FOR CONTROLLER 2 ==========
